@@ -1,5 +1,4 @@
 {
-  "$id": "https://static.dicebear.com/schema/v1/definition.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$defs": {
     "identifier": {
