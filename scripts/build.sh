@@ -30,7 +30,8 @@ done
 
 echo "Update CDN URLs in README.md."
 
-sed -i '' "s|cdn.hopjs.net/npm/@dicebear/schema@[^/]*/dist/|cdn.hopjs.net/npm/@dicebear/schema@${version}/dist/|g" "$README_FILE"
+sed -i.bak "s|cdn.hopjs.net/npm/@dicebear/schema@[^/]*/dist/|cdn.hopjs.net/npm/@dicebear/schema@${version}/dist/|g" "$README_FILE"
+rm "${README_FILE}.bak"
 
 echo "Update exports in package.json."
 
