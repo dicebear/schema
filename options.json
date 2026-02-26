@@ -1,0 +1,218 @@
+{
+  "$id": "https://static.dicebear.com/schema/v1/options.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DiceBear options schema",
+  "type": "object",
+  "$defs": {
+    "flip": {
+      "type": "string",
+      "enum": ["none", "horizontal", "vertical", "both"]
+    },
+    "rotate": {
+      "type": "number",
+      "minimum": -360,
+      "maximum": 360
+    },
+    "scale": {
+      "type": "number",
+      "minimum": 0
+    },
+    "translate": {
+      "type": "number",
+      "minimum": -100,
+      "maximum": 100
+    },
+    "borderRadius": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^#?([a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+    },
+    "fontFamilyName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9 _\\-]+$"
+    },
+    "fontWeight": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+    }
+  },
+  "properties": {
+    "seed": {
+      "type": "string",
+      "description": "The starting value for the pseudorandom number generator (PRNG) used in the avatar generation process. This option is essential for creating unique and consistent avatars. By setting a specific seed, you ensure that the same sequence of random characteristics is applied, allowing identical avatars to be reproduced. This is especially valuable for maintaining consistency across sessions and allowing users to share or recreate their personalized avatars."
+    },
+    "size": {
+      "type": "integer",
+      "description": "Specifies the dimensions of the avatar in pixels. If no size is specified, the avatar defaults to a responsive design or scales to 100% of its container. This flexibility allows the avatar to seamlessly adapt to different screen sizes and layouts, ensuring optimal display across devices and environments.",
+      "minimum": 1
+    },
+    "idRandomization": {
+      "type": "boolean",
+      "description": "Generates random values for all IDs present in the SVG. This process ensures that while the avatar appears visually identical, the underlying code remains unique. This is particularly useful for embedding the same avatar multiple times in a document without running into duplicate ID conflicts that can interfere with styles and scripts."
+    },
+    "flip": {
+      "description": "Specifies how the avatar will be flipped. Options include `none` for no flip, `horizontal` for a left-to-right flip, `vertical` for an upside-down flip, and `both` for a complete flip. If specified as an array, the PRNG will choose from the available options.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/flip"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/flip"
+          }
+        }
+      ]
+    },
+    "fontFamily": {
+      "description": "Specifies the font family used for text rendering. If specified as an array, the PRNG will choose from the available options.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fontFamilyName"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fontFamilyName"
+          }
+        }
+      ]
+    },
+    "fontWeight": {
+      "description": "Specifies the font weight used for text rendering. The value must be an integer between 1 and 1000. If specified as an array, the PRNG will choose from the available options.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/fontWeight"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fontWeight"
+          }
+        }
+      ]
+    },
+    "scale": {
+      "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will define a value between the two given values, including the values themselves.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/scale"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/scale"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      ]
+    },
+    "borderRadius": {
+      "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will define a value between the two given values, including the values themselves.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/borderRadius"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/borderRadius"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      ]
+    }
+  },
+  "patternProperties": {
+    "^[a-z][a-zA-Z0-9]*Probability$": {
+      "type": "number",
+      "description": "Represents the probability that a component of the avatar will be displayed. The value can be either a float or an integer, but is interpreted as a percentage. For example, a value of 0 means the part will never be displayed, while a value of 100 means it will always be displayed.",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "^[a-z][a-zA-Z0-9]*Variant$": {
+      "description": "Specifies which variants of the avatar part can be selected by the PRNG. If specified as a string or as an array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options.",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "^[a-z][a-zA-Z0-9]*Color$": {
+      "description": "Specifies which colors for the avatar component can be selected by the PRNG. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options. The color must be specified as a hex value.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/color"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/color"
+          }
+        }
+      ]
+    },
+    "^(r|[a-z][a-zA-Z0-9]*R)otate$": {
+      "description": "This is the rotation angle for the avatar or its parts. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If not preceded by an avatar part, the option applies to the entire avatar.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rotate"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rotate"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      ]
+    },
+    "^(t|[a-z][a-zA-Z0-9]*T)ranslateY$": {
+      "description": "This is the vertical translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/translate"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/translate"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      ]
+    },
+    "^(t|[a-z][a-zA-Z0-9]*T)ranslateX$": {
+      "description": "This is the horizontal translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/translate"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/translate"
+          },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

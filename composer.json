@@ -1,0 +1,17 @@
+{
+  "name": "dicebear/schema",
+  "description": "JSON Schema definitions for DiceBear avatar styles and options",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "dicebear",
+    "avatar",
+    "schema",
+    "json-schema"
+  ],
+  "homepage": "https://github.com/dicebear/schema",
+  "support": {
+    "issues": "https://github.com/dicebear/schema/issues",
+    "source": "https://github.com/dicebear/schema"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@dicebear/schema",
+  "version": "0.0.0",
+  "description": "JSON Schema definitions for DiceBear avatar styles and options",
+  "keywords": [
+    "dicebear",
+    "avatar",
+    "schema",
+    "json-schema"
+  ],
+  "bugs": {
+    "url": "https://github.com/dicebear/schema/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dicebear/schema.git"
+  },
+  "license": "MIT",
+  "exports": {
+    "./definition.json": "./definition.json",
+    "./options.json": "./options.json"
+  },
+  "files": [
+    "definition.json",
+    "options.json"
+  ],
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "node --test tests/**/*.test.js"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "prettier": "^3.8.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
