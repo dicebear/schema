@@ -16,13 +16,14 @@
     "url": "git+https://github.com/dicebear/schema.git"
   },
   "license": "MIT",
+  "type": "module",
   "exports": {
-    "./definition.json": "./definition.json",
-    "./options.json": "./options.json"
+    "./definition.json": "./src/definition.json",
+    "./options.json": "./src/options.json"
   },
   "files": [
-    "definition.json",
-    "options.json"
+    "src/definition.json",
+    "src/options.json"
   ],
   "scripts": {
     "format": "prettier --write .",
