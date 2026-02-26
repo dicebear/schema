@@ -103,3 +103,15 @@ git push origin main --follow-tags
 **Packagist**
 
 Once the repository is linked on [packagist.org](https://packagist.org), new releases are picked up automatically from the same Git tags — no separate step needed.
+
+## Sponsors
+
+Many thanks to our sponsors who provide us with free or discounted products.
+
+<a href="https://bunny.net/" target="_blank" rel="noopener noreferrer">
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="https://www.dicebear.com/sponsors/bunny-light.svg">
+        <source media="(prefers-color-scheme: light)" srcset="https://www.dicebear.com/sponsors/bunny-dark.svg">
+        <img alt="bunny.net" src="https://www.dicebear.com/sponsors/bunny-dark.svg" height="64">
+    </picture>
+</a>

@@ -18,14 +18,23 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "./definition.json": "./src/definition.json",
-    "./options.json": "./src/options.json"
+    "./definition.json": {
+      "types": "./dist/definition.min.json",
+      "default": "./dist/definition.min.json"
+    },
+    "./options.json": {
+      "types": "./dist/options.min.json",
+      "default": "./dist/options.min.json"
+    }
   },
   "files": [
-    "src/definition.json",
-    "src/options.json"
+    "LICENSE",
+    "dist/",
+    "src/",
+    "README.md"
   ],
   "scripts": {
+    "build": "bash scripts/build.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "node --test tests/**/*.test.js"
