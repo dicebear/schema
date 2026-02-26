@@ -33,3 +33,25 @@ jobs:
 
       - name: Publish
         run: npm publish --provenance
+
+  update-readme:
+    runs-on: ubuntu-latest
+    needs: publish
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Build
+        run: bash scripts/build.sh
+
+      - name: Commit updated README
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git diff --cached --quiet || git commit -m "Update CDN URLs in README for $(git describe --tags --abbrev=0)"
+          git push origin main

@@ -55,6 +55,15 @@ npm install @dicebear/schema
 composer require dicebear/schema
 ```
 
+**CDN**
+
+The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:
+
+```
+https://cdn.hopjs.net/npm/@dicebear/schema@0.1.3/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@0.1.3/dist/options.min.json
+```
+
 ## Usage
 
 **JavaScript**

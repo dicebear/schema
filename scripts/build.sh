@@ -5,6 +5,7 @@ BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET_DIR="$BASE_DIR/../src"
 DIST_DIR="$BASE_DIR/../dist"
 PACKAGE_FILE="$BASE_DIR/../package.json"
+README_FILE="$BASE_DIR/../README.md"
 
 echo "Minify definition files."
 
@@ -26,6 +27,10 @@ for f in "$TARGET_DIR"/*.json; do
   exports=$(echo "$exports" | jq --arg key "./${name}.json" --arg val "./dist/${name}.min.json" '. + {($key): {types: $val, default: $val}}')
 
 done
+
+echo "Update CDN URLs in README.md."
+
+sed -i '' "s|cdn.hopjs.net/npm/@dicebear/schema@[^/]*/dist/|cdn.hopjs.net/npm/@dicebear/schema@${version}/dist/|g" "$README_FILE"
 
 echo "Update exports in package.json."
 
