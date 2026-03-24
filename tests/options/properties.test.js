@@ -19,6 +19,10 @@ describe("options.json named properties", () => {
       assert.equal(validate({ size: 128 }), true);
     });
 
+    it("accepts seed with 1024 characters", () => {
+      assert.equal(validate({ seed: "a".repeat(1024) }), true);
+    });
+
     it("accepts boundary: size: 1", () => {
       assert.equal(validate({ size: 1 }), true);
     });
@@ -156,6 +160,10 @@ describe("options.json named properties", () => {
   });
 
   describe("invalid properties", () => {
+    it("rejects seed with more than 1024 characters", () => {
+      assert.equal(validate({ seed: "a".repeat(1025) }), false);
+    });
+
     it("rejects seed as number", () => {
       assert.equal(validate({ seed: 123 }), false);
     });
@@ -180,8 +188,16 @@ describe("options.json named properties", () => {
       assert.equal(validate({ flip: "diagonal" }), false);
     });
 
+    it("rejects flip array with more than 128 items", () => {
+      assert.equal(validate({ flip: Array(129).fill("none") }), false);
+    });
+
     it("rejects flip array with invalid enum value", () => {
       assert.equal(validate({ flip: ["horizontal", "diagonal"] }), false);
+    });
+
+    it("rejects fontFamily array with more than 128 items", () => {
+      assert.equal(validate({ fontFamily: Array(129).fill("Arial") }), false);
     });
 
     it("rejects fontFamily as number", () => {
@@ -194,6 +210,10 @@ describe("options.json named properties", () => {
 
     it("rejects fontFamily with parentheses", () => {
       assert.equal(validate({ fontFamily: "expression(alert(1))" }), false);
+    });
+
+    it("rejects fontWeight array with more than 128 items", () => {
+      assert.equal(validate({ fontWeight: Array(129).fill(400) }), false);
     });
 
     it("rejects fontWeight as float", () => {

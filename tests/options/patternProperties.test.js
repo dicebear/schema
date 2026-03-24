@@ -45,6 +45,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: [] }), true);
     });
 
+    it("rejects variant array with more than 128 items", () => {
+      assert.equal(validate({ eyesVariant: Array(129).fill("open") }), false);
+    });
+
     it("rejects variant array with non-string item", () => {
       assert.equal(validate({ eyesVariant: [123] }), false);
     });
@@ -65,6 +69,10 @@ describe("options.json patternProperties", () => {
 
     it("accepts empty color array", () => {
       assert.equal(validate({ skinColor: [] }), true);
+    });
+
+    it("rejects color array with more than 128 items", () => {
+      assert.equal(validate({ skinColor: Array(129).fill("#ff0000") }), false);
     });
 
     it("rejects named color string", () => {
@@ -92,6 +100,10 @@ describe("options.json patternProperties", () => {
 
     it("accepts empty colorFill array", () => {
       assert.equal(validate({ skinColorFill: [] }), true);
+    });
+
+    it("rejects colorFill array with more than 128 items", () => {
+      assert.equal(validate({ skinColorFill: Array(129).fill("solid") }), false);
     });
 
     it("rejects invalid colorFill string", () => {

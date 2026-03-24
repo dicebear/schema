@@ -51,7 +51,8 @@
   "properties": {
     "seed": {
       "type": "string",
-      "description": "The starting value for the pseudorandom number generator (PRNG) used in the avatar generation process. This option is essential for creating unique and consistent avatars. By setting a specific seed, you ensure that the same sequence of random characteristics is applied, allowing identical avatars to be reproduced. This is especially valuable for maintaining consistency across sessions and allowing users to share or recreate their personalized avatars."
+      "description": "The starting value for the pseudorandom number generator (PRNG) used in the avatar generation process. This option is essential for creating unique and consistent avatars. By setting a specific seed, you ensure that the same sequence of random characteristics is applied, allowing identical avatars to be reproduced. This is especially valuable for maintaining consistency across sessions and allowing users to share or recreate their personalized avatars.",
+      "maxLength": 1024
     },
     "size": {
       "type": "integer",
@@ -72,7 +73,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/flip"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
@@ -86,7 +88,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/fontFamilyName"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
@@ -100,7 +103,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/fontWeight"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
@@ -152,7 +156,8 @@
           "type": "array",
           "items": {
             "type": "string"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
@@ -166,7 +171,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/color"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
@@ -180,7 +186,8 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/colorFill"
-          }
+          },
+          "maxItems": 128
         }
       ]
     },
