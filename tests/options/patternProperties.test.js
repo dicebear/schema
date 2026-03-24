@@ -87,6 +87,40 @@ describe("options.json patternProperties", () => {
     });
   });
 
+  describe("colorFillStops", () => {
+    it("accepts single colorFillStops value", () => {
+      assert.equal(validate({ skinColorFillStops: 2 }), true);
+    });
+
+    it("accepts colorFillStops > 2", () => {
+      assert.equal(validate({ skinColorFillStops: 5 }), true);
+    });
+
+    it("accepts colorFillStops as [min, max] array", () => {
+      assert.equal(validate({ skinColorFillStops: [2, 5] }), true);
+    });
+
+    it("accepts colorFillStops: 1", () => {
+      assert.equal(validate({ skinColorFillStops: 1 }), true);
+    });
+
+    it("rejects colorFillStops < 1", () => {
+      assert.equal(validate({ skinColorFillStops: 0 }), false);
+    });
+
+    it("rejects colorFillStops as float", () => {
+      assert.equal(validate({ skinColorFillStops: 2.5 }), false);
+    });
+
+    it("rejects colorFillStops array with 3 items", () => {
+      assert.equal(validate({ skinColorFillStops: [2, 3, 5] }), false);
+    });
+
+    it("rejects colorFillStops array with out-of-range value", () => {
+      assert.equal(validate({ skinColorFillStops: [0, 5] }), false);
+    });
+  });
+
   describe("rotate", () => {
     it("accepts bare rotate", () => {
       assert.equal(validate({ rotate: 45 }), true);

@@ -34,6 +34,10 @@
       "type": "string",
       "enum": ["solid", "linear", "radial"]
     },
+    "colorFillStops": {
+      "type": "integer",
+      "minimum": 1
+    },
     "fontFamilyName": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9 _\\-]+$"
@@ -179,6 +183,22 @@
           "items": {
             "$ref": "#/$defs/colorFill"
           }
+        }
+      ]
+    },
+    "^[a-z][a-zA-Z0-9]*ColorFillStops$": {
+      "description": "Specifies the number of color stops for gradient fills. This value is only relevant when the color fill method is set to `linear` or `radial`. The minimum value is 1. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/colorFillStops"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/colorFillStops"
+          },
+          "minItems": 2,
+          "maxItems": 2
         }
       ]
     },
