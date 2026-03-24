@@ -19,6 +19,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ headProbability: 100 }), true);
     });
 
+    it("accepts probability as float", () => {
+      assert.equal(validate({ headProbability: 50.5 }), true);
+    });
+
     it("rejects probability < 0", () => {
       assert.equal(validate({ headProbability: -1 }), false);
     });
@@ -37,6 +41,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: ["open", "closed"] }), true);
     });
 
+    it("accepts empty variant array", () => {
+      assert.equal(validate({ eyesVariant: [] }), true);
+    });
+
     it("rejects variant array with non-string item", () => {
       assert.equal(validate({ eyesVariant: [123] }), false);
     });
@@ -53,6 +61,10 @@ describe("options.json patternProperties", () => {
 
     it("accepts array of hex colors", () => {
       assert.equal(validate({ skinColor: ["#ff0000", "#00ff00"] }), true);
+    });
+
+    it("accepts empty color array", () => {
+      assert.equal(validate({ skinColor: [] }), true);
     });
 
     it("rejects named color string", () => {
@@ -78,6 +90,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFill: ["solid", "linear"] }), true);
     });
 
+    it("accepts empty colorFill array", () => {
+      assert.equal(validate({ skinColorFill: [] }), true);
+    });
+
     it("rejects invalid colorFill string", () => {
       assert.equal(validate({ skinColorFill: "gradient" }), false);
     });
@@ -92,6 +108,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: 2 }), true);
     });
 
+    it("accepts colorFillStops: 1", () => {
+      assert.equal(validate({ skinColorFillStops: 1 }), true);
+    });
+
     it("accepts colorFillStops > 2", () => {
       assert.equal(validate({ skinColorFillStops: 5 }), true);
     });
@@ -100,20 +120,24 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: [2, 5] }), true);
     });
 
-    it("accepts colorFillStops: 1", () => {
-      assert.equal(validate({ skinColorFillStops: 1 }), true);
+    it("accepts colorFillStops array with 1 item", () => {
+      assert.equal(validate({ skinColorFillStops: [3] }), true);
+    });
+
+    it("accepts empty colorFillStops array", () => {
+      assert.equal(validate({ skinColorFillStops: [] }), true);
     });
 
     it("rejects colorFillStops < 1", () => {
       assert.equal(validate({ skinColorFillStops: 0 }), false);
     });
 
-    it("rejects colorFillStops as float", () => {
-      assert.equal(validate({ skinColorFillStops: 2.5 }), false);
+    it("rejects negative colorFillStops", () => {
+      assert.equal(validate({ skinColorFillStops: -1 }), false);
     });
 
-    it("accepts colorFillStops array with 1 item", () => {
-      assert.equal(validate({ skinColorFillStops: [3] }), true);
+    it("rejects colorFillStops as float", () => {
+      assert.equal(validate({ skinColorFillStops: 2.5 }), false);
     });
 
     it("rejects colorFillStops array with 3 items", () => {
@@ -122,10 +146,6 @@ describe("options.json patternProperties", () => {
 
     it("rejects colorFillStops array with out-of-range value", () => {
       assert.equal(validate({ skinColorFillStops: [0, 5] }), false);
-    });
-
-    it("accepts empty colorFillStops array", () => {
-      assert.equal(validate({ skinColorFillStops: [] }), true);
     });
   });
 
@@ -140,6 +160,14 @@ describe("options.json patternProperties", () => {
 
     it("accepts rotate as array", () => {
       assert.equal(validate({ rotate: [-30, 30] }), true);
+    });
+
+    it("accepts rotate array with 1 item", () => {
+      assert.equal(validate({ rotate: [30] }), true);
+    });
+
+    it("accepts empty rotate array", () => {
+      assert.equal(validate({ rotate: [] }), true);
     });
 
     it("accepts boundary: -360", () => {
@@ -162,16 +190,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ rotate: [-30, 0, 30] }), false);
     });
 
-    it("accepts rotate array with 1 item", () => {
-      assert.equal(validate({ rotate: [30] }), true);
-    });
-
     it("rejects rotate array with out-of-range value", () => {
       assert.equal(validate({ rotate: [-361, 30] }), false);
-    });
-
-    it("accepts empty rotate array", () => {
-      assert.equal(validate({ rotate: [] }), true);
     });
   });
 
@@ -188,12 +208,12 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateY: [-10, 10] }), true);
     });
 
-    it("rejects array with 3 items", () => {
-      assert.equal(validate({ translateY: [-10, 0, 10] }), false);
-    });
-
     it("accepts array with 1 item", () => {
       assert.equal(validate({ translateY: [10] }), true);
+    });
+
+    it("accepts empty translateY array", () => {
+      assert.equal(validate({ translateY: [] }), true);
     });
 
     it("accepts boundary: -100", () => {
@@ -202,6 +222,10 @@ describe("options.json patternProperties", () => {
 
     it("accepts boundary: 100", () => {
       assert.equal(validate({ translateY: 100 }), true);
+    });
+
+    it("rejects array with 3 items", () => {
+      assert.equal(validate({ translateY: [-10, 0, 10] }), false);
     });
 
     it("rejects value > 100", () => {
@@ -214,10 +238,6 @@ describe("options.json patternProperties", () => {
 
     it("rejects array with out-of-range value", () => {
       assert.equal(validate({ translateY: [-101, 10] }), false);
-    });
-
-    it("accepts empty translateY array", () => {
-      assert.equal(validate({ translateY: [] }), true);
     });
   });
 
@@ -234,12 +254,12 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: [-10, 10] }), true);
     });
 
-    it("rejects array with 3 items", () => {
-      assert.equal(validate({ translateX: [-10, 0, 10] }), false);
-    });
-
     it("accepts array with 1 item", () => {
       assert.equal(validate({ translateX: [10] }), true);
+    });
+
+    it("accepts empty translateX array", () => {
+      assert.equal(validate({ translateX: [] }), true);
     });
 
     it("accepts boundary: -100", () => {
@@ -248,6 +268,10 @@ describe("options.json patternProperties", () => {
 
     it("accepts boundary: 100", () => {
       assert.equal(validate({ translateX: 100 }), true);
+    });
+
+    it("rejects array with 3 items", () => {
+      assert.equal(validate({ translateX: [-10, 0, 10] }), false);
     });
 
     it("rejects value > 100", () => {
@@ -260,10 +284,6 @@ describe("options.json patternProperties", () => {
 
     it("rejects array with out-of-range value", () => {
       assert.equal(validate({ translateX: [-101, 10] }), false);
-    });
-
-    it("accepts empty translateX array", () => {
-      assert.equal(validate({ translateX: [] }), true);
     });
   });
 });

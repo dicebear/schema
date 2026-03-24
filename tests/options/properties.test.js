@@ -19,6 +19,10 @@ describe("options.json named properties", () => {
       assert.equal(validate({ size: 128 }), true);
     });
 
+    it("accepts boundary: size: 1", () => {
+      assert.equal(validate({ size: 1 }), true);
+    });
+
     it("accepts idRandomization as boolean", () => {
       assert.equal(validate({ idRandomization: true }), true);
     });
@@ -46,6 +50,10 @@ describe("options.json named properties", () => {
       );
     });
 
+    it("accepts empty flip array", () => {
+      assert.equal(validate({ flip: [] }), true);
+    });
+
     it("accepts fontFamily as string", () => {
       assert.equal(validate({ fontFamily: "Arial" }), true);
     });
@@ -66,8 +74,20 @@ describe("options.json named properties", () => {
       assert.equal(validate({ fontFamily: ["Arial", "Helvetica"] }), true);
     });
 
+    it("accepts empty fontFamily array", () => {
+      assert.equal(validate({ fontFamily: [] }), true);
+    });
+
     it("accepts fontWeight: 400", () => {
       assert.equal(validate({ fontWeight: 400 }), true);
+    });
+
+    it("accepts fontWeight as array", () => {
+      assert.equal(validate({ fontWeight: [400, 700] }), true);
+    });
+
+    it("accepts empty fontWeight array", () => {
+      assert.equal(validate({ fontWeight: [] }), true);
     });
 
     it("accepts boundary: fontWeight: 1", () => {
@@ -76,10 +96,6 @@ describe("options.json named properties", () => {
 
     it("accepts boundary: fontWeight: 1000", () => {
       assert.equal(validate({ fontWeight: 1000 }), true);
-    });
-
-    it("accepts fontWeight as array", () => {
-      assert.equal(validate({ fontWeight: [400, 700] }), true);
     });
 
     it("accepts boundary: fontWeight array [1, 1000]", () => {
@@ -98,6 +114,18 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: [80] }), true);
     });
 
+    it("accepts scale as float", () => {
+      assert.equal(validate({ scale: 1.5 }), true);
+    });
+
+    it("accepts empty scale array", () => {
+      assert.equal(validate({ scale: [] }), true);
+    });
+
+    it("accepts boundary: scale: 0", () => {
+      assert.equal(validate({ scale: 0 }), true);
+    });
+
     it("accepts borderRadius as single value", () => {
       assert.equal(validate({ borderRadius: 10 }), true);
     });
@@ -110,16 +138,12 @@ describe("options.json named properties", () => {
       assert.equal(validate({ borderRadius: [25] }), true);
     });
 
-    it("accepts empty scale array", () => {
-      assert.equal(validate({ scale: [] }), true);
+    it("accepts borderRadius as float", () => {
+      assert.equal(validate({ borderRadius: 10.5 }), true);
     });
 
     it("accepts empty borderRadius array", () => {
       assert.equal(validate({ borderRadius: [] }), true);
-    });
-
-    it("accepts boundary: size: 1", () => {
-      assert.equal(validate({ size: 1 }), true);
     });
 
     it("accepts boundary: borderRadius: 0", () => {
@@ -129,13 +153,13 @@ describe("options.json named properties", () => {
     it("accepts boundary: borderRadius: 50", () => {
       assert.equal(validate({ borderRadius: 50 }), true);
     });
-
-    it("accepts boundary: scale: 0", () => {
-      assert.equal(validate({ scale: 0 }), true);
-    });
   });
 
   describe("invalid properties", () => {
+    it("rejects seed as number", () => {
+      assert.equal(validate({ seed: 123 }), false);
+    });
+
     it("rejects size: 0", () => {
       assert.equal(validate({ size: 0 }), false);
     });
@@ -144,8 +168,20 @@ describe("options.json named properties", () => {
       assert.equal(validate({ size: 1.5 }), false);
     });
 
-    it("rejects seed as number", () => {
-      assert.equal(validate({ seed: 123 }), false);
+    it("rejects idRandomization as string", () => {
+      assert.equal(validate({ idRandomization: "true" }), false);
+    });
+
+    it("rejects idRandomization as number", () => {
+      assert.equal(validate({ idRandomization: 1 }), false);
+    });
+
+    it("rejects invalid flip enum", () => {
+      assert.equal(validate({ flip: "diagonal" }), false);
+    });
+
+    it("rejects flip array with invalid enum value", () => {
+      assert.equal(validate({ flip: ["horizontal", "diagonal"] }), false);
     });
 
     it("rejects fontFamily as number", () => {
@@ -184,20 +220,24 @@ describe("options.json named properties", () => {
       assert.equal(validate({ fontWeight: [400, 700.5] }), false);
     });
 
-    it("rejects invalid flip enum", () => {
-      assert.equal(validate({ flip: "diagonal" }), false);
+    it("rejects scale as string", () => {
+      assert.equal(validate({ scale: "big" }), false);
     });
 
-    it("rejects flip array with invalid enum value", () => {
-      assert.equal(validate({ flip: ["horizontal", "diagonal"] }), false);
+    it("rejects scale < 0", () => {
+      assert.equal(validate({ scale: -1 }), false);
     });
 
-    it("rejects idRandomization as string", () => {
-      assert.equal(validate({ idRandomization: "true" }), false);
+    it("rejects scale array with item < 0", () => {
+      assert.equal(validate({ scale: [-1, 50] }), false);
     });
 
-    it("rejects idRandomization as number", () => {
-      assert.equal(validate({ idRandomization: 1 }), false);
+    it("rejects scale array with 3+ items", () => {
+      assert.equal(validate({ scale: [80, 100, 120] }), false);
+    });
+
+    it("rejects borderRadius as string", () => {
+      assert.equal(validate({ borderRadius: "round" }), false);
     });
 
     it("rejects borderRadius > 50", () => {
@@ -214,18 +254,6 @@ describe("options.json named properties", () => {
 
     it("rejects borderRadius array with item < 0", () => {
       assert.equal(validate({ borderRadius: [-1, 30] }), false);
-    });
-
-    it("rejects scale < 0", () => {
-      assert.equal(validate({ scale: -1 }), false);
-    });
-
-    it("rejects scale array with item < 0", () => {
-      assert.equal(validate({ scale: [-1, 50] }), false);
-    });
-
-    it("rejects scale array with 3+ items", () => {
-      assert.equal(validate({ scale: [80, 100, 120] }), false);
     });
 
     it("rejects borderRadius array with 3+ items", () => {
