@@ -64,6 +64,29 @@ describe("options.json patternProperties", () => {
     });
   });
 
+  describe("colorFill", () => {
+    it("accepts single colorFill value", () => {
+      assert.equal(validate({ skinColorFill: "solid" }), true);
+    });
+
+    it("accepts all valid colorFill values", () => {
+      assert.equal(validate({ skinColorFill: "linear" }), true);
+      assert.equal(validate({ skinColorFill: "radial" }), true);
+    });
+
+    it("accepts array of colorFill values", () => {
+      assert.equal(validate({ skinColorFill: ["solid", "linear"] }), true);
+    });
+
+    it("rejects invalid colorFill string", () => {
+      assert.equal(validate({ skinColorFill: "gradient" }), false);
+    });
+
+    it("rejects array with invalid colorFill item", () => {
+      assert.equal(validate({ skinColorFill: ["solid", "invalid"] }), false);
+    });
+  });
+
   describe("rotate", () => {
     it("accepts bare rotate", () => {
       assert.equal(validate({ rotate: 45 }), true);

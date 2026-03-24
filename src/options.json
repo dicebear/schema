@@ -30,6 +30,10 @@
       "type": "string",
       "pattern": "^#?([a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
     },
+    "colorFill": {
+      "type": "string",
+      "enum": ["solid", "linear", "radial"]
+    },
     "fontFamilyName": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9 _\\-]+$"
@@ -160,6 +164,20 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/color"
+          }
+        }
+      ]
+    },
+    "^[a-z][a-zA-Z0-9]*ColorFill$": {
+      "description": "Specifies the color fill method for the avatar component. Options include `solid` for a flat color, `linear` for a linear gradient, and `radial` for a radial gradient. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/colorFill"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/colorFill"
           }
         }
       ]
