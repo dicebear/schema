@@ -94,12 +94,28 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: [80, 120] }), true);
     });
 
+    it("accepts scale array with 1 item", () => {
+      assert.equal(validate({ scale: [80] }), true);
+    });
+
     it("accepts borderRadius as single value", () => {
       assert.equal(validate({ borderRadius: 10 }), true);
     });
 
     it("accepts borderRadius as [min, max] array", () => {
       assert.equal(validate({ borderRadius: [0, 50] }), true);
+    });
+
+    it("accepts borderRadius array with 1 item", () => {
+      assert.equal(validate({ borderRadius: [25] }), true);
+    });
+
+    it("accepts empty scale array", () => {
+      assert.equal(validate({ scale: [] }), true);
+    });
+
+    it("accepts empty borderRadius array", () => {
+      assert.equal(validate({ borderRadius: [] }), true);
     });
 
     it("accepts boundary: size: 1", () => {
@@ -212,8 +228,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: [80, 100, 120] }), false);
     });
 
-    it("rejects scale array with 1 item", () => {
-      assert.equal(validate({ scale: [80] }), false);
+    it("rejects borderRadius array with 3+ items", () => {
+      assert.equal(validate({ borderRadius: [0, 25, 50] }), false);
     });
   });
 });

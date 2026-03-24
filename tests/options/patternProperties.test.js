@@ -112,12 +112,20 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: 2.5 }), false);
     });
 
+    it("accepts colorFillStops array with 1 item", () => {
+      assert.equal(validate({ skinColorFillStops: [3] }), true);
+    });
+
     it("rejects colorFillStops array with 3 items", () => {
       assert.equal(validate({ skinColorFillStops: [2, 3, 5] }), false);
     });
 
     it("rejects colorFillStops array with out-of-range value", () => {
       assert.equal(validate({ skinColorFillStops: [0, 5] }), false);
+    });
+
+    it("accepts empty colorFillStops array", () => {
+      assert.equal(validate({ skinColorFillStops: [] }), true);
     });
   });
 
@@ -161,6 +169,10 @@ describe("options.json patternProperties", () => {
     it("rejects rotate array with out-of-range value", () => {
       assert.equal(validate({ rotate: [-361, 30] }), false);
     });
+
+    it("accepts empty rotate array", () => {
+      assert.equal(validate({ rotate: [] }), true);
+    });
   });
 
   describe("translateY", () => {
@@ -203,6 +215,10 @@ describe("options.json patternProperties", () => {
     it("rejects array with out-of-range value", () => {
       assert.equal(validate({ translateY: [-101, 10] }), false);
     });
+
+    it("accepts empty translateY array", () => {
+      assert.equal(validate({ translateY: [] }), true);
+    });
   });
 
   describe("translateX", () => {
@@ -244,6 +260,10 @@ describe("options.json patternProperties", () => {
 
     it("rejects array with out-of-range value", () => {
       assert.equal(validate({ translateX: [-101, 10] }), false);
+    });
+
+    it("accepts empty translateX array", () => {
+      assert.equal(validate({ translateX: [] }), true);
     });
   });
 });

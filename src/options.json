@@ -105,7 +105,7 @@
       ]
     },
     "scale": {
-      "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will define a value between the two given values, including the values themselves.",
+      "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
           "$ref": "#/$defs/scale"
@@ -115,13 +115,12 @@
           "items": {
             "$ref": "#/$defs/scale"
           },
-          "minItems": 2,
           "maxItems": 2
         }
       ]
     },
     "borderRadius": {
-      "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will define a value between the two given values, including the values themselves.",
+      "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
           "$ref": "#/$defs/borderRadius"
@@ -131,7 +130,6 @@
           "items": {
             "$ref": "#/$defs/borderRadius"
           },
-          "minItems": 2,
           "maxItems": 2
         }
       ]
@@ -197,7 +195,6 @@
           "items": {
             "$ref": "#/$defs/colorFillStops"
           },
-          "minItems": 2,
           "maxItems": 2
         }
       ]
@@ -213,7 +210,6 @@
           "items": {
             "$ref": "#/$defs/rotate"
           },
-          "minItems": 1,
           "maxItems": 2
         }
       ]
@@ -229,7 +225,6 @@
           "items": {
             "$ref": "#/$defs/translate"
           },
-          "minItems": 1,
           "maxItems": 2
         }
       ]
@@ -245,7 +240,6 @@
           "items": {
             "$ref": "#/$defs/translate"
           },
-          "minItems": 1,
           "maxItems": 2
         }
       ]
