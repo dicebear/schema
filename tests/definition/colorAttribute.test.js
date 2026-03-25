@@ -38,8 +38,8 @@ describe("definition.json $defs/colorAttribute", () => {
       assert.equal(validate("#FF00FF80"), true);
     });
 
-    it('rejects "#ffff" (4-digit hex)', () => {
-      assert.equal(validate("#ffff"), false);
+    it('accepts "#ffff" (4-digit hex with alpha)', () => {
+      assert.equal(validate("#ffff"), true);
     });
 
     it('rejects "#ggg" (invalid hex chars)', () => {

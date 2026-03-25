@@ -63,6 +63,10 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColor: "ff0000" }), true);
     });
 
+    it("accepts 4-digit hex color", () => {
+      assert.equal(validate({ skinColor: "#f00a" }), true);
+    });
+
     it("accepts array of hex colors", () => {
       assert.equal(validate({ skinColor: ["#ff0000", "#00ff00"] }), true);
     });

@@ -23,7 +23,7 @@
           "type": "string",
           "anyOf": [
             { "pattern": "^[a-zA-Z]+$" },
-            { "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$" },
+            { "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$" },
             {
               "pattern": "^rgba?\\(\\s*\\d+\\s*,\\s*\\d+\\s*,\\s*\\d+\\s*(,\\s*[0-1](\\.\\d+)?\\s*)?\\)$"
             },
@@ -635,7 +635,7 @@
               "type": "array",
               "items": {
                 "type": "string",
-                "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+                "pattern": "^#([a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
               }
             },
             "notEqualTo": {

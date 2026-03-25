@@ -53,6 +53,13 @@ describe("definition.json colors", () => {
       });
       assert.equal(validate(data), true);
     });
+
+    it("accepts 4-digit hex in values", () => {
+      const data = withCanvas({
+        colors: { skin: { values: ["#fff0"] } },
+      });
+      assert.equal(validate(data), true);
+    });
   });
 
   describe("invalid colors", () => {
@@ -73,13 +80,6 @@ describe("definition.json colors", () => {
     it("rejects invalid hex in values", () => {
       const data = withCanvas({
         colors: { skin: { values: ["#xyz123"] } },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects 4-digit hex in values", () => {
-      const data = withCanvas({
-        colors: { skin: { values: ["#fff0"] } },
       });
       assert.equal(validate(data), false);
     });
