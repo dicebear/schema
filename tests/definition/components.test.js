@@ -297,6 +297,90 @@ describe("definition.json components", () => {
     });
   });
 
+  describe("variant rarity", () => {
+    it("accepts variant with rarity", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: 10 } },
+          },
+        },
+      });
+      assert.equal(validate(data), true);
+    });
+
+    it("accepts variant with rarity: 0 (boundary)", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: 0 } },
+          },
+        },
+      });
+      assert.equal(validate(data), true);
+    });
+
+    it("accepts variant with fractional rarity", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: 0.5 } },
+          },
+        },
+      });
+      assert.equal(validate(data), true);
+    });
+
+    it("accepts multiple variants with different rarity values", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: {
+              round: { elements: [], rarity: 50 },
+              square: { elements: [], rarity: 10 },
+              star: { elements: [], rarity: 1 },
+            },
+          },
+        },
+      });
+      assert.equal(validate(data), true);
+    });
+
+    it("rejects variant with negative rarity", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: -1 } },
+          },
+        },
+      });
+      assert.equal(validate(data), false);
+    });
+
+    it("rejects variant with string rarity", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: "high" } },
+          },
+        },
+      });
+      assert.equal(validate(data), false);
+    });
+  });
+
   describe("additionalProperties", () => {
     it("rejects additional property in component", () => {
       const data = withCanvas({

@@ -616,6 +616,11 @@
                       "description": "The SVG elements that make up this variant.",
                       "type": "array",
                       "items": { "$ref": "#/$defs/element" }
+                    },
+                    "rarity": {
+                      "description": "A non-negative weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is never selected by the PRNG unless explicitly chosen via options.",
+                      "type": "number",
+                      "minimum": 0
                     }
                   },
                   "required": ["elements"],

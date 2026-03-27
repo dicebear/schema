@@ -26,18 +26,25 @@ Validates the options object passed by users when generating an avatar. Supporte
 |---|---|---|
 | `seed` | `string` | PRNG seed for reproducible avatars |
 | `size` | `integer` | Output size in pixels |
-| `flip` | `string \| array` | `none`, `horizontal`, `vertical`, or `both` |
+| `flip` | `string \| array` | Mirror direction: `none`, `horizontal`, `vertical`, or `both` |
 | `scale` | `number \| [min, max]` | Scaling factor (1 = original size) |
 | `rotate` | `number \| [min, max]` | Rotation in degrees (−360 to 360) |
 | `translateX` | `number \| [min, max]` | Horizontal offset (−100 to 100) |
 | `translateY` | `number \| [min, max]` | Vertical offset (−100 to 100) |
 | `borderRadius` | `number \| [min, max]` | Corner radius (0 = sharp, 50 = circle) |
-| `idRandomization` | `boolean` | Randomize SVG IDs to avoid conflicts |
+| `idRandomization` | `boolean` | SVG ID randomization to avoid conflicts |
 | `fontFamily` | `string \| array` | Font family for text rendering |
-| `fontWeight` | `integer \| array` | Font weight (1–1000) |
-| `*Probability` | `number` | Display probability for a component (0–100) |
-| `*Variant` | `string \| array` | Selectable variants for a component |
-| `*Color` | `string \| array` | Selectable hex colors for a component |
+| `fontWeight` | `integer \| array` | Font weight (1 to 1000) |
+| `*Probability` | `number` | Component display probability (0 to 100) |
+| `*Variant` | `string \| array` | Component variants |
+| `*VariantRarity` | `object` | Component per-variant rarity weights (`{ variantName: weight }`) |
+| `*Color` | `string \| array` | Hex colors |
+| `*ColorFill` | `string \| array` | Color fill: `solid`, `linear`, or `radial` |
+| `*ColorFillStops` | `integer \| [min, max]` | Gradient color stops (min 1) |
+| `*ColorRotate` | `number \| [min, max]` | Gradient rotation (−360 to 360) |
+| `*Rotate` | `number \| [min, max]` | Component rotation in degrees (−360 to 360) |
+| `*TranslateX` | `number \| [min, max]` | Component horizontal offset (−100 to 100) |
+| `*TranslateY` | `number \| [min, max]` | Component vertical offset (−100 to 100) |
 
 When an option accepts an array, the PRNG either picks from the list (for discrete values) or picks a value within the range (for numeric min/max pairs).
 

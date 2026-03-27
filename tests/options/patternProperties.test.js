@@ -54,6 +54,57 @@ describe("options.json patternProperties", () => {
     });
   });
 
+  describe("variantRarity", () => {
+    it("accepts variantRarity as object with weights", () => {
+      assert.equal(
+        validate({ eyesVariantRarity: { open: 50, closed: 10 } }),
+        true
+      );
+    });
+
+    it("accepts variantRarity with weight 0 (boundary)", () => {
+      assert.equal(validate({ eyesVariantRarity: { open: 0 } }), true);
+    });
+
+    it("accepts variantRarity with fractional weight", () => {
+      assert.equal(validate({ eyesVariantRarity: { open: 0.5 } }), true);
+    });
+
+    it("accepts empty variantRarity object", () => {
+      assert.equal(validate({ eyesVariantRarity: {} }), true);
+    });
+
+    it("rejects variantRarity with more than 128 properties", () => {
+      const obj = Object.fromEntries(
+        Array.from({ length: 129 }, (_, i) => [`v${i}`, 1])
+      );
+      assert.equal(validate({ eyesVariantRarity: obj }), false);
+    });
+
+    it("rejects variantRarity with negative weight", () => {
+      assert.equal(validate({ eyesVariantRarity: { open: -1 } }), false);
+    });
+
+    it("rejects variantRarity key starting with uppercase", () => {
+      assert.equal(validate({ eyesVariantRarity: { Open: 10 } }), false);
+    });
+
+    it("rejects variantRarity key starting with digit", () => {
+      assert.equal(validate({ eyesVariantRarity: { "1open": 10 } }), false);
+    });
+
+    it("rejects variantRarity as string", () => {
+      assert.equal(validate({ eyesVariantRarity: "open" }), false);
+    });
+
+    it("rejects variantRarity with string value", () => {
+      assert.equal(
+        validate({ eyesVariantRarity: { open: "high" } }),
+        false
+      );
+    });
+  });
+
   describe("color", () => {
     it("accepts single hex color", () => {
       assert.equal(validate({ skinColor: "#ff0000" }), true);
