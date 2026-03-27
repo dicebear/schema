@@ -41,7 +41,7 @@ Validates the options object passed by users when generating an avatar. Supporte
 | `*Color` | `string \| array` | Hex colors |
 | `*ColorFill` | `string \| array` | Color fill: `solid`, `linear`, or `radial` |
 | `*ColorFillStops` | `integer \| [min, max]` | Gradient color stops (min 1) |
-| `*ColorRotate` | `number \| [min, max]` | Gradient rotation (−360 to 360) |
+| `*ColorAngle` | `number \| [min, max]` | Gradient angle (−360 to 360) |
 | `*Rotate` | `number \| [min, max]` | Component rotation in degrees (−360 to 360) |
 | `*TranslateX` | `number \| [min, max]` | Component horizontal offset (−100 to 100) |
 | `*TranslateY` | `number \| [min, max]` | Component vertical offset (−100 to 100) |

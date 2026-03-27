@@ -216,49 +216,49 @@ describe("options.json patternProperties", () => {
     });
   });
 
-  describe("colorRotate", () => {
-    it("accepts single colorRotate value", () => {
-      assert.equal(validate({ skinColorRotate: 45 }), true);
+  describe("colorAngle", () => {
+    it("accepts single colorAngle value", () => {
+      assert.equal(validate({ skinColorAngle: 45 }), true);
     });
 
-    it("accepts colorRotate as float", () => {
-      assert.equal(validate({ skinColorRotate: 45.5 }), true);
+    it("accepts colorAngle as float", () => {
+      assert.equal(validate({ skinColorAngle: 45.5 }), true);
     });
 
-    it("accepts colorRotate as [min, max] array", () => {
-      assert.equal(validate({ skinColorRotate: [-90, 90] }), true);
+    it("accepts colorAngle as [min, max] array", () => {
+      assert.equal(validate({ skinColorAngle: [-90, 90] }), true);
     });
 
-    it("accepts colorRotate array with 1 item", () => {
-      assert.equal(validate({ skinColorRotate: [45] }), true);
+    it("accepts colorAngle array with 1 item", () => {
+      assert.equal(validate({ skinColorAngle: [45] }), true);
     });
 
-    it("accepts empty colorRotate array", () => {
-      assert.equal(validate({ skinColorRotate: [] }), true);
+    it("accepts empty colorAngle array", () => {
+      assert.equal(validate({ skinColorAngle: [] }), true);
     });
 
     it("accepts boundary: -360", () => {
-      assert.equal(validate({ skinColorRotate: -360 }), true);
+      assert.equal(validate({ skinColorAngle: -360 }), true);
     });
 
     it("accepts boundary: 360", () => {
-      assert.equal(validate({ skinColorRotate: 360 }), true);
+      assert.equal(validate({ skinColorAngle: 360 }), true);
     });
 
-    it("rejects colorRotate > 360", () => {
-      assert.equal(validate({ skinColorRotate: 361 }), false);
+    it("rejects colorAngle > 360", () => {
+      assert.equal(validate({ skinColorAngle: 361 }), false);
     });
 
-    it("rejects colorRotate < -360", () => {
-      assert.equal(validate({ skinColorRotate: -361 }), false);
+    it("rejects colorAngle < -360", () => {
+      assert.equal(validate({ skinColorAngle: -361 }), false);
     });
 
-    it("rejects colorRotate array with 3 items", () => {
-      assert.equal(validate({ skinColorRotate: [-90, 0, 90] }), false);
+    it("rejects colorAngle array with 3 items", () => {
+      assert.equal(validate({ skinColorAngle: [-90, 0, 90] }), false);
     });
 
-    it("rejects colorRotate array with out-of-range value", () => {
-      assert.equal(validate({ skinColorRotate: [-361, 90] }), false);
+    it("rejects colorAngle array with out-of-range value", () => {
+      assert.equal(validate({ skinColorAngle: [-361, 90] }), false);
     });
   });
 

@@ -218,8 +218,8 @@
         }
       ]
     },
-    "^[a-z][a-zA-Z0-9]*ColorRotate$": {
-      "description": "Specifies the rotation angle for the color gradient of the avatar component. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+    "^[a-z][a-zA-Z0-9]*ColorAngle$": {
+      "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
           "$ref": "#/$defs/rotate"
