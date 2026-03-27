@@ -24,7 +24,7 @@ describe("definition.json $defs/element", () => {
       assert.equal(validate({ type: "component", value: "eyes" }), true);
     });
 
-    for (const name of ["initial", "initials", "fontFamily", "fontWeight"]) {
+    for (const name of ["initial", "initials"]) {
       it(`accepts text with variable value object (${name})`, () => {
         assert.equal(
           validate({ type: "text", value: { type: "variable", value: name } }),
@@ -149,32 +149,15 @@ describe("definition.json $defs/element", () => {
       );
     });
 
-    it("rejects variable value object with unknown variable name", () => {
-      assert.equal(
-        validate({ type: "text", value: { type: "variable", value: "skinColor" } }),
-        false,
-      );
+    it("rejects wrong variable name", () => {
+      assert.equal(validate({ type: "text", value: { type: "variable", value: "fontFamily" } }), false);
+      assert.equal(validate({ type: "text", value: { type: "variable", value: "skinColor" } }), false);
     });
 
-    it("rejects variable value object without type", () => {
-      assert.equal(
-        validate({ type: "text", value: { value: "skinColor" } }),
-        false,
-      );
-    });
-
-    it("rejects variable value object without value", () => {
-      assert.equal(
-        validate({ type: "text", value: { type: "variable" } }),
-        false,
-      );
-    });
-
-    it("rejects variable value object with additional properties", () => {
-      assert.equal(
-        validate({ type: "text", value: { type: "variable", value: "skinColor", extra: "data" } }),
-        false,
-      );
+    it("rejects malformed variable reference", () => {
+      assert.equal(validate({ type: "text", value: { value: "initial" } }), false);
+      assert.equal(validate({ type: "text", value: { type: "variable" } }), false);
+      assert.equal(validate({ type: "text", value: { type: "variable", value: "initial", extra: true } }), false);
     });
 
     it("rejects value on non-style element", () => {

@@ -1,13 +1,9 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { loadSchema, createValidator } from "../helpers/validator.js";
+import { loadSchema, createValidator, withCanvas } from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
 const validate = createValidator(schema);
-
-function withCanvas(extra) {
-  return { canvas: { elements: [], width: 100, height: 100 }, ...extra };
-}
 
 describe("definition.json components", () => {
   describe("valid components", () => {

@@ -64,6 +64,26 @@ describe("definition.json $defs/attributes", () => {
     });
   });
 
+  describe("variable references in attributes", () => {
+    it("accepts correct variable for font-family and font-weight", () => {
+      assert.equal(validate({ "font-family": { type: "variable", value: "fontFamily" } }), true);
+      assert.equal(validate({ "font-weight": { type: "variable", value: "fontWeight" } }), true);
+    });
+
+    it("rejects wrong variable name", () => {
+      assert.equal(validate({ "font-family": { type: "variable", value: "fontWeight" } }), false);
+      assert.equal(validate({ "font-weight": { type: "variable", value: "fontFamily" } }), false);
+      assert.equal(validate({ "font-family": { type: "variable", value: "initial" } }), false);
+      assert.equal(validate({ "font-family": { type: "variable", value: "unknownVar" } }), false);
+    });
+
+    it("rejects malformed variable reference", () => {
+      assert.equal(validate({ "font-family": { value: "fontFamily" } }), false);
+      assert.equal(validate({ "font-family": { type: "variable" } }), false);
+      assert.equal(validate({ "font-family": { type: "variable", value: "fontFamily", extra: true } }), false);
+    });
+  });
+
   describe("invalid attributes", () => {
     it("rejects unknown attribute (additionalProperties: false)", () => {
       assert.equal(validate({ unknownProp: "value" }), false);

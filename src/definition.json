@@ -6,16 +6,6 @@
       "type": "string",
       "pattern": "^[a-z][a-zA-Z0-9]*$"
     },
-    "variableName": {
-      "description": "A camelCase identifier starting with a lowercase letter. Used for variable references.",
-      "type": "string",
-      "enum": [
-        "initial",
-        "initials",
-        "fontWeight",
-        "fontFamily"
-      ]
-    },
     "colorAttribute": {
       "description": "A color value, either as a direct color string (named color, hex, rgb(a), hsl(a), hsb(a)) or as a reference to a named color defined in the `colors` section.",
       "anyOf": [
@@ -160,21 +150,14 @@
           "enum": ["element", "text", "component"]
         },
         "value": {
-          "description": "The text content for `text` nodes, the component name for `component` nodes, or the CSS content for `style` elements. Can also be a variable reference object to dynamically inject a runtime value.",
+          "description": "The text content for `text` nodes, the component name for `component` nodes, or the CSS content for `style` elements.",
           "anyOf": [
             { "type": "string" },
             {
-              "description": "A reference to a runtime variable. The variable value is resolved and injected at render time.",
               "type": "object",
               "properties": {
-                "type": {
-                  "type": "string",
-                  "const": "variable"
-                },
-                "value": {
-                  "description": "The name of the variable to reference.",
-                  "$ref": "#/$defs/variableName"
-                }
+                "type": { "type": "string", "const": "variable" },
+                "value": { "type": "string", "enum": ["initial", "initials"] }
               },
               "required": ["type", "value"],
               "additionalProperties": false
@@ -289,12 +272,38 @@
           "$ref": "#/$defs/colorAttribute"
         },
         "flood-opacity": { "type": "string" },
-        "font-family": { "type": "string" },
+        "font-family": {
+          "anyOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "const": "variable" },
+                "value": { "type": "string", "enum": ["fontFamily"] }
+              },
+              "required": ["type", "value"],
+              "additionalProperties": false
+            }
+          ]
+        },
         "font-size": { "type": "string" },
         "font-size-adjust": { "type": "string" },
         "font-style": { "type": "string" },
         "font-variant": { "type": "string" },
-        "font-weight": { "type": "string" },
+        "font-weight": {
+          "anyOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "const": "variable" },
+                "value": { "type": "string", "enum": ["fontWeight"] }
+              },
+              "required": ["type", "value"],
+              "additionalProperties": false
+            }
+          ]
+        },
         "fx": { "type": "string" },
         "fy": { "type": "string" },
         "gradientTransform": { "type": "string" },

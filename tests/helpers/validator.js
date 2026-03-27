@@ -16,6 +16,10 @@ export function createValidator(schema) {
   return ajv.compile(schema);
 }
 
+export function withCanvas(extra) {
+  return { canvas: { elements: [], width: 100, height: 100 }, ...extra };
+}
+
 export function getDefSchema(schema, defName) {
   const def = schema.$defs?.[defName];
   if (!def) {
