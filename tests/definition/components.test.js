@@ -297,56 +297,56 @@ describe("definition.json components", () => {
     });
   });
 
-  describe("variant rarity", () => {
-    it("accepts variant with rarity", () => {
+  describe("variant weight", () => {
+    it("accepts variant with weight", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
-            variants: { round: { elements: [], rarity: 10 } },
+            variants: { round: { elements: [], weight: 10 } },
           },
         },
       });
       assert.equal(validate(data), true);
     });
 
-    it("accepts variant with rarity: 0 (boundary)", () => {
+    it("accepts variant with weight: 0 (boundary)", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
-            variants: { round: { elements: [], rarity: 0 } },
+            variants: { round: { elements: [], weight: 0 } },
           },
         },
       });
       assert.equal(validate(data), true);
     });
 
-    it("accepts variant with fractional rarity", () => {
+    it("accepts variant with fractional weight", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
-            variants: { round: { elements: [], rarity: 0.5 } },
+            variants: { round: { elements: [], weight: 0.5 } },
           },
         },
       });
       assert.equal(validate(data), true);
     });
 
-    it("accepts multiple variants with different rarity values", () => {
+    it("accepts multiple variants with different weight values", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
             variants: {
-              round: { elements: [], rarity: 50 },
-              square: { elements: [], rarity: 10 },
-              star: { elements: [], rarity: 1 },
+              round: { elements: [], weight: 50 },
+              square: { elements: [], weight: 10 },
+              star: { elements: [], weight: 1 },
             },
           },
         },
@@ -354,26 +354,39 @@ describe("definition.json components", () => {
       assert.equal(validate(data), true);
     });
 
-    it("rejects variant with negative rarity", () => {
+    it("rejects variant with negative weight", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
-            variants: { round: { elements: [], rarity: -1 } },
+            variants: { round: { elements: [], weight: -1 } },
           },
         },
       });
       assert.equal(validate(data), false);
     });
 
-    it("rejects variant with string rarity", () => {
+    it("rejects variant with string weight", () => {
       const data = withCanvas({
         components: {
           head: {
             width: 100,
             height: 100,
-            variants: { round: { elements: [], rarity: "high" } },
+            variants: { round: { elements: [], weight: "high" } },
+          },
+        },
+      });
+      assert.equal(validate(data), false);
+    });
+
+    it("rejects the removed rarity property (renamed to weight)", () => {
+      const data = withCanvas({
+        components: {
+          head: {
+            width: 100,
+            height: 100,
+            variants: { round: { elements: [], rarity: 10 } },
           },
         },
       });

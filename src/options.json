@@ -147,7 +147,7 @@
       "maximum": 100
     },
     "^[a-z][a-zA-Z0-9]*Variant$": {
-      "description": "Specifies which variants of the avatar part can be selected by the PRNG. If specified as a string or as an array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options.",
+      "description": "Specifies which variants of the avatar part can be selected by the PRNG and their relative weights. A string or array of strings filters which variants the PRNG can choose from. An object maps variant names to non-negative weights, simultaneously filtering and weighting selection.",
       "oneOf": [
         {
           "type": "string"
@@ -158,20 +158,19 @@
             "type": "string"
           },
           "maxItems": 128
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-zA-Z0-9]*$"
+          },
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxProperties": 128
         }
       ]
-    },
-    "^[a-z][a-zA-Z0-9]*VariantRarity$": {
-      "description": "Specifies per-variant rarity weights for a component, overriding the default weights from the style definition. Each key is a variant name and the value is a non-negative weight. Higher values make the variant more likely to be selected by the PRNG. Variants not listed retain their definition-level rarity (default: 1).",
-      "type": "object",
-      "propertyNames": {
-        "pattern": "^[a-z][a-zA-Z0-9]*$"
-      },
-      "additionalProperties": {
-        "type": "number",
-        "minimum": 0
-      },
-      "maxProperties": 128
     },
     "^[a-z][a-zA-Z0-9]*Color$": {
       "description": "Specifies which colors for the avatar component can be selected by the PRNG. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options. The color must be specified as a hex value.",

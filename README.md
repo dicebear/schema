@@ -36,8 +36,7 @@ Validates the options object passed by users when generating an avatar. Supporte
 | `fontFamily` | `string \| array` | Font family for text rendering |
 | `fontWeight` | `integer \| array` | Font weight (1 to 1000) |
 | `*Probability` | `number` | Component display probability (0 to 100) |
-| `*Variant` | `string \| array` | Component variants |
-| `*VariantRarity` | `object` | Component per-variant rarity weights (`{ variantName: weight }`) |
+| `*Variant` | `string \| string[] \| object` | Component variant filter and weights |
 | `*Color` | `string \| array` | Hex colors |
 | `*ColorFill` | `string \| array` | Color fill: `solid`, `linear`, or `radial` |
 | `*ColorFillStops` | `integer \| [min, max]` | Gradient color stops (min 1) |
