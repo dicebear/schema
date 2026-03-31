@@ -82,8 +82,10 @@ import optionsSchema from '@dicebear/schema/options.json' assert { type: 'json' 
 **PHP**
 
 ```php
-$definition = json_decode(file_get_contents(__DIR__ . '/vendor/dicebear/schema/src/definition.json'), true);
-$options    = json_decode(file_get_contents(__DIR__ . '/vendor/dicebear/schema/src/options.json'), true);
+$basePath = \Composer\InstalledVersions::getInstallPath('dicebear/schema');
+
+$definition = json_decode(file_get_contents($basePath . '/src/definition.json'), true);
+$options    = json_decode(file_get_contents($basePath . '/src/options.json'), true);
 ```
 
 ## Development
