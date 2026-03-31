@@ -457,6 +457,10 @@
   },
   "type": "object",
   "properties": {
+    "$id": {
+      "description": "A unique identifier for this style definition.",
+      "type": "string"
+    },
     "$schema": {
       "description": "The JSON Schema identifier for this document.",
       "type": "string"
