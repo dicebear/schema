@@ -63,6 +63,11 @@
       "type": "boolean",
       "description": "Generates random values for all IDs present in the SVG. This process ensures that while the avatar appears visually identical, the underlying code remains unique. This is particularly useful for embedding the same avatar multiple times in a document without running into duplicate ID conflicts that can interfere with styles and scripts."
     },
+    "title": {
+      "type": "string",
+      "description": "Specifies an accessible title for the avatar. When set, the SVG will include a <title> element and an aria-label attribute, allowing screen readers and other assistive technologies to describe the avatar to users.",
+      "maxLength": 256
+    },
     "flip": {
       "description": "Specifies how the avatar will be flipped. Options include `none` for no flip, `horizontal` for a left-to-right flip, `vertical` for an upside-down flip, and `both` for a complete flip. If specified as an array, the PRNG will choose from the available options.",
       "oneOf": [
