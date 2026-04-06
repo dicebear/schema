@@ -70,7 +70,7 @@
     },
     "flip": {
       "description": "Specifies how the avatar will be flipped. Options include `none` for no flip, `horizontal` for a left-to-right flip, `vertical` for an upside-down flip, and `both` for a complete flip. If specified as an array, the PRNG will choose from the available options.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/flip"
         },
@@ -85,7 +85,7 @@
     },
     "fontFamily": {
       "description": "Specifies the font family used for text rendering. If specified as an array, the PRNG will choose from the available options.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/fontFamilyName"
         },
@@ -100,7 +100,7 @@
     },
     "fontWeight": {
       "description": "Specifies the font weight used for text rendering. The value must be an integer between 1 and 1000. If specified as an array, the PRNG will choose from the available options.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/fontWeight"
         },
@@ -115,7 +115,7 @@
     },
     "scale": {
       "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/scale"
         },
@@ -130,7 +130,7 @@
     },
     "borderRadius": {
       "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/borderRadius"
         },
@@ -153,7 +153,7 @@
     },
     "^[a-z][a-zA-Z0-9]*Variant$": {
       "description": "Specifies which variants of the avatar part can be selected by the PRNG and their relative weights. A string or array of strings filters which variants the PRNG can choose from. An object maps variant names to non-negative weights, simultaneously filtering and weighting selection.",
-      "oneOf": [
+      "anyOf": [
         {
           "type": "string"
         },
@@ -179,7 +179,7 @@
     },
     "^[a-z][a-zA-Z0-9]*Color$": {
       "description": "Specifies which colors for the avatar component can be selected by the PRNG. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options. The color must be specified as a hex value.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/color"
         },
@@ -194,7 +194,7 @@
     },
     "^[a-z][a-zA-Z0-9]*ColorFill$": {
       "description": "Specifies the color fill method for the avatar component. Options include `solid` for a flat color, `linear` for a linear gradient, and `radial` for a radial gradient. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/colorFill"
         },
@@ -209,7 +209,7 @@
     },
     "^[a-z][a-zA-Z0-9]*ColorFillStops$": {
       "description": "Specifies the number of color stops for gradient fills. This value is only relevant when the color fill method is set to `linear` or `radial`. The minimum value is 1. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/colorFillStops"
         },
@@ -224,7 +224,7 @@
     },
     "^[a-z][a-zA-Z0-9]*ColorAngle$": {
       "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/rotate"
         },
@@ -239,7 +239,7 @@
     },
     "^(r|[a-z][a-zA-Z0-9]*R)otate$": {
       "description": "This is the rotation angle for the avatar or its parts. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If not preceded by an avatar part, the option applies to the entire avatar.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/rotate"
         },
@@ -254,7 +254,7 @@
     },
     "^(t|[a-z][a-zA-Z0-9]*T)ranslateY$": {
       "description": "This is the vertical translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/translate"
         },
@@ -269,7 +269,7 @@
     },
     "^(t|[a-z][a-zA-Z0-9]*T)ranslateX$": {
       "description": "This is the horizontal translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
-      "oneOf": [
+      "anyOf": [
         {
           "$ref": "#/definitions/translate"
         },
