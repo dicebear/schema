@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import Ajv2020 from "ajv/dist/2020.js";
+import Ajv from "ajv";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const schemaDir = resolve(__dirname, "../../src");
@@ -12,7 +12,7 @@ export function loadSchema(filename) {
 }
 
 export function createValidator(schema) {
-  const ajv = new Ajv2020({ strict: false, allErrors: true });
+  const ajv = new Ajv({ strict: false, allErrors: true });
   return ajv.compile(schema);
 }
 
@@ -21,15 +21,14 @@ export function withCanvas(extra) {
 }
 
 export function getDefSchema(schema, defName) {
-  const def = schema.$defs?.[defName];
+  const def = schema.definitions?.[defName];
   if (!def) {
-    throw new Error(`$def "${defName}" not found in schema`);
+    throw new Error(`definition "${defName}" not found in schema`);
   }
 
-  // Build a standalone schema that includes all $defs for $ref resolution
   return {
     $schema: schema.$schema,
-    $defs: schema.$defs,
+    definitions: schema.definitions,
     ...def,
   };
 }

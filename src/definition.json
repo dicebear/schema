@@ -1,6 +1,6 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$defs": {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
     "identifier": {
       "description": "A camelCase identifier starting with a lowercase letter. Used for component, variable, and color references.",
       "type": "string",
@@ -35,7 +35,7 @@
             },
             "value": {
               "description": "The name of the color to reference.",
-              "$ref": "#/$defs/identifier"
+              "$ref": "#/definitions/identifier"
             }
           },
           "required": ["type", "value"],
@@ -51,7 +51,7 @@
     "paintAttribute": {
       "description": "A paint value for `fill` and `stroke` attributes. Accepts all color formats from `colorAttribute` as well as local SVG paint server references in the form `url(#id)`, e.g. for gradients or patterns.",
       "anyOf": [
-        { "$ref": "#/$defs/colorAttribute" },
+        { "$ref": "#/definitions/colorAttribute" },
         { "type": "string", "pattern": "^url\\(#[a-zA-Z_][a-zA-Z0-9_.-]*\\)$" }
       ]
     },
@@ -166,13 +166,13 @@
         },
         "attributes": {
           "description": "SVG presentation attributes to apply to this element.",
-          "$ref": "#/$defs/attributes"
+          "$ref": "#/definitions/attributes"
         },
         "children": {
           "description": "Nested child elements. Only valid for `element` and `text` nodes.",
           "type": "array",
           "items": {
-            "$ref": "#/$defs/element"
+            "$ref": "#/definitions/element"
           }
         }
       },
@@ -186,7 +186,7 @@
           },
           "then": {
             "required": ["value"],
-            "properties": { "value": { "$ref": "#/$defs/identifier" } },
+            "properties": { "value": { "$ref": "#/definitions/identifier" } },
             "not": { "required": ["children"] }
           }
         },
@@ -204,8 +204,8 @@
               "properties": {
                 "value": {
                   "allOf": [
-                    { "$ref": "#/$defs/noExternalUrlRef" },
-                    { "$ref": "#/$defs/noCssInjection" }
+                    { "$ref": "#/definitions/noExternalUrlRef" },
+                    { "$ref": "#/definitions/noCssInjection" }
                   ]
                 }
               }
@@ -235,11 +235,11 @@
         "clipPathUnits": { "type": "string" },
         "clip-path": {
           "description": "References a clip path. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "clip-rule": { "type": "string" },
         "color": {
-          "$ref": "#/$defs/colorAttribute"
+          "$ref": "#/definitions/colorAttribute"
         },
         "color-interpolation": { "type": "string" },
         "color-interpolation-filters": { "type": "string" },
@@ -259,17 +259,17 @@
         "exponent": { "type": "string" },
         "fill": {
           "description": "The fill color or paint server reference for this element.",
-          "$ref": "#/$defs/paintAttribute"
+          "$ref": "#/definitions/paintAttribute"
         },
         "fill-opacity": { "type": "string" },
         "fill-rule": { "type": "string" },
         "filter": {
           "description": "References a filter effect. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "filterUnits": { "type": "string" },
         "flood-color": {
-          "$ref": "#/$defs/colorAttribute"
+          "$ref": "#/definitions/colorAttribute"
         },
         "flood-opacity": { "type": "string" },
         "font-family": {
@@ -341,26 +341,26 @@
         "lengthAdjust": { "type": "string" },
         "letter-spacing": { "type": "string" },
         "lighting-color": {
-          "$ref": "#/$defs/colorAttribute"
+          "$ref": "#/definitions/colorAttribute"
         },
         "marker-end": {
           "description": "References a marker to draw at the end of a path. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "marker-mid": {
           "description": "References a marker to draw at intermediate vertices of a path. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "marker-start": {
           "description": "References a marker to draw at the start of a path. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "markerHeight": { "type": "string" },
         "markerUnits": { "type": "string" },
         "markerWidth": { "type": "string" },
         "mask": {
           "description": "References a mask element. External URL references are not allowed.",
-          "$ref": "#/$defs/noExternalUrlRef"
+          "$ref": "#/definitions/noExternalUrlRef"
         },
         "maskContentUnits": { "type": "string" },
         "maskUnits": { "type": "string" },
@@ -402,12 +402,12 @@
         "stdDeviation": { "type": "string" },
         "stitchTiles": { "type": "string" },
         "stop-color": {
-          "$ref": "#/$defs/colorAttribute"
+          "$ref": "#/definitions/colorAttribute"
         },
         "stop-opacity": { "type": "string" },
         "stroke": {
           "description": "The stroke color or paint server reference for this element.",
-          "$ref": "#/$defs/paintAttribute"
+          "$ref": "#/definitions/paintAttribute"
         },
         "stroke-dasharray": { "type": "string" },
         "stroke-dashoffset": { "type": "string" },
@@ -419,8 +419,8 @@
         "style": {
           "description": "Inline CSS styles. External URL references and CSS injection patterns are not allowed.",
           "allOf": [
-            { "$ref": "#/$defs/noExternalUrlRef" },
-            { "$ref": "#/$defs/noCssInjection" }
+            { "$ref": "#/definitions/noExternalUrlRef" },
+            { "$ref": "#/definitions/noCssInjection" }
           ]
         },
         "surfaceScale": { "type": "string" },
@@ -483,7 +483,7 @@
             },
             "url": {
               "description": "A link to the full license text.",
-              "$ref": "#/$defs/safeUrl"
+              "$ref": "#/definitions/safeUrl"
             },
             "text": {
               "description": "The full license text.",
@@ -502,7 +502,7 @@
             },
             "url": {
               "description": "A link to the creator's website or profile.",
-              "$ref": "#/$defs/safeUrl"
+              "$ref": "#/definitions/safeUrl"
             }
           },
           "additionalProperties": false
@@ -517,7 +517,7 @@
             },
             "url": {
               "description": "A link to the original source.",
-              "$ref": "#/$defs/safeUrl"
+              "$ref": "#/definitions/safeUrl"
             }
           },
           "additionalProperties": false
@@ -527,7 +527,7 @@
     },
     "attributes": {
       "description": "Global SVG presentation attributes applied to the root `<svg>` element.",
-      "$ref": "#/$defs/attributes"
+      "$ref": "#/definitions/attributes"
     },
     "canvas": {
       "description": "The main content of the avatar, defining the SVG structure, canvas dimensions, and element tree.",
@@ -536,7 +536,7 @@
         "elements": {
           "description": "The list of SVG elements that make up the avatar.",
           "type": "array",
-          "items": { "$ref": "#/$defs/element" }
+          "items": { "$ref": "#/definitions/element" }
         },
         "width": {
           "description": "The natural width of the avatar canvas in pixels. Must be at least 1.",
@@ -619,7 +619,7 @@
                     "elements": {
                       "description": "The SVG elements that make up this variant.",
                       "type": "array",
-                      "items": { "$ref": "#/$defs/element" }
+                      "items": { "$ref": "#/definitions/element" }
                     },
                     "weight": {
                       "description": "A non-negative weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is not selected by the PRNG unless all available variants have a weight of 0.",
@@ -659,11 +659,11 @@
             "notEqualTo": {
               "description": "A list of other color names. The selected color value must differ from the color values selected in those colors.",
               "type": "array",
-              "items": { "$ref": "#/$defs/identifier" }
+              "items": { "$ref": "#/definitions/identifier" }
             },
             "contrastTo": {
               "description": "The name of another color. When specified, the PRNG is not used for selection — instead, the color value with the highest contrast against the selected color value of the referenced color is chosen.",
-              "$ref": "#/$defs/identifier"
+              "$ref": "#/definitions/identifier"
             }
           },
           "required": ["values"],

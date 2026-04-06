@@ -1,8 +1,8 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "DiceBear options schema",
   "type": "object",
-  "$defs": {
+  "definitions": {
     "flip": {
       "type": "string",
       "enum": ["none", "horizontal", "vertical", "both"]
@@ -72,12 +72,12 @@
       "description": "Specifies how the avatar will be flipped. Options include `none` for no flip, `horizontal` for a left-to-right flip, `vertical` for an upside-down flip, and `both` for a complete flip. If specified as an array, the PRNG will choose from the available options.",
       "oneOf": [
         {
-          "$ref": "#/$defs/flip"
+          "$ref": "#/definitions/flip"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/flip"
+            "$ref": "#/definitions/flip"
           },
           "maxItems": 128
         }
@@ -87,12 +87,12 @@
       "description": "Specifies the font family used for text rendering. If specified as an array, the PRNG will choose from the available options.",
       "oneOf": [
         {
-          "$ref": "#/$defs/fontFamilyName"
+          "$ref": "#/definitions/fontFamilyName"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/fontFamilyName"
+            "$ref": "#/definitions/fontFamilyName"
           },
           "maxItems": 128
         }
@@ -102,12 +102,12 @@
       "description": "Specifies the font weight used for text rendering. The value must be an integer between 1 and 1000. If specified as an array, the PRNG will choose from the available options.",
       "oneOf": [
         {
-          "$ref": "#/$defs/fontWeight"
+          "$ref": "#/definitions/fontWeight"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/fontWeight"
+            "$ref": "#/definitions/fontWeight"
           },
           "maxItems": 128
         }
@@ -117,12 +117,12 @@
       "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
-          "$ref": "#/$defs/scale"
+          "$ref": "#/definitions/scale"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/scale"
+            "$ref": "#/definitions/scale"
           },
           "maxItems": 2
         }
@@ -132,12 +132,12 @@
       "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
-          "$ref": "#/$defs/borderRadius"
+          "$ref": "#/definitions/borderRadius"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/borderRadius"
+            "$ref": "#/definitions/borderRadius"
           },
           "maxItems": 2
         }
@@ -181,12 +181,12 @@
       "description": "Specifies which colors for the avatar component can be selected by the PRNG. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options. The color must be specified as a hex value.",
       "oneOf": [
         {
-          "$ref": "#/$defs/color"
+          "$ref": "#/definitions/color"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/color"
+            "$ref": "#/definitions/color"
           },
           "maxItems": 128
         }
@@ -196,12 +196,12 @@
       "description": "Specifies the color fill method for the avatar component. Options include `solid` for a flat color, `linear` for a linear gradient, and `radial` for a radial gradient. If specified as a string or array with only one value, the value is fixed. However, if specified as an array with multiple values, the PRNG will choose from the available options.",
       "oneOf": [
         {
-          "$ref": "#/$defs/colorFill"
+          "$ref": "#/definitions/colorFill"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/colorFill"
+            "$ref": "#/definitions/colorFill"
           },
           "maxItems": 128
         }
@@ -211,12 +211,12 @@
       "description": "Specifies the number of color stops for gradient fills. This value is only relevant when the color fill method is set to `linear` or `radial`. The minimum value is 1. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
-          "$ref": "#/$defs/colorFillStops"
+          "$ref": "#/definitions/colorFillStops"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/colorFillStops"
+            "$ref": "#/definitions/colorFillStops"
           },
           "maxItems": 2
         }
@@ -226,12 +226,12 @@
       "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "oneOf": [
         {
-          "$ref": "#/$defs/rotate"
+          "$ref": "#/definitions/rotate"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/rotate"
+            "$ref": "#/definitions/rotate"
           },
           "maxItems": 2
         }
@@ -241,12 +241,12 @@
       "description": "This is the rotation angle for the avatar or its parts. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If not preceded by an avatar part, the option applies to the entire avatar.",
       "oneOf": [
         {
-          "$ref": "#/$defs/rotate"
+          "$ref": "#/definitions/rotate"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/rotate"
+            "$ref": "#/definitions/rotate"
           },
           "maxItems": 2
         }
@@ -256,12 +256,12 @@
       "description": "This is the vertical translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
       "oneOf": [
         {
-          "$ref": "#/$defs/translate"
+          "$ref": "#/definitions/translate"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/translate"
+            "$ref": "#/definitions/translate"
           },
           "maxItems": 2
         }
@@ -271,12 +271,12 @@
       "description": "This is the horizontal translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
       "oneOf": [
         {
-          "$ref": "#/$defs/translate"
+          "$ref": "#/definitions/translate"
         },
         {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/translate"
+            "$ref": "#/definitions/translate"
           },
           "maxItems": 2
         }

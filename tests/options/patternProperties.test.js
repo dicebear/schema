@@ -176,8 +176,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: 2 }), true);
     });
 
-    it("accepts colorFillStops: 1", () => {
-      assert.equal(validate({ skinColorFillStops: 1 }), true);
+    it("rejects colorFillStops: 1 (minimum is 2)", () => {
+      assert.equal(validate({ skinColorFillStops: 1 }), false);
     });
 
     it("accepts colorFillStops > 2", () => {
