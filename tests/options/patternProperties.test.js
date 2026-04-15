@@ -96,9 +96,9 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: {} }), false);
     });
 
-    it("rejects variant object with more than 128 properties", () => {
+    it("rejects variant object with more than 512 properties", () => {
       const obj = Object.fromEntries(
-        Array.from({ length: 129 }, (_, i) => [`v${i}`, 1]),
+        Array.from({ length: 513 }, (_, i) => [`v${i}`, 1]),
       );
       assert.equal(validate({ eyesVariant: obj }), false);
     });

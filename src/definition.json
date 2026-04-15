@@ -621,13 +621,13 @@
               "required": ["elements"],
               "additionalProperties": false
             },
-            "maxProperties": 256
+            "maxProperties": 512
           }
         },
         "required": ["width", "height", "variants"],
         "additionalProperties": false
       },
-      "maxProperties": 128
+      "maxProperties": 512
     },
     "colors": {
       "description": "Named color palettes used by the avatar. The PRNG selects colors from these groups at render time. Color groups can define constraints such as contrast or exclusion rules. Keys must be `camelCaseName` identifiers.",
@@ -657,7 +657,7 @@
         "required": ["values"],
         "additionalProperties": false
       },
-      "maxProperties": 128
+      "maxProperties": 512
     }
   },
   "required": ["canvas"],

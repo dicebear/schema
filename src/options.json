@@ -208,7 +208,7 @@
             "minimum": 0
           },
           "minProperties": 1,
-          "maxProperties": 128
+          "maxProperties": 512
         }
       ]
     },
@@ -291,5 +291,5 @@
   },
   "propertyNames": { "maxLength": 128 },
   "additionalProperties": false,
-  "maxProperties": 256
+  "maxProperties": 512
 }
