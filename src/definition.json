@@ -621,7 +621,7 @@
               "required": ["elements"],
               "additionalProperties": false
             },
-            "maxProperties": 128
+            "maxProperties": 256
           }
         },
         "required": ["width", "height", "variants"],
