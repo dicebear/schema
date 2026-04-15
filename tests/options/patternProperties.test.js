@@ -351,28 +351,28 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateY: [] }), false);
     });
 
-    it("accepts boundary: -200", () => {
-      assert.equal(validate({ translateY: -200 }), true);
+    it("accepts boundary: -1000", () => {
+      assert.equal(validate({ translateY: -1000 }), true);
     });
 
-    it("accepts boundary: 200", () => {
-      assert.equal(validate({ translateY: 200 }), true);
+    it("accepts boundary: 1000", () => {
+      assert.equal(validate({ translateY: 1000 }), true);
     });
 
     it("rejects array with 3 items", () => {
       assert.equal(validate({ translateY: [-10, 0, 10] }), false);
     });
 
-    it("rejects value > 200", () => {
-      assert.equal(validate({ translateY: 201 }), false);
+    it("rejects value > 1000", () => {
+      assert.equal(validate({ translateY: 1001 }), false);
     });
 
-    it("rejects value < -200", () => {
-      assert.equal(validate({ translateY: -201 }), false);
+    it("rejects value < -1000", () => {
+      assert.equal(validate({ translateY: -1001 }), false);
     });
 
     it("rejects array with out-of-range value", () => {
-      assert.equal(validate({ translateY: [-201, 10] }), false);
+      assert.equal(validate({ translateY: [-1001, 10] }), false);
     });
   });
 
@@ -397,28 +397,28 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: [] }), false);
     });
 
-    it("accepts boundary: -200", () => {
-      assert.equal(validate({ translateX: -200 }), true);
+    it("accepts boundary: -1000", () => {
+      assert.equal(validate({ translateX: -1000 }), true);
     });
 
-    it("accepts boundary: 200", () => {
-      assert.equal(validate({ translateX: 200 }), true);
+    it("accepts boundary: 1000", () => {
+      assert.equal(validate({ translateX: 1000 }), true);
     });
 
     it("rejects array with 3 items", () => {
       assert.equal(validate({ translateX: [-10, 0, 10] }), false);
     });
 
-    it("rejects value > 200", () => {
-      assert.equal(validate({ translateX: 201 }), false);
+    it("rejects value > 1000", () => {
+      assert.equal(validate({ translateX: 1001 }), false);
     });
 
-    it("rejects value < -200", () => {
-      assert.equal(validate({ translateX: -201 }), false);
+    it("rejects value < -1000", () => {
+      assert.equal(validate({ translateX: -1001 }), false);
     });
 
     it("rejects array with out-of-range value", () => {
-      assert.equal(validate({ translateX: [-201, 10] }), false);
+      assert.equal(validate({ translateX: [-1001, 10] }), false);
     });
   });
 });

@@ -142,8 +142,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: 0 }), true);
     });
 
-    it("accepts boundary: scale: 4", () => {
-      assert.equal(validate({ scale: 4 }), true);
+    it("accepts boundary: scale: 10", () => {
+      assert.equal(validate({ scale: 10 }), true);
     });
 
     it("accepts boundary: size: 4096", () => {
@@ -268,8 +268,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: -1 }), false);
     });
 
-    it("rejects scale > 4", () => {
-      assert.equal(validate({ scale: 4.1 }), false);
+    it("rejects scale > 10", () => {
+      assert.equal(validate({ scale: 10.1 }), false);
     });
 
     it("rejects scale: Infinity", () => {
@@ -280,8 +280,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: [-1, 1] }), false);
     });
 
-    it("rejects scale array with item > 4", () => {
-      assert.equal(validate({ scale: [1, 5] }), false);
+    it("rejects scale array with item > 10", () => {
+      assert.equal(validate({ scale: [1, 11] }), false);
     });
 
     it("rejects scale array with 3+ items", () => {
