@@ -80,9 +80,7 @@ describe("definition.json components", () => {
     });
 
     it("rejects additional property on translate", () => {
-      assertInvalid(
-        makeComponent({ translate: { x: [0], y: [0], z: [0] } }),
-      );
+      assertInvalid(makeComponent({ translate: { x: [0], y: [0], z: [0] } }));
     });
   });
 
@@ -144,15 +142,11 @@ describe("definition.json components", () => {
     });
 
     it("rejects x with more than 2 items", () => {
-      assertInvalid(
-        makeComponent({ translate: { x: [-5, 0, 5], y: [0] } }),
-      );
+      assertInvalid(makeComponent({ translate: { x: [-5, 0, 5], y: [0] } }));
     });
 
     it("rejects y with more than 2 items", () => {
-      assertInvalid(
-        makeComponent({ translate: { x: [0], y: [-5, 0, 5] } }),
-      );
+      assertInvalid(makeComponent({ translate: { x: [0], y: [-5, 0, 5] } }));
     });
 
     it("rejects empty array", () => {
@@ -164,23 +158,17 @@ describe("definition.json components", () => {
     });
 
     it("rejects value below lower bound (-1001)", () => {
-      assertInvalid(
-        makeComponent({ translate: { x: [-1001, 0], y: [0] } }),
-      );
+      assertInvalid(makeComponent({ translate: { x: [-1001, 0], y: [0] } }));
     });
 
     it("rejects value above upper bound (1001)", () => {
-      assertInvalid(
-        makeComponent({ translate: { x: [0, 1001], y: [0] } }),
-      );
+      assertInvalid(makeComponent({ translate: { x: [0, 1001], y: [0] } }));
     });
   });
 
   describe("variants", () => {
     it("rejects variant name starting with uppercase", () => {
-      assertInvalid(
-        makeComponent({ variants: { Round: { elements: [] } } }),
-      );
+      assertInvalid(makeComponent({ variants: { Round: { elements: [] } } }));
     });
 
     it("rejects variant name starting with digit", () => {

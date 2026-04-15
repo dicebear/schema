@@ -32,7 +32,9 @@ function isStringBounded(node) {
 }
 
 function isObjectBounded(node) {
-  return node.additionalProperties === false || node.maxProperties !== undefined;
+  return (
+    node.additionalProperties === false || node.maxProperties !== undefined
+  );
 }
 
 function isArrayBounded(node) {

@@ -65,11 +65,26 @@
         "type": "string",
         "anyOf": [
           { "type": "string", "pattern": "[uU][rR][lL]\\s*\\(\\s*[^#)\\s]" },
-          { "type": "string", "pattern": "[eE][xX][pP][rR][eE][sS][sS][iI][oO][nN]\\s*\\(" },
-          { "type": "string", "pattern": "[bB][eE][hH][aA][vV][iI][oO][rR]\\s*:" },
-          { "type": "string", "pattern": "-[mM][oO][zZ]-[bB][iI][nN][dD][iI][nN][gG]" },
-          { "type": "string", "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]\\s*:" },
-          { "type": "string", "pattern": "[vV][bB][sS][cC][rR][iI][pP][tT]\\s*:" },
+          {
+            "type": "string",
+            "pattern": "[eE][xX][pP][rR][eE][sS][sS][iI][oO][nN]\\s*\\("
+          },
+          {
+            "type": "string",
+            "pattern": "[bB][eE][hH][aA][vV][iI][oO][rR]\\s*:"
+          },
+          {
+            "type": "string",
+            "pattern": "-[mM][oO][zZ]-[bB][iI][nN][dD][iI][nN][gG]"
+          },
+          {
+            "type": "string",
+            "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]\\s*:"
+          },
+          {
+            "type": "string",
+            "pattern": "[vV][bB][sS][cC][rR][iI][pP][tT]\\s*:"
+          },
           { "type": "string", "pattern": "\\\\" }
         ]
       }
@@ -545,70 +560,70 @@
       "type": "object",
       "propertyNames": { "$ref": "#/definitions/camelCaseName" },
       "additionalProperties": {
-          "type": "object",
-          "properties": {
-            "width": {
-              "description": "The natural width of the component canvas in pixels.",
+        "type": "object",
+        "properties": {
+          "width": {
+            "description": "The natural width of the component canvas in pixels.",
+            "type": "number",
+            "minimum": 1
+          },
+          "height": {
+            "description": "The natural height of the component canvas in pixels.",
+            "type": "number",
+            "minimum": 1
+          },
+          "probability": {
+            "description": "The probability, expressed as a percentage, that this component is rendered at all.",
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "rotate": {
+            "description": "A rotation in degrees. A single value fixes the angle; two values define a range the PRNG picks from.",
+            "type": "array",
+            "items": {
               "type": "number",
-              "minimum": 1
+              "minimum": -360,
+              "maximum": 360
             },
-            "height": {
-              "description": "The natural height of the component canvas in pixels.",
-              "type": "number",
-              "minimum": 1
+            "minItems": 1,
+            "maxItems": 2
+          },
+          "translate": {
+            "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
+            "type": "object",
+            "properties": {
+              "x": { "$ref": "#/definitions/translateValue" },
+              "y": { "$ref": "#/definitions/translateValue" }
             },
-            "probability": {
-              "description": "The probability, expressed as a percentage, that this component is rendered at all.",
-              "type": "number",
-              "minimum": 0,
-              "maximum": 100
-            },
-            "rotate": {
-              "description": "A rotation in degrees. A single value fixes the angle; two values define a range the PRNG picks from.",
-              "type": "array",
-              "items": {
-                "type": "number",
-                "minimum": -360,
-                "maximum": 360
-              },
-              "minItems": 1,
-              "maxItems": 2
-            },
-            "translate": {
-              "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
+            "additionalProperties": false
+          },
+          "variants": {
+            "description": "The available visual variants of this component. The PRNG selects one variant per render. Keys must be `camelCaseName` identifiers.",
+            "type": "object",
+            "propertyNames": { "$ref": "#/definitions/camelCaseName" },
+            "additionalProperties": {
               "type": "object",
               "properties": {
-                "x": { "$ref": "#/definitions/translateValue" },
-                "y": { "$ref": "#/definitions/translateValue" }
+                "elements": {
+                  "description": "The SVG elements that make up this variant.",
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/element" },
+                  "maxItems": 1024
+                },
+                "weight": {
+                  "description": "A weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is not selected unless all available variants have a weight of 0.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1000000
+                }
               },
+              "required": ["elements"],
               "additionalProperties": false
             },
-            "variants": {
-              "description": "The available visual variants of this component. The PRNG selects one variant per render. Keys must be `camelCaseName` identifiers.",
-              "type": "object",
-              "propertyNames": { "$ref": "#/definitions/camelCaseName" },
-              "additionalProperties": {
-                "type": "object",
-                "properties": {
-                  "elements": {
-                    "description": "The SVG elements that make up this variant.",
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/element" },
-                    "maxItems": 1024
-                  },
-                  "weight": {
-                    "description": "A weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is not selected unless all available variants have a weight of 0.",
-                    "type": "number",
-                    "minimum": 0,
-                    "maximum": 1000000
-                  }
-                },
-                "required": ["elements"],
-                "additionalProperties": false
-              },
-              "maxProperties": 128
-            }
-          },
+            "maxProperties": 128
+          }
+        },
         "required": ["width", "height", "variants"],
         "additionalProperties": false
       },
@@ -619,26 +634,26 @@
       "type": "object",
       "propertyNames": { "$ref": "#/definitions/camelCaseName" },
       "additionalProperties": {
-          "type": "object",
-          "properties": {
-            "values": {
-              "description": "The list of hex color values the PRNG can choose from.",
-              "type": "array",
-              "items": { "$ref": "#/definitions/hexColor" },
-              "minItems": 1,
-              "maxItems": 128
-            },
-            "notEqualTo": {
-              "description": "A list of other color names. The selected color value must differ from the color values selected in those colors. The schema does not prevent cycles (e.g. `a` notEqualTo `b` and `b` notEqualTo `a`); renderers resolve palettes in definition order and must reject unsatisfiable configurations at load time.",
-              "type": "array",
-              "items": { "$ref": "#/definitions/colorName" },
-              "maxItems": 64
-            },
-            "contrastTo": {
-              "description": "The name of another color. When specified, the PRNG is not used for selection — instead, the color value with the highest contrast against the selected color value of the referenced color is chosen. The schema does not prevent cycles (e.g. `a` contrastTo `b` and `b` contrastTo `a`); renderers resolve palettes in definition order and must reject unsatisfiable configurations at load time.",
-              "$ref": "#/definitions/colorName"
-            }
+        "type": "object",
+        "properties": {
+          "values": {
+            "description": "The list of hex color values the PRNG can choose from.",
+            "type": "array",
+            "items": { "$ref": "#/definitions/hexColor" },
+            "minItems": 1,
+            "maxItems": 128
           },
+          "notEqualTo": {
+            "description": "A list of other color names. The selected color value must differ from the color values selected in those colors. The schema does not prevent cycles (e.g. `a` notEqualTo `b` and `b` notEqualTo `a`); renderers resolve palettes in definition order and must reject unsatisfiable configurations at load time.",
+            "type": "array",
+            "items": { "$ref": "#/definitions/colorName" },
+            "maxItems": 64
+          },
+          "contrastTo": {
+            "description": "The name of another color. When specified, the PRNG is not used for selection — instead, the color value with the highest contrast against the selected color value of the referenced color is chosen. The schema does not prevent cycles (e.g. `a` contrastTo `b` and `b` contrastTo `a`); renderers resolve palettes in definition order and must reject unsatisfiable configurations at load time.",
+            "$ref": "#/definitions/colorName"
+          }
+        },
         "required": ["values"],
         "additionalProperties": false
       },
