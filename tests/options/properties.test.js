@@ -48,14 +48,11 @@ describe("options.json named properties", () => {
     });
 
     it("accepts flip as array", () => {
-      assert.equal(
-        validate({ flip: ["horizontal", "vertical"] }),
-        true,
-      );
+      assert.equal(validate({ flip: ["horizontal", "vertical"] }), true);
     });
 
-    it("accepts empty flip array", () => {
-      assert.equal(validate({ flip: [] }), true);
+    it("rejects empty flip array", () => {
+      assert.equal(validate({ flip: [] }), false);
     });
 
     it("accepts fontFamily as string", () => {
@@ -78,8 +75,23 @@ describe("options.json named properties", () => {
       assert.equal(validate({ fontFamily: ["Arial", "Helvetica"] }), true);
     });
 
-    it("accepts empty fontFamily array", () => {
-      assert.equal(validate({ fontFamily: [] }), true);
+    it("accepts fontFamily with comma-separated fallback", () => {
+      assert.equal(validate({ fontFamily: "Arial, Helvetica" }), true);
+    });
+
+    it("accepts fontFamily with comma-separated fallback (no space)", () => {
+      assert.equal(validate({ fontFamily: "Arial,Helvetica" }), true);
+    });
+
+    it("accepts fontFamily with multi-word and fallback chain", () => {
+      assert.equal(
+        validate({ fontFamily: "Times New Roman, Arial, sans-serif" }),
+        true,
+      );
+    });
+
+    it("rejects empty fontFamily array", () => {
+      assert.equal(validate({ fontFamily: [] }), false);
     });
 
     it("accepts fontWeight: 400", () => {
@@ -90,8 +102,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ fontWeight: [400, 700] }), true);
     });
 
-    it("accepts empty fontWeight array", () => {
-      assert.equal(validate({ fontWeight: [] }), true);
+    it("rejects empty fontWeight array", () => {
+      assert.equal(validate({ fontWeight: [] }), false);
     });
 
     it("accepts boundary: fontWeight: 1", () => {
@@ -107,27 +119,35 @@ describe("options.json named properties", () => {
     });
 
     it("accepts scale as single value", () => {
-      assert.equal(validate({ scale: 100 }), true);
+      assert.equal(validate({ scale: 2 }), true);
     });
 
     it("accepts scale as [min, max] array", () => {
-      assert.equal(validate({ scale: [80, 120] }), true);
+      assert.equal(validate({ scale: [0.8, 1.2] }), true);
     });
 
     it("accepts scale array with 1 item", () => {
-      assert.equal(validate({ scale: [80] }), true);
+      assert.equal(validate({ scale: [0.8] }), true);
     });
 
     it("accepts scale as float", () => {
       assert.equal(validate({ scale: 1.5 }), true);
     });
 
-    it("accepts empty scale array", () => {
-      assert.equal(validate({ scale: [] }), true);
+    it("rejects empty scale array", () => {
+      assert.equal(validate({ scale: [] }), false);
     });
 
     it("accepts boundary: scale: 0", () => {
       assert.equal(validate({ scale: 0 }), true);
+    });
+
+    it("accepts boundary: scale: 4", () => {
+      assert.equal(validate({ scale: 4 }), true);
+    });
+
+    it("accepts boundary: size: 4096", () => {
+      assert.equal(validate({ size: 4096 }), true);
     });
 
     it("accepts borderRadius as single value", () => {
@@ -146,8 +166,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ borderRadius: 10.5 }), true);
     });
 
-    it("accepts empty borderRadius array", () => {
-      assert.equal(validate({ borderRadius: [] }), true);
+    it("rejects empty borderRadius array", () => {
+      assert.equal(validate({ borderRadius: [] }), false);
     });
 
     it("accepts boundary: borderRadius: 0", () => {
@@ -248,12 +268,28 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: -1 }), false);
     });
 
+    it("rejects scale > 4", () => {
+      assert.equal(validate({ scale: 4.1 }), false);
+    });
+
+    it("rejects scale: Infinity", () => {
+      assert.equal(validate({ scale: Infinity }), false);
+    });
+
     it("rejects scale array with item < 0", () => {
-      assert.equal(validate({ scale: [-1, 50] }), false);
+      assert.equal(validate({ scale: [-1, 1] }), false);
+    });
+
+    it("rejects scale array with item > 4", () => {
+      assert.equal(validate({ scale: [1, 5] }), false);
     });
 
     it("rejects scale array with 3+ items", () => {
-      assert.equal(validate({ scale: [80, 100, 120] }), false);
+      assert.equal(validate({ scale: [0.8, 1, 1.2] }), false);
+    });
+
+    it("rejects size > 4096", () => {
+      assert.equal(validate({ size: 4097 }), false);
     });
 
     it("rejects borderRadius as string", () => {

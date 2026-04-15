@@ -2,19 +2,17 @@
 set -euo pipefail
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-TARGET_DIR="$BASE_DIR/../src"
+SRC_DIR="$BASE_DIR/../src"
 DIST_DIR="$BASE_DIR/../dist"
 PACKAGE_FILE="$BASE_DIR/../package.json"
-README_FILE="$BASE_DIR/../README.md"
 
-echo "Minify definition files."
+version=$(jq -r '.version' "$PACKAGE_FILE")
+
+echo "Minify schemas (version ${version})."
 
 mkdir -p "$DIST_DIR"
 
-version=$(jq -r '.version' "$PACKAGE_FILE")
-exports="{}"
-
-for f in "$TARGET_DIR"/*.json; do
+for f in "$SRC_DIR"/*.json; do
 
   [ -f "$f" ] || continue
 
@@ -24,16 +22,4 @@ for f in "$TARGET_DIR"/*.json; do
   id="https://cdn.hopjs.net/npm/@dicebear/schema@${version}/dist/${name}.min.json"
   jq -c --arg id "$id" '{"$id": $id} + .' "$f" > "$DIST_DIR/${name}.min.json"
 
-  exports=$(echo "$exports" | jq --arg key "./${name}.json" --arg val "./dist/${name}.min.json" '. + {($key): {types: $val, default: $val}}')
-
 done
-
-echo "Update CDN URLs in README.md."
-
-sed -i.bak "s|cdn.hopjs.net/npm/@dicebear/schema@[^/]*/dist/|cdn.hopjs.net/npm/@dicebear/schema@${version}/dist/|g" "$README_FILE"
-rm "${README_FILE}.bak"
-
-echo "Update exports in package.json."
-
-jq --argjson exports "$exports" '. + {exports: $exports}' "$PACKAGE_FILE" > "$PACKAGE_FILE.tmp"
-mv "$PACKAGE_FILE.tmp" "$PACKAGE_FILE"

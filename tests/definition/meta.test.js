@@ -1,6 +1,10 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { loadSchema, createValidator, withCanvas } from "../helpers/validator.js";
+import {
+  loadSchema,
+  createValidator,
+  withCanvas,
+} from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
 const validate = createValidator(schema);

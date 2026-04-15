@@ -1,439 +1,258 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { loadSchema, createValidator, withCanvas } from "../helpers/validator.js";
+import {
+  loadSchema,
+  createValidator,
+  withCanvas,
+} from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
 const validate = createValidator(schema);
 
+const makeComponent = (overrides = {}) =>
+  withCanvas({
+    components: {
+      head: {
+        width: 100,
+        height: 100,
+        variants: { round: { elements: [] } },
+        ...overrides,
+      },
+    },
+  });
+
+const componentWithName = (name) =>
+  withCanvas({
+    components: {
+      [name]: {
+        width: 100,
+        height: 100,
+        variants: { round: { elements: [] } },
+      },
+    },
+  });
+
+const assertValid = (data) => assert.equal(validate(data), true);
+const assertInvalid = (data) => assert.equal(validate(data), false);
+
 describe("definition.json components", () => {
   describe("valid components", () => {
     it("accepts empty components object", () => {
-      assert.equal(validate(withCanvas({ components: {} })), true);
+      assertValid(withCanvas({ components: {} }));
     });
 
-    it("accepts minimal component with width/height/variants", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
+    it("accepts minimal component (width/height/variants)", () => {
+      assertValid(makeComponent());
     });
 
-    it("accepts component with optional probability/rotate/translate", () => {
-      const data = withCanvas({
-        components: {
-          eyes: {
-            width: 50,
-            height: 30,
-            probability: 80,
-            rotate: [-10, 10],
-            translate: { x: [-5, 5], y: [0, 10] },
-            variants: { open: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
-    });
-
-    it("accepts rotate as single-item array", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [45],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
-    });
-
-    it("accepts rotate boundary values [-360, 360]", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [-360, 360],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
-    });
-
-    it("accepts probability: 0 (boundary)", () => {
-      const data = withCanvas({
-        components: {
-          nose: {
-            width: 10,
-            height: 10,
-            probability: 0,
-            variants: { small: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
-    });
-
-    it("accepts probability: 100 (boundary)", () => {
-      const data = withCanvas({
-        components: {
-          nose: {
-            width: 10,
-            height: 10,
-            probability: 100,
-            variants: { small: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
+    it("accepts component with probability/rotate/translate", () => {
+      assertValid(
+        makeComponent({
+          probability: 80,
+          rotate: [-10, 10],
+          translate: { x: [-5, 5], y: [0, 10] },
+        }),
+      );
     });
   });
 
-  describe("invalid components", () => {
+  describe("component names", () => {
     it("rejects name starting with uppercase letter", () => {
-      const data = withCanvas({
-        components: {
-          Head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
+      assertInvalid(componentWithName("Head"));
     });
 
     it("rejects name starting with digit", () => {
-      const data = withCanvas({
-        components: {
-          "1head": {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
+      assertInvalid(componentWithName("1head"));
     });
 
     it("rejects empty-string name", () => {
-      const data = withCanvas({
-        components: {
-          "": {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects missing required fields (width/height/variants)", () => {
-      const data = withCanvas({
-        components: { head: {} },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects probability > 100", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            probability: 101,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects translate x with more than 2 items", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            translate: { x: [-5, 0, 5], y: [0] },
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects translate y with more than 2 items", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            translate: { x: [0], y: [-5, 0, 5] },
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects empty translate x array", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            translate: { x: [], y: [0] },
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects rotate value > 360", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [0, 361],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects rotate value < -360", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [-361, 0],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects variant name starting with uppercase", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { Round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects variant name starting with digit", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { "1round": { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects rotate with more than 2 items", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [-10, 0, 10],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects empty rotate array", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            rotate: [],
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects probability < 0", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            probability: -1,
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
+      assertInvalid(componentWithName(""));
     });
   });
 
-  describe("variant weight", () => {
-    it("accepts variant with weight", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [], weight: 10 } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
+  describe("component structure", () => {
+    it("rejects missing required fields", () => {
+      assertInvalid(withCanvas({ components: { head: {} } }));
     });
 
-    it("accepts variant with weight: 0 (boundary)", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [], weight: 0 } },
-          },
-        },
-      });
-      assert.equal(validate(data), true);
+    it("rejects additional property on component", () => {
+      assertInvalid(makeComponent({ extra: "data" }));
     });
 
-    it("accepts variant with fractional weight", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
+    it("rejects additional property on translate", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [0], y: [0], z: [0] } }),
+      );
+    });
+  });
+
+  describe("probability bounds", () => {
+    it("accepts boundary 0", () => {
+      assertValid(makeComponent({ probability: 0 }));
+    });
+
+    it("accepts boundary 100", () => {
+      assertValid(makeComponent({ probability: 100 }));
+    });
+
+    it("rejects > 100", () => {
+      assertInvalid(makeComponent({ probability: 101 }));
+    });
+
+    it("rejects < 0", () => {
+      assertInvalid(makeComponent({ probability: -1 }));
+    });
+  });
+
+  describe("rotate bounds", () => {
+    it("accepts single-item array", () => {
+      assertValid(makeComponent({ rotate: [45] }));
+    });
+
+    it("accepts boundary values [-360, 360]", () => {
+      assertValid(makeComponent({ rotate: [-360, 360] }));
+    });
+
+    it("rejects value > 360", () => {
+      assertInvalid(makeComponent({ rotate: [0, 361] }));
+    });
+
+    it("rejects value < -360", () => {
+      assertInvalid(makeComponent({ rotate: [-361, 0] }));
+    });
+
+    it("rejects more than 2 items", () => {
+      assertInvalid(makeComponent({ rotate: [-10, 0, 10] }));
+    });
+
+    it("rejects empty array", () => {
+      assertInvalid(makeComponent({ rotate: [] }));
+    });
+
+    it("rejects bare number (arrays only)", () => {
+      assertInvalid(makeComponent({ rotate: 45 }));
+    });
+  });
+
+  describe("translate bounds", () => {
+    it("accepts boundary values (±1000)", () => {
+      assertValid(
+        makeComponent({
+          translate: { x: [-1000, 1000], y: [-1000, 1000] },
+        }),
+      );
+    });
+
+    it("rejects x with more than 2 items", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [-5, 0, 5], y: [0] } }),
+      );
+    });
+
+    it("rejects y with more than 2 items", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [0], y: [-5, 0, 5] } }),
+      );
+    });
+
+    it("rejects empty array", () => {
+      assertInvalid(makeComponent({ translate: { x: [], y: [0] } }));
+    });
+
+    it("rejects bare number (arrays only)", () => {
+      assertInvalid(makeComponent({ translate: { x: 5, y: -10 } }));
+    });
+
+    it("rejects value below lower bound (-1001)", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [-1001, 0], y: [0] } }),
+      );
+    });
+
+    it("rejects value above upper bound (1001)", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [0, 1001], y: [0] } }),
+      );
+    });
+  });
+
+  describe("variants", () => {
+    it("rejects variant name starting with uppercase", () => {
+      assertInvalid(
+        makeComponent({ variants: { Round: { elements: [] } } }),
+      );
+    });
+
+    it("rejects variant name starting with digit", () => {
+      assertInvalid(
+        makeComponent({ variants: { "1round": { elements: [] } } }),
+      );
+    });
+
+    it("rejects additional property on variant", () => {
+      assertInvalid(
+        makeComponent({
+          variants: { round: { elements: [], extra: "data" } },
+        }),
+      );
+    });
+
+    describe("weight", () => {
+      it("accepts integer weight", () => {
+        assertValid(
+          makeComponent({ variants: { round: { elements: [], weight: 10 } } }),
+        );
+      });
+
+      it("accepts weight boundary 0", () => {
+        assertValid(
+          makeComponent({ variants: { round: { elements: [], weight: 0 } } }),
+        );
+      });
+
+      it("accepts fractional weight", () => {
+        assertValid(
+          makeComponent({
             variants: { round: { elements: [], weight: 0.5 } },
-          },
-        },
+          }),
+        );
       });
-      assert.equal(validate(data), true);
-    });
 
-    it("accepts multiple variants with different weight values", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
+      it("accepts multiple variants with different weights", () => {
+        assertValid(
+          makeComponent({
             variants: {
               round: { elements: [], weight: 50 },
               square: { elements: [], weight: 10 },
               star: { elements: [], weight: 1 },
             },
-          },
-        },
+          }),
+        );
       });
-      assert.equal(validate(data), true);
-    });
 
-    it("rejects variant with negative weight", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
+      it("rejects negative weight", () => {
+        assertInvalid(
+          makeComponent({
             variants: { round: { elements: [], weight: -1 } },
-          },
-        },
+          }),
+        );
       });
-      assert.equal(validate(data), false);
-    });
 
-    it("rejects variant with string weight", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
+      it("rejects string weight", () => {
+        assertInvalid(
+          makeComponent({
             variants: { round: { elements: [], weight: "high" } },
-          },
-        },
+          }),
+        );
       });
-      assert.equal(validate(data), false);
-    });
 
-    it("rejects the removed rarity property (renamed to weight)", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
+      it("rejects the removed rarity property (renamed to weight)", () => {
+        assertInvalid(
+          makeComponent({
             variants: { round: { elements: [], rarity: 10 } },
-          },
-        },
+          }),
+        );
       });
-      assert.equal(validate(data), false);
-    });
-  });
-
-  describe("additionalProperties", () => {
-    it("rejects additional property in component", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [] } },
-            extra: "data",
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects additional property in variant", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            variants: { round: { elements: [], extra: "data" } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
-    });
-
-    it("rejects additional property in translate", () => {
-      const data = withCanvas({
-        components: {
-          head: {
-            width: 100,
-            height: 100,
-            translate: { x: [0], y: [0], z: [0] },
-            variants: { round: { elements: [] } },
-          },
-        },
-      });
-      assert.equal(validate(data), false);
     });
   });
 });

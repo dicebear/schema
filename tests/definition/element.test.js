@@ -4,6 +4,7 @@ import {
   loadSchema,
   createValidator,
   getDefSchema,
+  LIMITS,
 } from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
@@ -16,18 +17,21 @@ describe("definition.json $defs/element", () => {
       assert.equal(validate({ type: "element", name: "rect" }), true);
     });
 
-    it("accepts minimal text type", () => {
-      assert.equal(validate({ type: "text" }), true);
+    it("accepts minimal text type with string value", () => {
+      assert.equal(validate({ type: "text", value: "hi" }), true);
     });
 
-    it("accepts component with value", () => {
-      assert.equal(validate({ type: "component", value: "eyes" }), true);
+    it("accepts component with name", () => {
+      assert.equal(validate({ type: "component", name: "eyes" }), true);
     });
 
-    for (const name of ["initial", "initials"]) {
-      it(`accepts text with variable value object (${name})`, () => {
+    for (const variableName of ["initial", "initials"]) {
+      it(`accepts text with variable value object (${variableName})`, () => {
         assert.equal(
-          validate({ type: "text", value: { type: "variable", value: name } }),
+          validate({
+            type: "text",
+            value: { type: "variable", name: variableName },
+          }),
           true,
         );
       });
@@ -76,8 +80,12 @@ describe("definition.json $defs/element", () => {
       assert.equal(validate({ type: "element" }), false);
     });
 
-    it("rejects component without required value", () => {
+    it("rejects component without required name", () => {
       assert.equal(validate({ type: "component" }), false);
+    });
+
+    it("rejects text without required value", () => {
+      assert.equal(validate({ type: "text" }), false);
     });
 
     it('rejects "variable" as element type', () => {
@@ -144,25 +152,93 @@ describe("definition.json $defs/element", () => {
 
     it("rejects component type with invalid name value", () => {
       assert.equal(
-        validate({ type: "component", value: "Invalid Name" }),
+        validate({ type: "component", name: "Invalid Name" }),
         false,
       );
     });
 
     it("rejects wrong variable name", () => {
-      assert.equal(validate({ type: "text", value: { type: "variable", value: "fontFamily" } }), false);
-      assert.equal(validate({ type: "text", value: { type: "variable", value: "skinColor" } }), false);
+      assert.equal(
+        validate({
+          type: "text",
+          value: { type: "variable", name: "fontFamily" },
+        }),
+        false,
+      );
+      assert.equal(
+        validate({
+          type: "text",
+          value: { type: "variable", name: "skinColor" },
+        }),
+        false,
+      );
     });
 
     it("rejects malformed variable reference", () => {
-      assert.equal(validate({ type: "text", value: { value: "initial" } }), false);
-      assert.equal(validate({ type: "text", value: { type: "variable" } }), false);
-      assert.equal(validate({ type: "text", value: { type: "variable", value: "initial", extra: true } }), false);
+      assert.equal(
+        validate({ type: "text", value: { name: "initial" } }),
+        false,
+      );
+      assert.equal(
+        validate({ type: "text", value: { type: "variable" } }),
+        false,
+      );
+      assert.equal(
+        validate({
+          type: "text",
+          value: { type: "variable", name: "initial", extra: true },
+        }),
+        false,
+      );
     });
 
     it("rejects value on non-style element", () => {
       assert.equal(
         validate({ type: "element", name: "rect", value: "test" }),
+        false,
+      );
+    });
+
+    it(`rejects text value longer than ${LIMITS.elementValue} characters`, () => {
+      assert.equal(
+        validate({ type: "text", value: "a".repeat(LIMITS.elementValue + 1) }),
+        false,
+      );
+    });
+
+    it(`accepts text value of exactly ${LIMITS.elementValue} characters`, () => {
+      assert.equal(
+        validate({ type: "text", value: "a".repeat(LIMITS.elementValue) }),
+        true,
+      );
+    });
+  });
+
+  describe("type-specific name and attribute rules", () => {
+    it("rejects component type with an extra value property", () => {
+      assert.equal(
+        validate({ type: "component", name: "eyes", value: "rect" }),
+        false,
+      );
+    });
+
+    it("rejects component type with attributes", () => {
+      assert.equal(
+        validate({ type: "component", name: "eyes", attributes: {} }),
+        false,
+      );
+    });
+
+    it("rejects text type with an extra name property", () => {
+      assert.equal(
+        validate({ type: "text", value: "hi", name: "rect" }),
+        false,
+      );
+    });
+
+    it("rejects text type with attributes", () => {
+      assert.equal(
+        validate({ type: "text", value: "hi", attributes: {} }),
         false,
       );
     });
@@ -180,13 +256,13 @@ describe("definition.json $defs/element", () => {
       );
     });
 
-    it("accepts text type with children", () => {
+    it("rejects text type with children", () => {
       assert.equal(
         validate({
           type: "text",
           children: [{ type: "element", name: "tspan" }],
         }),
-        true,
+        false,
       );
     });
 
@@ -194,7 +270,7 @@ describe("definition.json $defs/element", () => {
       assert.equal(
         validate({
           type: "component",
-          value: "eyes",
+          name: "eyes",
           children: [{ type: "element", name: "rect" }],
         }),
         false,
@@ -202,91 +278,106 @@ describe("definition.json $defs/element", () => {
     });
   });
 
-  describe("style element value security", () => {
-    it("accepts style element with safe CSS", () => {
+  describe("style element content security", () => {
+    const styleWithChildren = (...children) => ({
+      type: "element",
+      name: "style",
+      children,
+    });
+
+    const styleWithCss = (...values) =>
+      styleWithChildren(...values.map((value) => ({ type: "text", value })));
+
+    it("rejects style element with value (value not valid on element types)", () => {
       assert.equal(
         validate({
           type: "element",
           name: "style",
-          value: ".cls { fill: red; stroke: blue; }",
+          value: ".cls { fill: red; }",
         }),
+        false,
+      );
+    });
+
+    it("accepts style element with no children", () => {
+      assert.equal(validate({ type: "element", name: "style" }), true);
+    });
+
+    it("accepts style element with empty children array", () => {
+      assert.equal(validate(styleWithChildren()), true);
+    });
+
+    it("accepts style element with safe CSS text child", () => {
+      assert.equal(
+        validate(styleWithCss(".cls { fill: red; stroke: blue; }")),
         true,
       );
     });
 
-    it("accepts style element with local url() reference", () => {
+    it("accepts style element with local url() reference in text child", () => {
       assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value: ".cls { fill: url(#gradient); }",
-        }),
+        validate(styleWithCss(".cls { fill: url(#gradient); }")),
         true,
       );
     });
 
-    it("rejects style element with external url()", () => {
+    it("accepts style element with multiple safe text children", () => {
       assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value: ".cls { background: url(https://evil.com/track); }",
-        }),
+        validate(styleWithCss(".a { fill: red; }", ".b { stroke: blue; }")),
+        true,
+      );
+    });
+
+    for (const [label, value] of [
+      ["external url()", ".cls { background: url(https://evil.com/track); }"],
+      ["@import", "@import url('https://evil.com/steal.css');"],
+      [
+        "@font-face",
+        "@font-face { font-family: evil; src: url('https://evil.com/font.woff'); }",
+      ],
+      ["expression()", ".cls { width: expression(alert(1)); }"],
+      ["-moz-binding", ".cls { -moz-binding: url(https://evil.com/xbl#xss); }"],
+      [
+        "CSS escape sequence (backslash)",
+        ".cls { background: \\75\\72\\6C(https://evil.com); }",
+      ],
+    ]) {
+      it(`rejects style element with ${label} in text child`, () => {
+        assert.equal(validate(styleWithCss(value)), false);
+      });
+    }
+
+    it("rejects style element with element child", () => {
+      assert.equal(
+        validate(styleWithChildren({ type: "element", name: "g" })),
         false,
       );
     });
 
-    it("rejects style element with @import", () => {
+    it("rejects style element with component child", () => {
       assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value: "@import url('https://evil.com/steal.css');",
-        }),
+        validate(styleWithChildren({ type: "component", name: "eyes" })),
         false,
       );
     });
 
-    it("rejects style element with @font-face", () => {
+    it("rejects style element with text child using variable value", () => {
       assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value:
-            "@font-face { font-family: evil; src: url('https://evil.com/font.woff'); }",
-        }),
+        validate(
+          styleWithChildren({
+            type: "text",
+            value: { type: "variable", name: "initial" },
+          }),
+        ),
         false,
       );
     });
 
-    it("rejects style element with expression()", () => {
+    it("rejects style element with value AND children", () => {
       assert.equal(
         validate({
-          type: "element",
-          name: "style",
-          value: ".cls { width: expression(alert(1)); }",
-        }),
-        false,
-      );
-    });
-
-    it("rejects style element with -moz-binding", () => {
-      assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value: ".cls { -moz-binding: url(https://evil.com/xbl#xss); }",
-        }),
-        false,
-      );
-    });
-
-    it("rejects style element with CSS escape sequence (backslash)", () => {
-      assert.equal(
-        validate({
-          type: "element",
-          name: "style",
-          value: ".cls { background: \\75\\72\\6C(https://evil.com); }",
+          ...styleWithCss(".a { fill: red; }"),
+          value: ".cls { fill: red; }",
         }),
         false,
       );

@@ -41,8 +41,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: ["open", "closed"] }), true);
     });
 
-    it("accepts empty variant array", () => {
-      assert.equal(validate({ eyesVariant: [] }), true);
+    it("rejects empty variant array", () => {
+      assert.equal(validate({ eyesVariant: [] }), false);
     });
 
     it("rejects variant array with more than 128 items", () => {
@@ -53,11 +53,35 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: [123] }), false);
     });
 
-    it("accepts variant as object with weights", () => {
+    it("rejects variant string with non-camelCase characters", () => {
       assert.equal(
-        validate({ eyesVariant: { open: 5, closed: 1 } }),
-        true
+        validate({ eyesVariant: "<script>alert(1)</script>" }),
+        false,
       );
+    });
+
+    it("rejects variant string with spaces", () => {
+      assert.equal(validate({ eyesVariant: "open variant" }), false);
+    });
+
+    it("rejects variant string starting with uppercase", () => {
+      assert.equal(validate({ eyesVariant: "Open" }), false);
+    });
+
+    it("rejects variant string starting with digit", () => {
+      assert.equal(validate({ eyesVariant: "1open" }), false);
+    });
+
+    it("rejects empty variant string", () => {
+      assert.equal(validate({ eyesVariant: "" }), false);
+    });
+
+    it("rejects variant array item with non-camelCase characters", () => {
+      assert.equal(validate({ eyesVariant: ["open", "<script>"] }), false);
+    });
+
+    it("accepts variant as object with weights", () => {
+      assert.equal(validate({ eyesVariant: { open: 5, closed: 1 } }), true);
     });
 
     it("accepts variant object with weight 0 (boundary)", () => {
@@ -68,13 +92,13 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: { open: 0.5 } }), true);
     });
 
-    it("accepts empty variant object", () => {
-      assert.equal(validate({ eyesVariant: {} }), true);
+    it("rejects empty variant object", () => {
+      assert.equal(validate({ eyesVariant: {} }), false);
     });
 
     it("rejects variant object with more than 128 properties", () => {
       const obj = Object.fromEntries(
-        Array.from({ length: 129 }, (_, i) => [`v${i}`, 1])
+        Array.from({ length: 129 }, (_, i) => [`v${i}`, 1]),
       );
       assert.equal(validate({ eyesVariant: obj }), false);
     });
@@ -92,17 +116,11 @@ describe("options.json patternProperties", () => {
     });
 
     it("rejects variant object with string value", () => {
-      assert.equal(
-        validate({ eyesVariant: { open: "high" } }),
-        false
-      );
+      assert.equal(validate({ eyesVariant: { open: "high" } }), false);
     });
 
     it("rejects the removed *VariantRarity option", () => {
-      assert.equal(
-        validate({ eyesVariantRarity: { open: 5 } }),
-        false
-      );
+      assert.equal(validate({ eyesVariantRarity: { open: 5 } }), false);
     });
   });
 
@@ -123,8 +141,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColor: ["#ff0000", "#00ff00"] }), true);
     });
 
-    it("accepts empty color array", () => {
-      assert.equal(validate({ skinColor: [] }), true);
+    it("rejects empty color array", () => {
+      assert.equal(validate({ skinColor: [] }), false);
     });
 
     it("rejects color array with more than 128 items", () => {
@@ -154,12 +172,15 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFill: ["solid", "linear"] }), true);
     });
 
-    it("accepts empty colorFill array", () => {
-      assert.equal(validate({ skinColorFill: [] }), true);
+    it("rejects empty colorFill array", () => {
+      assert.equal(validate({ skinColorFill: [] }), false);
     });
 
     it("rejects colorFill array with more than 128 items", () => {
-      assert.equal(validate({ skinColorFill: Array(129).fill("solid") }), false);
+      assert.equal(
+        validate({ skinColorFill: Array(129).fill("solid") }),
+        false,
+      );
     });
 
     it("rejects invalid colorFill string", () => {
@@ -192,12 +213,12 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: [3] }), true);
     });
 
-    it("accepts empty colorFillStops array", () => {
-      assert.equal(validate({ skinColorFillStops: [] }), true);
+    it("rejects empty colorFillStops array", () => {
+      assert.equal(validate({ skinColorFillStops: [] }), false);
     });
 
-    it("rejects colorFillStops < 1", () => {
-      assert.equal(validate({ skinColorFillStops: 0 }), false);
+    it("rejects colorFillStops < 2", () => {
+      assert.equal(validate({ skinColorFillStops: 1 }), false);
     });
 
     it("rejects negative colorFillStops", () => {
@@ -234,8 +255,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorAngle: [45] }), true);
     });
 
-    it("accepts empty colorAngle array", () => {
-      assert.equal(validate({ skinColorAngle: [] }), true);
+    it("rejects empty colorAngle array", () => {
+      assert.equal(validate({ skinColorAngle: [] }), false);
     });
 
     it("accepts boundary: -360", () => {
@@ -280,8 +301,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ rotate: [30] }), true);
     });
 
-    it("accepts empty rotate array", () => {
-      assert.equal(validate({ rotate: [] }), true);
+    it("rejects empty rotate array", () => {
+      assert.equal(validate({ rotate: [] }), false);
     });
 
     it("accepts boundary: -360", () => {
@@ -326,32 +347,32 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateY: [10] }), true);
     });
 
-    it("accepts empty translateY array", () => {
-      assert.equal(validate({ translateY: [] }), true);
+    it("rejects empty translateY array", () => {
+      assert.equal(validate({ translateY: [] }), false);
     });
 
-    it("accepts boundary: -100", () => {
-      assert.equal(validate({ translateY: -100 }), true);
+    it("accepts boundary: -200", () => {
+      assert.equal(validate({ translateY: -200 }), true);
     });
 
-    it("accepts boundary: 100", () => {
-      assert.equal(validate({ translateY: 100 }), true);
+    it("accepts boundary: 200", () => {
+      assert.equal(validate({ translateY: 200 }), true);
     });
 
     it("rejects array with 3 items", () => {
       assert.equal(validate({ translateY: [-10, 0, 10] }), false);
     });
 
-    it("rejects value > 100", () => {
-      assert.equal(validate({ translateY: 101 }), false);
+    it("rejects value > 200", () => {
+      assert.equal(validate({ translateY: 201 }), false);
     });
 
-    it("rejects value < -100", () => {
-      assert.equal(validate({ translateY: -101 }), false);
+    it("rejects value < -200", () => {
+      assert.equal(validate({ translateY: -201 }), false);
     });
 
     it("rejects array with out-of-range value", () => {
-      assert.equal(validate({ translateY: [-101, 10] }), false);
+      assert.equal(validate({ translateY: [-201, 10] }), false);
     });
   });
 
@@ -372,32 +393,32 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: [10] }), true);
     });
 
-    it("accepts empty translateX array", () => {
-      assert.equal(validate({ translateX: [] }), true);
+    it("rejects empty translateX array", () => {
+      assert.equal(validate({ translateX: [] }), false);
     });
 
-    it("accepts boundary: -100", () => {
-      assert.equal(validate({ translateX: -100 }), true);
+    it("accepts boundary: -200", () => {
+      assert.equal(validate({ translateX: -200 }), true);
     });
 
-    it("accepts boundary: 100", () => {
-      assert.equal(validate({ translateX: 100 }), true);
+    it("accepts boundary: 200", () => {
+      assert.equal(validate({ translateX: 200 }), true);
     });
 
     it("rejects array with 3 items", () => {
       assert.equal(validate({ translateX: [-10, 0, 10] }), false);
     });
 
-    it("rejects value > 100", () => {
-      assert.equal(validate({ translateX: 101 }), false);
+    it("rejects value > 200", () => {
+      assert.equal(validate({ translateX: 201 }), false);
     });
 
-    it("rejects value < -100", () => {
-      assert.equal(validate({ translateX: -101 }), false);
+    it("rejects value < -200", () => {
+      assert.equal(validate({ translateX: -201 }), false);
     });
 
     it("rejects array with out-of-range value", () => {
-      assert.equal(validate({ translateX: [-101, 10] }), false);
+      assert.equal(validate({ translateX: [-201, 10] }), false);
     });
   });
 });

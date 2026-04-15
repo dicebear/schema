@@ -6,6 +6,14 @@ import Ajv from "ajv";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const schemaDir = resolve(__dirname, "../../src");
 
+export const LIMITS = {
+  attributeString: 1024,
+  pathDataString: 16384,
+  colorValue: 1024,
+  elementValue: 4096,
+  dataUri: 262144,
+};
+
 export function loadSchema(filename) {
   const content = readFileSync(resolve(schemaDir, filename), "utf-8");
   return JSON.parse(content);

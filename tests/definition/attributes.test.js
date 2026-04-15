@@ -4,6 +4,7 @@ import {
   loadSchema,
   createValidator,
   getDefSchema,
+  LIMITS,
 } from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
@@ -30,11 +31,17 @@ describe("definition.json $defs/attributes", () => {
 
     it("accepts color ref with object (name reference)", () => {
       assert.equal(
-        validate({ fill: { type: "color", value: "skinColor" } }),
+        validate({ fill: { type: "color", name: "skinColor" } }),
         true,
       );
     });
 
+    it("accepts multiple attributes", () => {
+      assert.equal(validate({ d: "M0 0", fill: "red", opacity: "0.5" }), true);
+    });
+  });
+
+  describe("paint server references (fill/stroke)", () => {
     it("accepts fill with local url(#id)", () => {
       assert.equal(validate({ fill: "url(#myGradient)" }), true);
     });
@@ -43,44 +50,145 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(validate({ stroke: "url(#myPattern)" }), true);
     });
 
+    it("accepts fill with uppercase URL(#id)", () => {
+      assert.equal(validate({ fill: "URL(#myGradient)" }), true);
+    });
+
+    it("accepts fill with empty fragment url(#)", () => {
+      assert.equal(validate({ fill: "url(#)" }), true);
+    });
+
     it("rejects fill with external url()", () => {
-      assert.equal(validate({ fill: "url(https://evil.com/grad.svg#g)" }), false);
-    });
-
-    it("rejects fill with uppercase URL(#id)", () => {
-      assert.equal(validate({ fill: "URL(#myGradient)" }), false);
-    });
-
-    it("rejects fill with empty id url(#)", () => {
-      assert.equal(validate({ fill: "url(#)" }), false);
+      assert.equal(
+        validate({ fill: "url(https://evil.com/grad.svg#g)" }),
+        false,
+      );
     });
 
     it("rejects stroke with external url()", () => {
-      assert.equal(validate({ stroke: "url(https://evil.com/grad.svg#g)" }), false);
+      assert.equal(
+        validate({ stroke: "url(https://evil.com/grad.svg#g)" }),
+        false,
+      );
+    });
+  });
+
+  describe("injection filter (attributeString)", () => {
+    it("accepts normal path data", () => {
+      assert.equal(validate({ d: "M0 0L10 10 Z" }), true);
     });
 
-    it("accepts multiple attributes", () => {
-      assert.equal(validate({ d: "M0 0", fill: "red", opacity: "0.5" }), true);
+    it("accepts transform with translate/scale", () => {
+      assert.equal(validate({ transform: "translate(10, 20) scale(2)" }), true);
+    });
+
+    it("rejects d with external url()", () => {
+      assert.equal(validate({ d: "url(https://evil.com/path.svg)" }), false);
+    });
+
+    it("rejects transform with expression()", () => {
+      assert.equal(validate({ transform: "expression(alert(1))" }), false);
+    });
+
+    it("rejects font-size with behavior:", () => {
+      assert.equal(validate({ "font-size": "behavior: url(xss.htc)" }), false);
+    });
+
+    it("rejects stdDeviation with -moz-binding", () => {
+      assert.equal(
+        validate({ stdDeviation: "-moz-binding: url(xss.xbl)" }),
+        false,
+      );
+    });
+
+    it("rejects opacity with backslash escape", () => {
+      assert.equal(validate({ opacity: "\\75rl(x)" }), false);
+    });
+
+    it("accepts local url(#id) in an attributeString value", () => {
+      assert.equal(validate({ d: "foo url(#ref) bar" }), true);
+    });
+
+    it("rejects fill with javascript: URI", () => {
+      assert.equal(validate({ fill: "javascript:alert(1)" }), false);
+    });
+
+    it("rejects fill with mixed-case JavaScript: URI", () => {
+      assert.equal(validate({ fill: "JavaScript:alert(1)" }), false);
+    });
+
+    it("rejects stroke with vbscript: URI", () => {
+      assert.equal(validate({ stroke: "vbscript:MsgBox(1)" }), false);
+    });
+  });
+
+  describe("length bounds", () => {
+    it(`accepts attributeString at ${LIMITS.attributeString} characters`, () => {
+      assert.equal(
+        validate({ transform: "a".repeat(LIMITS.attributeString) }),
+        true,
+      );
+    });
+
+    it(`rejects attributeString over ${LIMITS.attributeString} characters`, () => {
+      assert.equal(
+        validate({ transform: "a".repeat(LIMITS.attributeString + 1) }),
+        false,
+      );
+    });
+
+    it(`accepts d (pathDataString) at ${LIMITS.pathDataString} characters`, () => {
+      assert.equal(validate({ d: "M".repeat(LIMITS.pathDataString) }), true);
+    });
+
+    it(`rejects d (pathDataString) over ${LIMITS.pathDataString} characters`, () => {
+      assert.equal(
+        validate({ d: "M".repeat(LIMITS.pathDataString + 1) }),
+        false,
+      );
     });
   });
 
   describe("variable references in attributes", () => {
     it("accepts correct variable for font-family and font-weight", () => {
-      assert.equal(validate({ "font-family": { type: "variable", value: "fontFamily" } }), true);
-      assert.equal(validate({ "font-weight": { type: "variable", value: "fontWeight" } }), true);
+      assert.equal(
+        validate({ "font-family": { type: "variable", name: "fontFamily" } }),
+        true,
+      );
+      assert.equal(
+        validate({ "font-weight": { type: "variable", name: "fontWeight" } }),
+        true,
+      );
     });
 
     it("rejects wrong variable name", () => {
-      assert.equal(validate({ "font-family": { type: "variable", value: "fontWeight" } }), false);
-      assert.equal(validate({ "font-weight": { type: "variable", value: "fontFamily" } }), false);
-      assert.equal(validate({ "font-family": { type: "variable", value: "initial" } }), false);
-      assert.equal(validate({ "font-family": { type: "variable", value: "unknownVar" } }), false);
+      assert.equal(
+        validate({ "font-family": { type: "variable", name: "fontWeight" } }),
+        false,
+      );
+      assert.equal(
+        validate({ "font-weight": { type: "variable", name: "fontFamily" } }),
+        false,
+      );
+      assert.equal(
+        validate({ "font-family": { type: "variable", name: "initial" } }),
+        false,
+      );
+      assert.equal(
+        validate({ "font-family": { type: "variable", name: "unknownVar" } }),
+        false,
+      );
     });
 
     it("rejects malformed variable reference", () => {
-      assert.equal(validate({ "font-family": { value: "fontFamily" } }), false);
+      assert.equal(validate({ "font-family": { name: "fontFamily" } }), false);
       assert.equal(validate({ "font-family": { type: "variable" } }), false);
-      assert.equal(validate({ "font-family": { type: "variable", value: "fontFamily", extra: true } }), false);
+      assert.equal(
+        validate({
+          "font-family": { type: "variable", name: "fontFamily", extra: true },
+        }),
+        false,
+      );
     });
   });
 
@@ -110,6 +218,13 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(
         validate({ href: "data:image/jpeg;base64,/9j/4AAQ=" }),
         true,
+      );
+    });
+
+    it("rejects data URI with image/jpg (not a registered IANA media type)", () => {
+      assert.equal(
+        validate({ href: "data:image/jpg;base64,/9j/4AAQ=" }),
+        false,
       );
     });
 
@@ -177,6 +292,34 @@ describe("definition.json $defs/attributes", () => {
         false,
       );
     });
+
+    it("accepts fragment reference containing underscores and dots", () => {
+      assert.equal(validate({ href: "#_my.id-2" }), true);
+    });
+
+    it("accepts fragment with consecutive separators", () => {
+      assert.equal(validate({ href: "#my--id" }), true);
+    });
+
+    it("accepts fragment with trailing separator", () => {
+      assert.equal(validate({ href: "#foo-" }), true);
+    });
+
+    it("rejects fragment starting with digit", () => {
+      assert.equal(validate({ href: "#1foo" }), false);
+    });
+
+    it("rejects fragment with colon", () => {
+      assert.equal(validate({ href: "#foo:bar" }), false);
+    });
+
+    it(`rejects data URI larger than ${LIMITS.dataUri} characters`, () => {
+      const payload = "A".repeat(LIMITS.dataUri + 1);
+      assert.equal(
+        validate({ href: `data:image/png;base64,${payload}` }),
+        false,
+      );
+    });
   });
 
   describe("event handler attributes (XSS prevention)", () => {
@@ -224,26 +367,14 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(validate({ style: "fill: url(#myGradient)" }), true);
     });
 
-    it("rejects style with external url()", () => {
-      assert.equal(
-        validate({ style: "background: url(https://evil.com/steal)" }),
-        false,
-      );
-    });
-
-    it("rejects style with external URL() (uppercase)", () => {
-      assert.equal(
-        validate({ style: "background: URL(https://evil.com/steal)" }),
-        false,
-      );
-    });
-
-    it("rejects style with external mixed-case Url()", () => {
-      assert.equal(
-        validate({ style: "background: Url(https://evil.com/steal)" }),
-        false,
-      );
-    });
+    for (const fn of ["url", "URL", "Url"]) {
+      it(`rejects style with external ${fn}()`, () => {
+        assert.equal(
+          validate({ style: `background: ${fn}(https://evil.com/steal)` }),
+          false,
+        );
+      });
+    }
 
     it("rejects style with @import", () => {
       assert.equal(
@@ -290,24 +421,16 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(validate({ id: "myElement" }), true);
     });
 
-    it("accepts id with underscores and hyphens", () => {
-      assert.equal(validate({ id: "_my-element.v2" }), true);
+    it("rejects id with backslash escape", () => {
+      assert.equal(validate({ id: "foo\\bar" }), false);
     });
 
-    it("rejects id with HTML tags", () => {
-      assert.equal(validate({ id: "<script>alert(1)</script>" }), false);
+    it("rejects id with javascript: scheme", () => {
+      assert.equal(validate({ id: "javascript:alert(1)" }), false);
     });
 
-    it("rejects id with spaces", () => {
-      assert.equal(validate({ id: "my element" }), false);
-    });
-
-    it("rejects id starting with a digit", () => {
-      assert.equal(validate({ id: "1invalid" }), false);
-    });
-
-    it("rejects id with quotes", () => {
-      assert.equal(validate({ id: 'a"onload="alert(1)' }), false);
+    it("rejects id with external url()", () => {
+      assert.equal(validate({ id: "url(https://evil.com/x)" }), false);
     });
   });
 
@@ -320,19 +443,27 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(validate({ class: "class1 class2" }), true);
     });
 
-    it("rejects class with HTML tags", () => {
+    it("accepts utility-framework class syntax", () => {
       assert.equal(
-        validate({ class: '<img src=x onerror="alert(1)">' }),
-        false,
+        validate({ class: "hover:bg-red-500 w-[200px] sm:text-lg" }),
+        true,
       );
     });
 
-    it("rejects class with curly braces", () => {
-      assert.equal(validate({ class: "a{color:red}" }), false);
+    it("rejects class with backslash escape", () => {
+      assert.equal(validate({ class: "foo\\bar" }), false);
     });
 
-    it("rejects class with quotes", () => {
-      assert.equal(validate({ class: 'a" onclick="alert(1)' }), false);
+    it("rejects class with javascript: scheme", () => {
+      assert.equal(validate({ class: "javascript:alert(1)" }), false);
+    });
+
+    it("rejects class with external url()", () => {
+      assert.equal(validate({ class: "url(https://evil.com/x)" }), false);
+    });
+
+    it("rejects class with expression()", () => {
+      assert.equal(validate({ class: "expression(alert(1))" }), false);
     });
   });
 
@@ -452,6 +583,26 @@ describe("definition.json $defs/attributes", () => {
         false,
       );
     });
+
+    for (const attr of [
+      "filter",
+      "clip-path",
+      "mask",
+      "marker-start",
+      "marker-mid",
+      "marker-end",
+    ]) {
+      for (const [label, value] of [
+        ["expression()", "expression(alert(1))"],
+        ["mixed-case Expression()", "Expression(alert(1))"],
+        ["behavior:", "behavior: url(xss.htc)"],
+        ["-moz-binding", "-moz-binding: url(xss.xbl)"],
+      ]) {
+        it(`rejects ${attr} with ${label}`, () => {
+          assert.equal(validate({ [attr]: value }), false);
+        });
+      }
+    }
   });
 
   describe("prototype pollution prevention", () => {

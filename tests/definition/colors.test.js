@@ -1,6 +1,10 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { loadSchema, createValidator, withCanvas } from "../helpers/validator.js";
+import {
+  loadSchema,
+  createValidator,
+  withCanvas,
+} from "../helpers/validator.js";
 
 const schema = loadSchema("definition.json");
 const validate = createValidator(schema);
@@ -9,13 +13,6 @@ describe("definition.json colors", () => {
   describe("valid colors", () => {
     it("accepts empty colors object", () => {
       assert.equal(validate(withCanvas({ colors: {} })), true);
-    });
-
-    it("accepts color group with empty values array", () => {
-      const data = withCanvas({
-        colors: { skin: { values: [] } },
-      });
-      assert.equal(validate(data), true);
     });
 
     it("accepts color group with values", () => {
@@ -66,7 +63,14 @@ describe("definition.json colors", () => {
       assert.equal(validate(data), false);
     });
 
-    it("rejects hex without #", () => {
+    it("rejects color group with empty values array", () => {
+      const data = withCanvas({
+        colors: { skin: { values: [] } },
+      });
+      assert.equal(validate(data), false);
+    });
+
+    it("rejects hex without # (leading hash is required)", () => {
       const data = withCanvas({
         colors: { skin: { values: ["ff0000"] } },
       });

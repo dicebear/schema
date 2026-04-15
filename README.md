@@ -4,7 +4,7 @@ JSON Schema definitions for [DiceBear](https://dicebear.com) avatar styles and o
 
 ## Schemas
 
-This package exports two JSON Schemas (Draft 2020-12):
+This package exports two JSON Schemas (Draft 07):
 
 ### `definition.json`
 
@@ -22,28 +22,28 @@ Only a safe subset of SVG elements and attributes is permitted. Event handlers, 
 
 Validates the options object passed by users when generating an avatar. Supported properties include:
 
-| Property | Type | Description |
-|---|---|---|
-| `seed` | `string` | PRNG seed for reproducible avatars |
-| `size` | `integer` | Output size in pixels |
-| `flip` | `string \| array` | Mirror direction: `none`, `horizontal`, `vertical`, or `both` |
-| `scale` | `number \| [min, max]` | Scaling factor (1 = original size) |
-| `rotate` | `number \| [min, max]` | Rotation in degrees (−360 to 360) |
-| `translateX` | `number \| [min, max]` | Horizontal offset (−100 to 100) |
-| `translateY` | `number \| [min, max]` | Vertical offset (−100 to 100) |
-| `borderRadius` | `number \| [min, max]` | Corner radius (0 = sharp, 50 = circle) |
-| `idRandomization` | `boolean` | SVG ID randomization to avoid conflicts |
-| `fontFamily` | `string \| array` | Font family for text rendering |
-| `fontWeight` | `integer \| array` | Font weight (1 to 1000) |
-| `*Probability` | `number` | Component display probability (0 to 100) |
-| `*Variant` | `string \| string[] \| object` | Component variant filter and weights |
-| `*Color` | `string \| array` | Hex colors |
-| `*ColorFill` | `string \| array` | Color fill: `solid`, `linear`, or `radial` |
-| `*ColorFillStops` | `integer \| [min, max]` | Gradient color stops (min 1) |
-| `*ColorAngle` | `number \| [min, max]` | Gradient angle (−360 to 360) |
-| `*Rotate` | `number \| [min, max]` | Component rotation in degrees (−360 to 360) |
-| `*TranslateX` | `number \| [min, max]` | Component horizontal offset (−100 to 100) |
-| `*TranslateY` | `number \| [min, max]` | Component vertical offset (−100 to 100) |
+| Property          | Type                           | Description                                                   |
+| ----------------- | ------------------------------ | ------------------------------------------------------------- |
+| `seed`            | `string`                       | PRNG seed for reproducible avatars                            |
+| `size`            | `integer`                      | Output size in pixels                                         |
+| `flip`            | `string \| array`              | Mirror direction: `none`, `horizontal`, `vertical`, or `both` |
+| `scale`           | `number \| [min, max]`         | Scaling factor (0 to 10, 1 = original size)                   |
+| `rotate`          | `number \| [min, max]`         | Rotation in degrees (−360 to 360)                             |
+| `translateX`      | `number \| [min, max]`         | Horizontal offset (−1000 to 1000)                             |
+| `translateY`      | `number \| [min, max]`         | Vertical offset (−1000 to 1000)                               |
+| `borderRadius`    | `number \| [min, max]`         | Corner radius (0 = sharp, 50 = circle)                        |
+| `idRandomization` | `boolean`                      | SVG ID randomization to avoid conflicts                       |
+| `fontFamily`      | `string \| array`              | Font family for text rendering                                |
+| `fontWeight`      | `integer \| array`             | Font weight (1 to 1000)                                       |
+| `*Probability`    | `number`                       | Component display probability (0 to 100)                      |
+| `*Variant`        | `string \| string[] \| object` | Component variant filter and weights                          |
+| `*Color`          | `string \| array`              | Hex colors                                                    |
+| `*ColorFill`      | `string \| array`              | Color fill: `solid`, `linear`, or `radial`                    |
+| `*ColorFillStops` | `integer \| [min, max]`        | Gradient color stops (min 2)                                  |
+| `*ColorAngle`     | `number \| [min, max]`         | Gradient angle (−360 to 360)                                  |
+| `*Rotate`         | `number \| [min, max]`         | Component rotation in degrees (−360 to 360)                   |
+| `*TranslateX`     | `number \| [min, max]`         | Component horizontal offset (−1000 to 1000)                   |
+| `*TranslateY`     | `number \| [min, max]`         | Component vertical offset (−1000 to 1000)                     |
 
 When an option accepts an array, the PRNG either picks from the list (for discrete values) or picks a value within the range (for numeric min/max pairs).
 
@@ -75,8 +75,8 @@ https://cdn.hopjs.net/npm/@dicebear/schema@0.10.1/dist/options.min.json
 **JavaScript**
 
 ```js
-import definitionSchema from '@dicebear/schema/definition.json' assert { type: 'json' };
-import optionsSchema from '@dicebear/schema/options.json' assert { type: 'json' };
+import definitionSchema from "@dicebear/schema/definition.json" assert { type: "json" };
+import optionsSchema from "@dicebear/schema/options.json" assert { type: "json" };
 ```
 
 **PHP**

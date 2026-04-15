@@ -14,12 +14,13 @@
     },
     "scale": {
       "type": "number",
-      "minimum": 0
+      "minimum": 0,
+      "maximum": 10
     },
     "translate": {
       "type": "number",
-      "minimum": -100,
-      "maximum": 100
+      "minimum": -1000,
+      "maximum": 1000
     },
     "borderRadius": {
       "type": "number",
@@ -40,12 +41,40 @@
     },
     "fontFamilyName": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9 _\\-]+$"
+      "pattern": "^[a-zA-Z0-9_\\-]+( [a-zA-Z0-9_\\-]+)*(, ?[a-zA-Z0-9_\\-]+( [a-zA-Z0-9_\\-]+)*)*$",
+      "maxLength": 256
     },
     "fontWeight": {
       "type": "integer",
       "minimum": 1,
       "maximum": 1000
+    },
+    "variantName": {
+      "type": "string",
+      "pattern": "^[a-z][a-zA-Z0-9]*$",
+      "maxLength": 64
+    },
+    "rotateOption": {
+      "anyOf": [
+        { "$ref": "#/definitions/rotate" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/rotate" },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      ]
+    },
+    "translateOption": {
+      "anyOf": [
+        { "$ref": "#/definitions/translate" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/translate" },
+          "minItems": 1,
+          "maxItems": 2
+        }
+      ]
     }
   },
   "properties": {
@@ -57,7 +86,8 @@
     "size": {
       "type": "integer",
       "description": "Specifies the dimensions of the avatar in pixels. If no size is specified, the avatar defaults to a responsive design or scales to 100% of its container. This flexibility allows the avatar to seamlessly adapt to different screen sizes and layouts, ensuring optimal display across devices and environments.",
-      "minimum": 1
+      "minimum": 1,
+      "maximum": 4096
     },
     "idRandomization": {
       "type": "boolean",
@@ -79,6 +109,7 @@
           "items": {
             "$ref": "#/definitions/flip"
           },
+          "minItems": 1,
           "maxItems": 128
         }
       ]
@@ -94,6 +125,7 @@
           "items": {
             "$ref": "#/definitions/fontFamilyName"
           },
+          "minItems": 1,
           "maxItems": 128
         }
       ]
@@ -109,6 +141,7 @@
           "items": {
             "$ref": "#/definitions/fontWeight"
           },
+          "minItems": 1,
           "maxItems": 128
         }
       ]
@@ -124,6 +157,7 @@
           "items": {
             "$ref": "#/definitions/scale"
           },
+          "minItems": 1,
           "maxItems": 2
         }
       ]
@@ -139,6 +173,7 @@
           "items": {
             "$ref": "#/definitions/borderRadius"
           },
+          "minItems": 1,
           "maxItems": 2
         }
       ]
@@ -152,27 +187,27 @@
       "maximum": 100
     },
     "^[a-z][a-zA-Z0-9]*Variant$": {
-      "description": "Specifies which variants of the avatar part can be selected by the PRNG and their relative weights. A string or array of strings filters which variants the PRNG can choose from. An object maps variant names to non-negative weights, simultaneously filtering and weighting selection.",
+      "description": "Specifies which variants of the avatar part can be selected by the PRNG and their relative weights. A string or array of strings filters which variants the PRNG can choose from. An object maps variant names to non-negative weights, simultaneously filtering and weighting selection. Variant names must be camelCase identifiers.",
       "anyOf": [
         {
-          "type": "string"
+          "$ref": "#/definitions/variantName"
         },
         {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/variantName"
           },
+          "minItems": 1,
           "maxItems": 128
         },
         {
           "type": "object",
-          "propertyNames": {
-            "pattern": "^[a-z][a-zA-Z0-9]*$"
-          },
+          "propertyNames": { "$ref": "#/definitions/variantName" },
           "additionalProperties": {
             "type": "number",
             "minimum": 0
           },
+          "minProperties": 1,
           "maxProperties": 128
         }
       ]
@@ -188,6 +223,7 @@
           "items": {
             "$ref": "#/definitions/color"
           },
+          "minItems": 1,
           "maxItems": 128
         }
       ]
@@ -203,12 +239,13 @@
           "items": {
             "$ref": "#/definitions/colorFill"
           },
+          "minItems": 1,
           "maxItems": 128
         }
       ]
     },
     "^[a-z][a-zA-Z0-9]*ColorFillStops$": {
-      "description": "Specifies the number of color stops for gradient fills. This value is only relevant when the color fill method is set to `linear` or `radial`. The minimum value is 1. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "description": "Specifies the number of color stops for gradient fills. This value is only relevant when the color fill method is set to `linear` or `radial`. The minimum value is 2. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "anyOf": [
         {
           "$ref": "#/definitions/colorFillStops"
@@ -218,70 +255,41 @@
           "items": {
             "$ref": "#/definitions/colorFillStops"
           },
+          "minItems": 1,
           "maxItems": 2
         }
       ]
     },
     "^[a-z][a-zA-Z0-9]*ColorAngle$": {
       "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/rotate"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/rotate"
-          },
-          "maxItems": 2
-        }
-      ]
+      "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
-    "^(r|[a-z][a-zA-Z0-9]*R)otate$": {
-      "description": "This is the rotation angle for the avatar or its parts. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If not preceded by an avatar part, the option applies to the entire avatar.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/rotate"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/rotate"
-          },
-          "maxItems": 2
-        }
-      ]
+    "^rotate$": {
+      "description": "This is the rotation angle for the entire avatar. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
-    "^(t|[a-z][a-zA-Z0-9]*T)ranslateY$": {
-      "description": "This is the vertical translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/translate"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/translate"
-          },
-          "maxItems": 2
-        }
-      ]
+    "^[a-z][a-zA-Z0-9]*Rotate$": {
+      "description": "This is the rotation angle for a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
-    "^(t|[a-z][a-zA-Z0-9]*T)ranslateX$": {
-      "description": "This is the horizontal translation of the avatar or its parts. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. If no avatar part is specified, the option applies to the entire avatar.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/translate"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/translate"
-          },
-          "maxItems": 2
-        }
-      ]
+    "^translateY$": {
+      "description": "This is the vertical translation of the entire avatar. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the avatar down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/translateOption" }]
+    },
+    "^[a-z][a-zA-Z0-9]*TranslateY$": {
+      "description": "This is the vertical translation of a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/translateOption" }]
+    },
+    "^translateX$": {
+      "description": "This is the horizontal translation of the entire avatar. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the avatar to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/translateOption" }]
+    },
+    "^[a-z][a-zA-Z0-9]*TranslateX$": {
+      "description": "This is the horizontal translation of a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/translateOption" }]
     }
   },
-  "additionalProperties": false
+  "propertyNames": { "maxLength": 128 },
+  "additionalProperties": false,
+  "maxProperties": 256
 }
