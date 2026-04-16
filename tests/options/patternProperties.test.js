@@ -41,8 +41,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ eyesVariant: ["open", "closed"] }), true);
     });
 
-    it("rejects empty variant array", () => {
-      assert.equal(validate({ eyesVariant: [] }), false);
+    it("accepts empty variant array", () => {
+      assert.equal(validate({ eyesVariant: [] }), true);
     });
 
     it("rejects variant array with more than 128 items", () => {
@@ -141,8 +141,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColor: ["#ff0000", "#00ff00"] }), true);
     });
 
-    it("rejects empty color array", () => {
-      assert.equal(validate({ skinColor: [] }), false);
+    it("accepts empty color array", () => {
+      assert.equal(validate({ skinColor: [] }), true);
     });
 
     it("rejects color array with more than 128 items", () => {
@@ -172,8 +172,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFill: ["solid", "linear"] }), true);
     });
 
-    it("rejects empty colorFill array", () => {
-      assert.equal(validate({ skinColorFill: [] }), false);
+    it("accepts empty colorFill array", () => {
+      assert.equal(validate({ skinColorFill: [] }), true);
     });
 
     it("rejects colorFill array with more than 128 items", () => {
@@ -213,8 +213,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorFillStops: [3] }), true);
     });
 
-    it("rejects empty colorFillStops array", () => {
-      assert.equal(validate({ skinColorFillStops: [] }), false);
+    it("accepts empty colorFillStops array", () => {
+      assert.equal(validate({ skinColorFillStops: [] }), true);
     });
 
     it("rejects colorFillStops < 2", () => {
@@ -255,8 +255,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ skinColorAngle: [45] }), true);
     });
 
-    it("rejects empty colorAngle array", () => {
-      assert.equal(validate({ skinColorAngle: [] }), false);
+    it("accepts empty colorAngle array", () => {
+      assert.equal(validate({ skinColorAngle: [] }), true);
     });
 
     it("accepts boundary: -360", () => {
@@ -301,8 +301,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ rotate: [30] }), true);
     });
 
-    it("rejects empty rotate array", () => {
-      assert.equal(validate({ rotate: [] }), false);
+    it("accepts empty rotate array", () => {
+      assert.equal(validate({ rotate: [] }), true);
     });
 
     it("accepts boundary: -360", () => {
@@ -347,8 +347,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateY: [10] }), true);
     });
 
-    it("rejects empty translateY array", () => {
-      assert.equal(validate({ translateY: [] }), false);
+    it("accepts empty translateY array", () => {
+      assert.equal(validate({ translateY: [] }), true);
     });
 
     it("accepts boundary: -1000", () => {
@@ -393,8 +393,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: [10] }), true);
     });
 
-    it("rejects empty translateX array", () => {
-      assert.equal(validate({ translateX: [] }), false);
+    it("accepts empty translateX array", () => {
+      assert.equal(validate({ translateX: [] }), true);
     });
 
     it("accepts boundary: -1000", () => {

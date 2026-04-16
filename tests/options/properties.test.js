@@ -51,8 +51,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ flip: ["horizontal", "vertical"] }), true);
     });
 
-    it("rejects empty flip array", () => {
-      assert.equal(validate({ flip: [] }), false);
+    it("accepts empty flip array", () => {
+      assert.equal(validate({ flip: [] }), true);
     });
 
     it("accepts fontFamily as string", () => {
@@ -90,8 +90,8 @@ describe("options.json named properties", () => {
       );
     });
 
-    it("rejects empty fontFamily array", () => {
-      assert.equal(validate({ fontFamily: [] }), false);
+    it("accepts empty fontFamily array", () => {
+      assert.equal(validate({ fontFamily: [] }), true);
     });
 
     it("accepts fontWeight: 400", () => {
@@ -102,8 +102,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ fontWeight: [400, 700] }), true);
     });
 
-    it("rejects empty fontWeight array", () => {
-      assert.equal(validate({ fontWeight: [] }), false);
+    it("accepts empty fontWeight array", () => {
+      assert.equal(validate({ fontWeight: [] }), true);
     });
 
     it("accepts boundary: fontWeight: 1", () => {
@@ -134,8 +134,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ scale: 1.5 }), true);
     });
 
-    it("rejects empty scale array", () => {
-      assert.equal(validate({ scale: [] }), false);
+    it("accepts empty scale array", () => {
+      assert.equal(validate({ scale: [] }), true);
     });
 
     it("accepts boundary: scale: 0", () => {
@@ -166,8 +166,8 @@ describe("options.json named properties", () => {
       assert.equal(validate({ borderRadius: 10.5 }), true);
     });
 
-    it("rejects empty borderRadius array", () => {
-      assert.equal(validate({ borderRadius: [] }), false);
+    it("accepts empty borderRadius array", () => {
+      assert.equal(validate({ borderRadius: [] }), true);
     });
 
     it("accepts boundary: borderRadius: 0", () => {

@@ -60,7 +60,7 @@
         {
           "type": "array",
           "items": { "$ref": "#/definitions/rotate" },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 2
         }
       ]
@@ -71,7 +71,7 @@
         {
           "type": "array",
           "items": { "$ref": "#/definitions/translate" },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 2
         }
       ]
@@ -109,7 +109,7 @@
           "items": {
             "$ref": "#/definitions/flip"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         }
       ]
@@ -125,7 +125,7 @@
           "items": {
             "$ref": "#/definitions/fontFamilyName"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         }
       ]
@@ -141,7 +141,7 @@
           "items": {
             "$ref": "#/definitions/fontWeight"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         }
       ]
@@ -157,7 +157,7 @@
           "items": {
             "$ref": "#/definitions/scale"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 2
         }
       ]
@@ -173,7 +173,7 @@
           "items": {
             "$ref": "#/definitions/borderRadius"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 2
         }
       ]
@@ -197,7 +197,7 @@
           "items": {
             "$ref": "#/definitions/variantName"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         },
         {
@@ -223,7 +223,7 @@
           "items": {
             "$ref": "#/definitions/color"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         }
       ]
@@ -239,7 +239,7 @@
           "items": {
             "$ref": "#/definitions/colorFill"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 128
         }
       ]
@@ -255,7 +255,7 @@
           "items": {
             "$ref": "#/definitions/colorFillStops"
           },
-          "minItems": 1,
+          "minItems": 0,
           "maxItems": 2
         }
       ]
