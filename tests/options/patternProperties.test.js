@@ -421,4 +421,62 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: [-1001, 10] }), false);
     });
   });
+
+  describe("scale", () => {
+    it("accepts prefixed scale (headScale)", () => {
+      assert.equal(validate({ headScale: 2 }), true);
+    });
+
+    it("accepts scale as [min, max] array", () => {
+      assert.equal(validate({ eyesScale: [0.8, 1.2] }), true);
+    });
+
+    it("accepts scale array with 1 item", () => {
+      assert.equal(validate({ eyesScale: [0.5] }), true);
+    });
+
+    it("accepts scale as float", () => {
+      assert.equal(validate({ eyesScale: 1.5 }), true);
+    });
+
+    it("accepts empty scale array", () => {
+      assert.equal(validate({ eyesScale: [] }), true);
+    });
+
+    it("accepts boundary: scale 0", () => {
+      assert.equal(validate({ eyesScale: 0 }), true);
+    });
+
+    it("accepts boundary: scale 10", () => {
+      assert.equal(validate({ eyesScale: 10 }), true);
+    });
+
+    it("rejects scale as string", () => {
+      assert.equal(validate({ eyesScale: "big" }), false);
+    });
+
+    it("rejects scale < 0", () => {
+      assert.equal(validate({ eyesScale: -1 }), false);
+    });
+
+    it("rejects scale > 10", () => {
+      assert.equal(validate({ eyesScale: 10.1 }), false);
+    });
+
+    it("rejects scale: Infinity", () => {
+      assert.equal(validate({ eyesScale: Infinity }), false);
+    });
+
+    it("rejects scale array with item < 0", () => {
+      assert.equal(validate({ eyesScale: [-0.1, 1] }), false);
+    });
+
+    it("rejects scale array with item > 10", () => {
+      assert.equal(validate({ eyesScale: [1, 10.1] }), false);
+    });
+
+    it("rejects scale array with 3+ items", () => {
+      assert.equal(validate({ eyesScale: [0.8, 1, 1.2] }), false);
+    });
+  });
 });

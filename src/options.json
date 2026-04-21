@@ -75,6 +75,17 @@
           "maxItems": 2
         }
       ]
+    },
+    "scaleOption": {
+      "anyOf": [
+        { "$ref": "#/definitions/scale" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/scale" },
+          "minItems": 0,
+          "maxItems": 2
+        }
+      ]
     }
   },
   "properties": {
@@ -148,19 +159,7 @@
     },
     "scale": {
       "description": "Sets the scaling of the avatar. A value of `1` corresponds to the original size of the avatar. This setting affects the size of the avatar itself, but not the size of the avatar container; any excess content will be clipped. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "anyOf": [
-        {
-          "$ref": "#/definitions/scale"
-        },
-        {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/scale"
-          },
-          "minItems": 0,
-          "maxItems": 2
-        }
-      ]
+      "allOf": [{ "$ref": "#/definitions/scaleOption" }]
     },
     "borderRadius": {
       "description": "This is the radius of the corners of the avatar. This value can be a float or an integer. A value of 0 means that the avatar has sharp corners, while larger values result in more rounded corners. The maximum value is 50, which turns the avatar into a complete circle. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
@@ -287,6 +286,10 @@
     "^[a-z][a-zA-Z0-9]*TranslateX$": {
       "description": "This is the horizontal translation of a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/translateOption" }]
+    },
+    "^[a-z][a-zA-Z0-9]*Scale$": {
+      "description": "This is the scale factor for a specific avatar part, prefixed with the part name in camelCase. A value of `1` corresponds to the original size of the part. This setting scales the part around its own center independently of the global `scale` option. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "allOf": [{ "$ref": "#/definitions/scaleOption" }]
     }
   },
   "propertyNames": { "maxLength": 128 },

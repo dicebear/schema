@@ -589,6 +589,17 @@
             "minItems": 1,
             "maxItems": 2
           },
+          "scale": {
+            "description": "A scale factor around the component's own center. A single value fixes the scale; two values define a range the PRNG picks from. A value of `1` corresponds to the original size.",
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "minItems": 1,
+            "maxItems": 2
+          },
           "translate": {
             "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
             "type": "object",

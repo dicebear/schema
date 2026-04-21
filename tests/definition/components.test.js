@@ -166,6 +166,40 @@ describe("definition.json components", () => {
     });
   });
 
+  describe("scale bounds", () => {
+    it("accepts single-item array", () => {
+      assertValid(makeComponent({ scale: [1.5] }));
+    });
+
+    it("accepts boundary values [0, 10]", () => {
+      assertValid(makeComponent({ scale: [0, 10] }));
+    });
+
+    it("accepts float range", () => {
+      assertValid(makeComponent({ scale: [0.8, 1.2] }));
+    });
+
+    it("rejects value > 10", () => {
+      assertInvalid(makeComponent({ scale: [1, 10.1] }));
+    });
+
+    it("rejects value < 0", () => {
+      assertInvalid(makeComponent({ scale: [-0.1, 1] }));
+    });
+
+    it("rejects more than 2 items", () => {
+      assertInvalid(makeComponent({ scale: [0.8, 1, 1.2] }));
+    });
+
+    it("rejects empty array", () => {
+      assertInvalid(makeComponent({ scale: [] }));
+    });
+
+    it("rejects bare number (arrays only)", () => {
+      assertInvalid(makeComponent({ scale: 2 }));
+    });
+  });
+
   describe("variants", () => {
     it("rejects variant name starting with uppercase", () => {
       assertInvalid(makeComponent({ variants: { Round: { elements: [] } } }));
