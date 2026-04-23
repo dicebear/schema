@@ -88,38 +88,10 @@ $definition = json_decode(file_get_contents($basePath . '/src/definition.json'),
 $options    = json_decode(file_get_contents($basePath . '/src/options.json'), true);
 ```
 
-## Development
+## Contributing
 
-```sh
-# Install dependencies
-npm install
-
-# Run tests
-npm test
-
-# Format code
-npm run format
-```
-
-## Publishing
-
-**npm**
-
-Releases are published to npm automatically via GitHub Actions when a version tag is pushed.
-
-```sh
-npm version patch   # 1.0.0 → 1.0.1
-npm version minor   # 1.0.0 → 1.1.0
-npm version major   # 1.0.0 → 2.0.0
-
-git push origin main --follow-tags
-```
-
-`npm version` updates `package.json`, creates a commit, and creates the Git tag in one step. The [publish workflow](.github/workflows/publish.yml) will then install dependencies, run the tests, and publish the package to npm with provenance.
-
-**Packagist**
-
-Once the repository is linked on [packagist.org](https://packagist.org), new releases are picked up automatically from the same Git tags — no separate step needed.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for local development, testing,
+and the release process.
 
 ## Sponsors
 
