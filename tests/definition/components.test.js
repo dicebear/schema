@@ -32,6 +32,21 @@ const componentWithName = (name) =>
     },
   });
 
+const makeAliasPair = (aliasOverrides = {}) =>
+  withCanvas({
+    components: {
+      eyes: {
+        width: 100,
+        height: 100,
+        variants: { round: { elements: [] } },
+      },
+      eyesRight: {
+        extends: "eyes",
+        ...aliasOverrides,
+      },
+    },
+  });
+
 const assertValid = (data) => assert.equal(validate(data), true);
 const assertInvalid = (data) => assert.equal(validate(data), false);
 
@@ -274,6 +289,82 @@ describe("definition.json components", () => {
             variants: { round: { elements: [], rarity: 10 } },
           }),
         );
+      });
+    });
+  });
+
+  describe("aliases (extends)", () => {
+    describe("valid aliases", () => {
+      it("accepts minimal alias", () => {
+        assertValid(makeAliasPair());
+      });
+
+      it("accepts alias with probability override", () => {
+        assertValid(makeAliasPair({ probability: 50 }));
+      });
+
+      it("accepts alias with rotate override", () => {
+        assertValid(makeAliasPair({ rotate: [-15, 15] }));
+      });
+
+      it("accepts alias with scale override", () => {
+        assertValid(makeAliasPair({ scale: [0.9, 1.1] }));
+      });
+
+      it("accepts alias with translate override", () => {
+        assertValid(makeAliasPair({ translate: { x: [-5, 5], y: [0] } }));
+      });
+
+      it("accepts alias with all overrides combined", () => {
+        assertValid(
+          makeAliasPair({
+            probability: 80,
+            rotate: [-10, 10],
+            scale: [1],
+            translate: { x: [0], y: [-5, 5] },
+          }),
+        );
+      });
+    });
+
+    describe("invalid aliases", () => {
+      it("rejects alias with width", () => {
+        assertInvalid(makeAliasPair({ width: 100 }));
+      });
+
+      it("rejects alias with height", () => {
+        assertInvalid(makeAliasPair({ height: 100 }));
+      });
+
+      it("rejects alias with variants", () => {
+        assertInvalid(makeAliasPair({ variants: { round: { elements: [] } } }));
+      });
+
+      it("rejects alias missing extends", () => {
+        assertInvalid(
+          withCanvas({
+            components: {
+              eyes: {
+                width: 100,
+                height: 100,
+                variants: { round: { elements: [] } },
+              },
+              eyesRight: {},
+            },
+          }),
+        );
+      });
+
+      it("rejects alias with additional property", () => {
+        assertInvalid(makeAliasPair({ extra: "data" }));
+      });
+
+      it("rejects extends with uppercase name", () => {
+        assertInvalid(makeAliasPair({ extends: "Eyes" }));
+      });
+
+      it("rejects extends as non-string", () => {
+        assertInvalid(makeAliasPair({ extends: 42 }));
       });
     });
   });

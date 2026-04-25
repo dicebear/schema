@@ -451,6 +451,106 @@
         "z": { "$ref": "#/definitions/attributeString" }
       },
       "additionalProperties": false
+    },
+    "componentProbability": {
+      "description": "The probability, expressed as a percentage, that this component is rendered at all.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "componentRotate": {
+      "description": "A rotation in degrees. A single value fixes the angle; two values define a range the PRNG picks from.",
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": -360,
+        "maximum": 360
+      },
+      "minItems": 1,
+      "maxItems": 2
+    },
+    "componentScale": {
+      "description": "A scale factor around the component's own center. A single value fixes the scale; two values define a range the PRNG picks from. A value of `1` corresponds to the original size.",
+      "type": "array",
+      "items": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "minItems": 1,
+      "maxItems": 2
+    },
+    "componentTranslate": {
+      "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
+      "type": "object",
+      "properties": {
+        "x": { "$ref": "#/definitions/translateValue" },
+        "y": { "$ref": "#/definitions/translateValue" }
+      },
+      "additionalProperties": false
+    },
+    "componentBase": {
+      "description": "A base component definition with its own dimensions and variants. The PRNG selects one variant per render based on the seed.",
+      "type": "object",
+      "properties": {
+        "width": {
+          "description": "The natural width of the component canvas in pixels.",
+          "type": "number",
+          "minimum": 1
+        },
+        "height": {
+          "description": "The natural height of the component canvas in pixels.",
+          "type": "number",
+          "minimum": 1
+        },
+        "probability": { "$ref": "#/definitions/componentProbability" },
+        "rotate": { "$ref": "#/definitions/componentRotate" },
+        "scale": { "$ref": "#/definitions/componentScale" },
+        "translate": { "$ref": "#/definitions/componentTranslate" },
+        "variants": {
+          "description": "The available visual variants of this component. The PRNG selects one variant per render. Keys must be `camelCaseName` identifiers.",
+          "type": "object",
+          "propertyNames": { "$ref": "#/definitions/camelCaseName" },
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "elements": {
+                "description": "The SVG elements that make up this variant.",
+                "type": "array",
+                "items": { "$ref": "#/definitions/element" },
+                "maxItems": 1024
+              },
+              "weight": {
+                "description": "A weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is not selected unless all available variants have a weight of 0.",
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1000000
+              }
+            },
+            "required": ["elements"],
+            "additionalProperties": false
+          },
+          "maxProperties": 512
+        }
+      },
+      "required": ["width", "height", "variants"],
+      "additionalProperties": false
+    },
+    "componentAlias": {
+      "description": "An alias that inherits its dimensions and variants from another component referenced by `extends`. Per-instance overrides for `probability`, `rotate`, `scale`, and `translate` are supported.",
+      "type": "object",
+      "properties": {
+        "extends": {
+          "description": "The name of an existing, non-alias component in this `components` map.",
+          "$ref": "#/definitions/componentName"
+        },
+        "probability": { "$ref": "#/definitions/componentProbability" },
+        "rotate": { "$ref": "#/definitions/componentRotate" },
+        "scale": { "$ref": "#/definitions/componentScale" },
+        "translate": { "$ref": "#/definitions/componentTranslate" }
+      },
+      "required": ["extends"],
+      "additionalProperties": false
     }
   },
   "type": "object",
@@ -556,87 +656,14 @@
       "additionalProperties": false
     },
     "components": {
-      "description": "Named, reusable SVG components. Each component defines a set of variants that the PRNG can select from at render time. Keys must be `camelCaseName` identifiers.",
+      "description": "Named, reusable SVG components. Each component defines a set of variants that the PRNG can select from at render time, or aliases another component to render an additional, independently-randomized instance of it. Keys must be `camelCaseName` identifiers.",
       "type": "object",
       "propertyNames": { "$ref": "#/definitions/camelCaseName" },
       "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "width": {
-            "description": "The natural width of the component canvas in pixels.",
-            "type": "number",
-            "minimum": 1
-          },
-          "height": {
-            "description": "The natural height of the component canvas in pixels.",
-            "type": "number",
-            "minimum": 1
-          },
-          "probability": {
-            "description": "The probability, expressed as a percentage, that this component is rendered at all.",
-            "type": "number",
-            "minimum": 0,
-            "maximum": 100
-          },
-          "rotate": {
-            "description": "A rotation in degrees. A single value fixes the angle; two values define a range the PRNG picks from.",
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": -360,
-              "maximum": 360
-            },
-            "minItems": 1,
-            "maxItems": 2
-          },
-          "scale": {
-            "description": "A scale factor around the component's own center. A single value fixes the scale; two values define a range the PRNG picks from. A value of `1` corresponds to the original size.",
-            "type": "array",
-            "items": {
-              "type": "number",
-              "minimum": 0,
-              "maximum": 10
-            },
-            "minItems": 1,
-            "maxItems": 2
-          },
-          "translate": {
-            "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
-            "type": "object",
-            "properties": {
-              "x": { "$ref": "#/definitions/translateValue" },
-              "y": { "$ref": "#/definitions/translateValue" }
-            },
-            "additionalProperties": false
-          },
-          "variants": {
-            "description": "The available visual variants of this component. The PRNG selects one variant per render. Keys must be `camelCaseName` identifiers.",
-            "type": "object",
-            "propertyNames": { "$ref": "#/definitions/camelCaseName" },
-            "additionalProperties": {
-              "type": "object",
-              "properties": {
-                "elements": {
-                  "description": "The SVG elements that make up this variant.",
-                  "type": "array",
-                  "items": { "$ref": "#/definitions/element" },
-                  "maxItems": 1024
-                },
-                "weight": {
-                  "description": "A weight that influences how likely the PRNG is to select this variant. Higher values make the variant more likely. When omitted, defaults to 1 (equal weighting). A value of 0 means the variant is not selected unless all available variants have a weight of 0.",
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 1000000
-                }
-              },
-              "required": ["elements"],
-              "additionalProperties": false
-            },
-            "maxProperties": 512
-          }
-        },
-        "required": ["width", "height", "variants"],
-        "additionalProperties": false
+        "anyOf": [
+          { "$ref": "#/definitions/componentBase" },
+          { "$ref": "#/definitions/componentAlias" }
+        ]
       },
       "maxProperties": 512
     },
