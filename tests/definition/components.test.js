@@ -298,36 +298,25 @@ describe("definition.json components", () => {
       it("accepts minimal alias", () => {
         assertValid(makeAliasPair());
       });
-
-      it("accepts alias with probability override", () => {
-        assertValid(makeAliasPair({ probability: 50 }));
-      });
-
-      it("accepts alias with rotate override", () => {
-        assertValid(makeAliasPair({ rotate: [-15, 15] }));
-      });
-
-      it("accepts alias with scale override", () => {
-        assertValid(makeAliasPair({ scale: [0.9, 1.1] }));
-      });
-
-      it("accepts alias with translate override", () => {
-        assertValid(makeAliasPair({ translate: { x: [-5, 5], y: [0] } }));
-      });
-
-      it("accepts alias with all overrides combined", () => {
-        assertValid(
-          makeAliasPair({
-            probability: 80,
-            rotate: [-10, 10],
-            scale: [1],
-            translate: { x: [0], y: [-5, 5] },
-          }),
-        );
-      });
     });
 
     describe("invalid aliases", () => {
+      it("rejects alias with probability override", () => {
+        assertInvalid(makeAliasPair({ probability: 50 }));
+      });
+
+      it("rejects alias with rotate override", () => {
+        assertInvalid(makeAliasPair({ rotate: [-15, 15] }));
+      });
+
+      it("rejects alias with scale override", () => {
+        assertInvalid(makeAliasPair({ scale: [0.9, 1.1] }));
+      });
+
+      it("rejects alias with translate override", () => {
+        assertInvalid(makeAliasPair({ translate: { x: [-5, 5], y: [0] } }));
+      });
+
       it("rejects alias with width", () => {
         assertInvalid(makeAliasPair({ width: 100 }));
       });

@@ -267,29 +267,13 @@
       "description": "This is the rotation angle for the entire avatar. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
-    "^[a-z][a-zA-Z0-9]*Rotate$": {
-      "description": "This is the rotation angle for a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "allOf": [{ "$ref": "#/definitions/rotateOption" }]
-    },
     "^translateY$": {
       "description": "This is the vertical translation of the entire avatar. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the avatar down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "allOf": [{ "$ref": "#/definitions/translateOption" }]
-    },
-    "^[a-z][a-zA-Z0-9]*TranslateY$": {
-      "description": "This is the vertical translation of a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part down and negative values move it up. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/translateOption" }]
     },
     "^translateX$": {
       "description": "This is the horizontal translation of the entire avatar. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the avatar to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/translateOption" }]
-    },
-    "^[a-z][a-zA-Z0-9]*TranslateX$": {
-      "description": "This is the horizontal translation of a specific avatar part, prefixed with the part name in camelCase. This value can be an integer or a float. A value of 0 results in no translation, while positive values move the part to the right and negative values move it to the left. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "allOf": [{ "$ref": "#/definitions/translateOption" }]
-    },
-    "^[a-z][a-zA-Z0-9]*Scale$": {
-      "description": "This is the scale factor for a specific avatar part, prefixed with the part name in camelCase. A value of `1` corresponds to the original size of the part. This setting scales the part around its own center independently of the global `scale` option. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
-      "allOf": [{ "$ref": "#/definitions/scaleOption" }]
     }
   },
   "propertyNames": { "maxLength": 128 },

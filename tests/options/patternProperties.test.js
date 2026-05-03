@@ -289,8 +289,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ rotate: 45 }), true);
     });
 
-    it("accepts prefixed rotate (headRotate)", () => {
-      assert.equal(validate({ headRotate: 90 }), true);
+    it("rejects prefixed rotate (headRotate)", () => {
+      assert.equal(validate({ headRotate: 90 }), false);
     });
 
     it("accepts rotate as array", () => {
@@ -335,8 +335,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateY: 10 }), true);
     });
 
-    it("accepts prefixed (headTranslateY)", () => {
-      assert.equal(validate({ headTranslateY: -5 }), true);
+    it("rejects prefixed (headTranslateY)", () => {
+      assert.equal(validate({ headTranslateY: -5 }), false);
     });
 
     it("accepts array form", () => {
@@ -381,8 +381,8 @@ describe("options.json patternProperties", () => {
       assert.equal(validate({ translateX: 10 }), true);
     });
 
-    it("accepts prefixed (headTranslateX)", () => {
-      assert.equal(validate({ headTranslateX: -5 }), true);
+    it("rejects prefixed (headTranslateX)", () => {
+      assert.equal(validate({ headTranslateX: -5 }), false);
     });
 
     it("accepts array form", () => {
@@ -422,61 +422,13 @@ describe("options.json patternProperties", () => {
     });
   });
 
-  describe("scale", () => {
-    it("accepts prefixed scale (headScale)", () => {
-      assert.equal(validate({ headScale: 2 }), true);
+  describe("removed per-component transforms", () => {
+    it("rejects prefixed scale (headScale)", () => {
+      assert.equal(validate({ headScale: 2 }), false);
     });
 
-    it("accepts scale as [min, max] array", () => {
-      assert.equal(validate({ eyesScale: [0.8, 1.2] }), true);
-    });
-
-    it("accepts scale array with 1 item", () => {
-      assert.equal(validate({ eyesScale: [0.5] }), true);
-    });
-
-    it("accepts scale as float", () => {
-      assert.equal(validate({ eyesScale: 1.5 }), true);
-    });
-
-    it("accepts empty scale array", () => {
-      assert.equal(validate({ eyesScale: [] }), true);
-    });
-
-    it("accepts boundary: scale 0", () => {
-      assert.equal(validate({ eyesScale: 0 }), true);
-    });
-
-    it("accepts boundary: scale 10", () => {
-      assert.equal(validate({ eyesScale: 10 }), true);
-    });
-
-    it("rejects scale as string", () => {
-      assert.equal(validate({ eyesScale: "big" }), false);
-    });
-
-    it("rejects scale < 0", () => {
-      assert.equal(validate({ eyesScale: -1 }), false);
-    });
-
-    it("rejects scale > 10", () => {
-      assert.equal(validate({ eyesScale: 10.1 }), false);
-    });
-
-    it("rejects scale: Infinity", () => {
-      assert.equal(validate({ eyesScale: Infinity }), false);
-    });
-
-    it("rejects scale array with item < 0", () => {
-      assert.equal(validate({ eyesScale: [-0.1, 1] }), false);
-    });
-
-    it("rejects scale array with item > 10", () => {
-      assert.equal(validate({ eyesScale: [1, 10.1] }), false);
-    });
-
-    it("rejects scale array with 3+ items", () => {
-      assert.equal(validate({ eyesScale: [0.8, 1, 1.2] }), false);
+    it("rejects prefixed scale array (eyesScale)", () => {
+      assert.equal(validate({ eyesScale: [0.8, 1.2] }), false);
     });
   });
 });

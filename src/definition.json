@@ -537,17 +537,13 @@
       "additionalProperties": false
     },
     "componentAlias": {
-      "description": "An alias that inherits its dimensions and variants from another component referenced by `extends`. Per-instance overrides for `probability`, `rotate`, `scale`, and `translate` are supported.",
+      "description": "An alias that inherits its dimensions, variants, and transforms from another component referenced by `extends`. Aliases have no per-instance overrides — they are pure references.",
       "type": "object",
       "properties": {
         "extends": {
           "description": "The name of an existing, non-alias component in this `components` map.",
           "$ref": "#/definitions/componentName"
-        },
-        "probability": { "$ref": "#/definitions/componentProbability" },
-        "rotate": { "$ref": "#/definitions/componentRotate" },
-        "scale": { "$ref": "#/definitions/componentScale" },
-        "translate": { "$ref": "#/definitions/componentTranslate" }
+        }
       },
       "required": ["extends"],
       "additionalProperties": false
