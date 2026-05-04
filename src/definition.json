@@ -280,6 +280,7 @@
         "direction": { "$ref": "#/definitions/attributeString" },
         "display": { "$ref": "#/definitions/attributeString" },
         "divisor": { "$ref": "#/definitions/attributeString" },
+        "dominant-baseline": { "$ref": "#/definitions/attributeString" },
         "dx": { "$ref": "#/definitions/attributeString" },
         "dy": { "$ref": "#/definitions/attributeString" },
         "edgeMode": { "$ref": "#/definitions/attributeString" },
