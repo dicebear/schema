@@ -41,9 +41,6 @@ Validates the options object passed by users when generating an avatar. Supporte
 | `*ColorFill`      | `string \| array`              | Color fill: `solid`, `linear`, or `radial`                    |
 | `*ColorFillStops` | `integer \| [min, max]`        | Gradient color stops (min 2)                                  |
 | `*ColorAngle`     | `number \| [min, max]`         | Gradient angle (−360 to 360)                                  |
-| `*Rotate`         | `number \| [min, max]`         | Component rotation in degrees (−360 to 360)                   |
-| `*TranslateX`     | `number \| [min, max]`         | Component horizontal offset (−1000 to 1000)                   |
-| `*TranslateY`     | `number \| [min, max]`         | Component vertical offset (−1000 to 1000)                     |
 
 When an option accepts an array, the PRNG either picks from the list (for discrete values) or picks a value within the range (for numeric min/max pairs).
 

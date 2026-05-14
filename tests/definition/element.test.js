@@ -329,12 +329,39 @@ describe("definition.json $defs/element", () => {
     });
 
     for (const [label, value] of [
+      [
+        "@media",
+        "@media (prefers-color-scheme: dark) { .cls { fill: white; } }",
+      ],
+      [
+        "@keyframes",
+        "@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }",
+      ],
+      [
+        "@supports",
+        "@supports (color: oklch(0 0 0)) { .cls { fill: oklch(0.5 0.1 200); } }",
+      ],
+      ["@layer", "@layer base { .cls { fill: red; } }"],
+    ]) {
+      it(`accepts style element with safe ${label} at-rule`, () => {
+        assert.equal(validate(styleWithCss(value)), true);
+      });
+    }
+
+    for (const [label, value] of [
       ["external url()", ".cls { background: url(https://evil.com/track); }"],
       ["@import", "@import url('https://evil.com/steal.css');"],
+      ["@import string form", "@import 'https://evil.com/steal.css';"],
+      ["@IMPORT (case-insensitive)", "@IMPORT 'https://evil.com/steal.css';"],
       [
         "@font-face",
         "@font-face { font-family: evil; src: url('https://evil.com/font.woff'); }",
       ],
+      [
+        "@document",
+        "@document url-prefix('https://evil.com') { .cls { fill: red; } }",
+      ],
+      ["@charset", '@charset "UTF-8";'],
       ["expression()", ".cls { width: expression(alert(1)); }"],
       ["-moz-binding", ".cls { -moz-binding: url(https://evil.com/xbl#xss); }"],
       [

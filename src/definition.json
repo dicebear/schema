@@ -16,7 +16,7 @@
       "allOf": [{ "$ref": "#/definitions/camelCaseName" }]
     },
     "translateValue": {
-      "description": "A translation value expressed as a percentage of the component's width (for `x`) or height (for `y`). Defines a range the PRNG picks from. Set `min === max` for a fixed value. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "description": "A translation value expressed as a percentage of the component's width (for `x`) or height (for `y`). Defines a range the PRNG picks from. Set `min === max` for a fixed value. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
         "min": { "type": "number", "minimum": -1000, "maximum": 1000 },
@@ -102,11 +102,25 @@
       "maxLength": 16384
     },
     "cssString": {
-      "description": "Used for inline `style` attribute content and `<style>` element bodies. `@`-rules (`@import`, `@font-face`, `@keyframes`, etc.) are rejected in addition to the common `filteredString` injection filter. This is not a general CSS sanitizer.",
+      "description": "Used for inline `style` attribute content and `<style>` element bodies. Known-dangerous `@`-rules — `@import`, `@font-face`, `@document`, `@charset` — are rejected in addition to the common `filteredString` injection filter. Other `@`-rules (`@media`, `@keyframes`, `@supports`, `@layer`, etc.) are permitted, but the `filteredString` injection filter still applies to their contents — so external `url(...)` references inside e.g. an `@media` rule are still blocked. This is not a general CSS sanitizer.",
       "type": "string",
       "allOf": [{ "$ref": "#/definitions/filteredString" }],
       "maxLength": 4096,
-      "not": { "type": "string", "pattern": "@" }
+      "not": {
+        "type": "string",
+        "anyOf": [
+          { "type": "string", "pattern": "@[iI][mM][pP][oO][rR][tT]" },
+          {
+            "type": "string",
+            "pattern": "@[fF][oO][nN][tT]-[fF][aA][cC][eE]"
+          },
+          {
+            "type": "string",
+            "pattern": "@[dD][oO][cC][uU][mM][eE][nN][tT]"
+          },
+          { "type": "string", "pattern": "@[cC][hH][aA][rR][sS][eE][tT]" }
+        ]
+      }
     },
     "element": {
       "description": "An SVG node. One of four mutually exclusive forms, discriminated by `type` (and `name` for the `<style>` special case): a text element, a component reference, a `<style>` element, or any other SVG element.",
@@ -460,7 +474,7 @@
       "maximum": 100
     },
     "componentRotate": {
-      "description": "A rotation in degrees. Defines a range the PRNG picks from. Set `min === max` for a fixed angle. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "description": "A rotation in degrees. Defines a range the PRNG picks from. Set `min === max` for a fixed angle. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
         "min": { "type": "number", "minimum": -360, "maximum": 360 },
@@ -471,7 +485,7 @@
       "additionalProperties": false
     },
     "componentScale": {
-      "description": "A scale factor around the component's own center (`1` corresponds to the original size). Defines a range the PRNG picks from. Set `min === max` for a fixed scale. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "description": "A scale factor around the component's own center (`1` corresponds to the original size). Defines a range the PRNG picks from. Set `min === max` for a fixed scale. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
         "min": { "type": "number", "minimum": 0, "maximum": 10 },

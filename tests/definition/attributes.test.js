@@ -376,12 +376,24 @@ describe("definition.json $defs/attributes", () => {
       });
     }
 
-    it("rejects style with @import", () => {
-      assert.equal(
-        validate({ style: "@import url(https://evil.com/steal.css)" }),
-        false,
-      );
-    });
+    for (const [label, value] of [
+      ["@import", "@import url(https://evil.com/steal.css)"],
+      ["@import string form", "@import 'https://evil.com/steal.css'"],
+      ["@IMPORT (case-insensitive)", "@IMPORT 'https://evil.com/steal.css'"],
+      [
+        "@font-face",
+        "@font-face { font-family: evil; src: url('https://evil.com/font.woff') }",
+      ],
+      [
+        "@document",
+        "@document url-prefix('https://evil.com') { fill: red }",
+      ],
+      ["@charset", '@charset "UTF-8"'],
+    ]) {
+      it(`rejects style with ${label}`, () => {
+        assert.equal(validate({ style: value }), false);
+      });
+    }
 
     it("rejects style with expression()", () => {
       assert.equal(validate({ style: "width: expression(alert(1))" }), false);

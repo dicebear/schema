@@ -208,8 +208,11 @@ describe("options.json named properties", () => {
       assert.equal(validate({ flip: "diagonal" }), false);
     });
 
-    it("rejects flip array with more than 128 items", () => {
-      assert.equal(validate({ flip: Array(129).fill("none") }), false);
+    it("rejects flip array with more than 4 items", () => {
+      assert.equal(
+        validate({ flip: ["none", "horizontal", "vertical", "both", "none"] }),
+        false,
+      );
     });
 
     it("rejects flip array with invalid enum value", () => {

@@ -121,7 +121,7 @@
             "$ref": "#/definitions/flip"
           },
           "minItems": 0,
-          "maxItems": 128
+          "maxItems": 4
         }
       ]
     },
