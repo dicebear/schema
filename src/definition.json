@@ -16,15 +16,15 @@
       "allOf": [{ "$ref": "#/definitions/camelCaseName" }]
     },
     "translateValue": {
-      "description": "A translation value expressed as a percentage of the component's width (for `x`) or height (for `y`). A single value fixes the translation; two values define a range the PRNG picks from.",
-      "type": "array",
-      "items": {
-        "type": "number",
-        "minimum": -1000,
-        "maximum": 1000
+      "description": "A translation value expressed as a percentage of the component's width (for `x`) or height (for `y`). Defines a range the PRNG picks from. Set `min === max` for a fixed value. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "type": "object",
+      "properties": {
+        "min": { "type": "number", "minimum": -1000, "maximum": 1000 },
+        "max": { "type": "number", "minimum": -1000, "maximum": 1000 },
+        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 2000 }
       },
-      "minItems": 1,
-      "maxItems": 2
+      "required": ["min", "max"],
+      "additionalProperties": false
     },
     "hexColor": {
       "description": "A hex color with leading `#`, in 3, 4, 6, or 8 digit form.",
@@ -460,26 +460,26 @@
       "maximum": 100
     },
     "componentRotate": {
-      "description": "A rotation in degrees. A single value fixes the angle; two values define a range the PRNG picks from.",
-      "type": "array",
-      "items": {
-        "type": "number",
-        "minimum": -360,
-        "maximum": 360
+      "description": "A rotation in degrees. Defines a range the PRNG picks from. Set `min === max` for a fixed angle. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "type": "object",
+      "properties": {
+        "min": { "type": "number", "minimum": -360, "maximum": 360 },
+        "max": { "type": "number", "minimum": -360, "maximum": 360 },
+        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 720 }
       },
-      "minItems": 1,
-      "maxItems": 2
+      "required": ["min", "max"],
+      "additionalProperties": false
     },
     "componentScale": {
-      "description": "A scale factor around the component's own center. A single value fixes the scale; two values define a range the PRNG picks from. A value of `1` corresponds to the original size.",
-      "type": "array",
-      "items": {
-        "type": "number",
-        "minimum": 0,
-        "maximum": 10
+      "description": "A scale factor around the component's own center (`1` corresponds to the original size). Defines a range the PRNG picks from. Set `min === max` for a fixed scale. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range.",
+      "type": "object",
+      "properties": {
+        "min": { "type": "number", "minimum": 0, "maximum": 10 },
+        "max": { "type": "number", "minimum": 0, "maximum": 10 },
+        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 10 }
       },
-      "minItems": 1,
-      "maxItems": 2
+      "required": ["min", "max"],
+      "additionalProperties": false
     },
     "componentTranslate": {
       "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",

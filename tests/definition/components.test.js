@@ -64,8 +64,8 @@ describe("definition.json components", () => {
       assertValid(
         makeComponent({
           probability: 80,
-          rotate: [-10, 10],
-          translate: { x: [-5, 5], y: [0, 10] },
+          rotate: { min: -10, max: 10 },
+          translate: { x: { min: -5, max: 5 }, y: { min: 0, max: 10 } },
         }),
       );
     });
@@ -95,7 +95,19 @@ describe("definition.json components", () => {
     });
 
     it("rejects additional property on translate", () => {
-      assertInvalid(makeComponent({ translate: { x: [0], y: [0], z: [0] } }));
+      assertInvalid(
+        makeComponent({
+          translate: { x: { min: 0, max: 0 }, y: { min: 0, max: 0 }, z: { min: 0, max: 0 } },
+        }),
+      );
+    });
+
+    it("rejects additional property on translate range object", () => {
+      assertInvalid(
+        makeComponent({
+          translate: { x: { min: 0, max: 10, extra: 1 }, y: { min: 0, max: 0 } },
+        }),
+      );
     });
   });
 
@@ -118,100 +130,173 @@ describe("definition.json components", () => {
   });
 
   describe("rotate bounds", () => {
-    it("accepts single-item array", () => {
-      assertValid(makeComponent({ rotate: [45] }));
+    it("accepts range object", () => {
+      assertValid(makeComponent({ rotate: { min: -360, max: 360 } }));
     });
 
-    it("accepts boundary values [-360, 360]", () => {
-      assertValid(makeComponent({ rotate: [-360, 360] }));
+    it("accepts range object with step", () => {
+      assertValid(makeComponent({ rotate: { min: -180, max: 180, step: 15 } }));
     });
 
-    it("rejects value > 360", () => {
-      assertInvalid(makeComponent({ rotate: [0, 361] }));
+    it("accepts fixed value via min === max", () => {
+      assertValid(makeComponent({ rotate: { min: 45, max: 45 } }));
     });
 
-    it("rejects value < -360", () => {
-      assertInvalid(makeComponent({ rotate: [-361, 0] }));
+    it("rejects max > 360", () => {
+      assertInvalid(makeComponent({ rotate: { min: 0, max: 361 } }));
     });
 
-    it("rejects more than 2 items", () => {
-      assertInvalid(makeComponent({ rotate: [-10, 0, 10] }));
+    it("rejects min < -360", () => {
+      assertInvalid(makeComponent({ rotate: { min: -361, max: 0 } }));
     });
 
-    it("rejects empty array", () => {
-      assertInvalid(makeComponent({ rotate: [] }));
+    it("accepts fractional step", () => {
+      assertValid(makeComponent({ rotate: { min: 0, max: 10, step: 0.5 } }));
     });
 
-    it("rejects bare number (arrays only)", () => {
+    it("rejects step <= 0", () => {
+      assertInvalid(makeComponent({ rotate: { min: 0, max: 10, step: 0 } }));
+    });
+
+    it("rejects missing max", () => {
+      assertInvalid(makeComponent({ rotate: { min: 0 } }));
+    });
+
+    it("rejects missing min", () => {
+      assertInvalid(makeComponent({ rotate: { max: 10 } }));
+    });
+
+    it("rejects bare number", () => {
       assertInvalid(makeComponent({ rotate: 45 }));
+    });
+
+    it("rejects array form", () => {
+      assertInvalid(makeComponent({ rotate: [45] }));
     });
   });
 
   describe("translate bounds", () => {
-    it("accepts boundary values (±1000)", () => {
+    it("accepts boundary range objects (±1000)", () => {
       assertValid(
         makeComponent({
-          translate: { x: [-1000, 1000], y: [-1000, 1000] },
+          translate: {
+            x: { min: -1000, max: 1000 },
+            y: { min: -1000, max: 1000 },
+          },
         }),
       );
     });
 
-    it("rejects x with more than 2 items", () => {
-      assertInvalid(makeComponent({ translate: { x: [-5, 0, 5], y: [0] } }));
+    it("accepts fixed value via min === max", () => {
+      assertValid(
+        makeComponent({ translate: { x: { min: 5, max: 5 }, y: { min: 0, max: 0 } } }),
+      );
     });
 
-    it("rejects y with more than 2 items", () => {
-      assertInvalid(makeComponent({ translate: { x: [0], y: [-5, 0, 5] } }));
-    });
-
-    it("rejects empty array", () => {
-      assertInvalid(makeComponent({ translate: { x: [], y: [0] } }));
-    });
-
-    it("rejects bare number (arrays only)", () => {
+    it("rejects bare numbers", () => {
       assertInvalid(makeComponent({ translate: { x: 5, y: -10 } }));
     });
 
+    it("accepts x range with step", () => {
+      assertValid(
+        makeComponent({
+          translate: { x: { min: 0, max: 100, step: 5 }, y: { min: 0, max: 0 } },
+        }),
+      );
+    });
+
+    it("accepts y range with step", () => {
+      assertValid(
+        makeComponent({
+          translate: { x: { min: 0, max: 0 }, y: { min: 0, max: 100, step: 5 } },
+        }),
+      );
+    });
+
+    it("rejects array form for x", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: [0, 100], y: { min: 0, max: 0 } } }),
+      );
+    });
+
+    it("rejects array form for y", () => {
+      assertInvalid(
+        makeComponent({ translate: { x: { min: 0, max: 0 }, y: [0, 100] } }),
+      );
+    });
+
+    it("accepts fractional step", () => {
+      assertValid(
+        makeComponent({
+          translate: { x: { min: 0, max: 100, step: 2.5 }, y: { min: 0, max: 0 } },
+        }),
+      );
+    });
+
+    it("rejects step <= 0", () => {
+      assertInvalid(
+        makeComponent({
+          translate: { x: { min: 0, max: 100, step: 0 }, y: { min: 0, max: 0 } },
+        }),
+      );
+    });
+
     it("rejects value below lower bound (-1001)", () => {
-      assertInvalid(makeComponent({ translate: { x: [-1001, 0], y: [0] } }));
+      assertInvalid(
+        makeComponent({
+          translate: { x: { min: -1001, max: 0 }, y: { min: 0, max: 0 } },
+        }),
+      );
     });
 
     it("rejects value above upper bound (1001)", () => {
-      assertInvalid(makeComponent({ translate: { x: [0, 1001], y: [0] } }));
+      assertInvalid(
+        makeComponent({
+          translate: { x: { min: 0, max: 1001 }, y: { min: 0, max: 0 } },
+        }),
+      );
     });
   });
 
   describe("scale bounds", () => {
-    it("accepts single-item array", () => {
-      assertValid(makeComponent({ scale: [1.5] }));
+    it("accepts range object with float bounds", () => {
+      assertValid(makeComponent({ scale: { min: 0.8, max: 1.2 } }));
     });
 
-    it("accepts boundary values [0, 10]", () => {
-      assertValid(makeComponent({ scale: [0, 10] }));
+    it("accepts boundary range [0, 10]", () => {
+      assertValid(makeComponent({ scale: { min: 0, max: 10 } }));
     });
 
-    it("accepts float range", () => {
-      assertValid(makeComponent({ scale: [0.8, 1.2] }));
+    it("accepts range object with step", () => {
+      assertValid(makeComponent({ scale: { min: 0, max: 10, step: 1 } }));
     });
 
-    it("rejects value > 10", () => {
-      assertInvalid(makeComponent({ scale: [1, 10.1] }));
+    it("accepts fixed value via min === max", () => {
+      assertValid(makeComponent({ scale: { min: 1.5, max: 1.5 } }));
     });
 
-    it("rejects value < 0", () => {
-      assertInvalid(makeComponent({ scale: [-0.1, 1] }));
+    it("rejects max > 10", () => {
+      assertInvalid(makeComponent({ scale: { min: 1, max: 10.1 } }));
     });
 
-    it("rejects more than 2 items", () => {
-      assertInvalid(makeComponent({ scale: [0.8, 1, 1.2] }));
+    it("rejects min < 0", () => {
+      assertInvalid(makeComponent({ scale: { min: -0.1, max: 1 } }));
     });
 
-    it("rejects empty array", () => {
-      assertInvalid(makeComponent({ scale: [] }));
+    it("accepts fractional step", () => {
+      assertValid(makeComponent({ scale: { min: 0.8, max: 1.2, step: 0.1 } }));
     });
 
-    it("rejects bare number (arrays only)", () => {
-      assertInvalid(makeComponent({ scale: 2 }));
+    it("rejects step <= 0", () => {
+      assertInvalid(makeComponent({ scale: { min: 0, max: 1, step: 0 } }));
+    });
+
+    it("rejects bare number", () => {
+      assertInvalid(makeComponent({ scale: 1.5 }));
+    });
+
+    it("rejects array form", () => {
+      assertInvalid(makeComponent({ scale: [1.5] }));
     });
   });
 
@@ -306,15 +391,15 @@ describe("definition.json components", () => {
       });
 
       it("rejects alias with rotate override", () => {
-        assertInvalid(makeAliasPair({ rotate: [-15, 15] }));
+        assertInvalid(makeAliasPair({ rotate: { min: -15, max: 15 } }));
       });
 
       it("rejects alias with scale override", () => {
-        assertInvalid(makeAliasPair({ scale: [0.9, 1.1] }));
+        assertInvalid(makeAliasPair({ scale: { min: 0.9, max: 1.1 } }));
       });
 
       it("rejects alias with translate override", () => {
-        assertInvalid(makeAliasPair({ translate: { x: [-5, 5], y: [0] } }));
+        assertInvalid(makeAliasPair({ translate: { x: { min: -5, max: 5 }, y: 0 } }));
       });
 
       it("rejects alias with width", () => {
