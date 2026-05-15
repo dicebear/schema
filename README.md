@@ -11,12 +11,16 @@ This package exports two JSON Schemas (Draft 07):
 Validates avatar style definitions — the files that describe how a DiceBear avatar style is structured. A definition includes:
 
 - **`canvas`** _(required)_ — The SVG canvas dimensions and root element tree
-- **`components`** — Named, reusable SVG components with variants. At render time, a PRNG selects one variant per component.
+- **`components`** — Named, reusable SVG components with variants. At render time, a PRNG selects one variant per component. Components can also be declared as aliases of another component via `extends`, producing an independently-randomized instance.
 - **`colors`** — Named color palettes. Colors can define constraints such as `notEqualTo` (must differ from another color) or `contrastTo` (picks the highest-contrast value).
 - **`attributes`** — Global SVG attributes applied to the root `<svg>` element
 - **`meta`** — License, creator, and source metadata
 
 Only a safe subset of SVG elements and attributes is permitted. Event handlers, external URL references, and CSS injection patterns are explicitly blocked.
+
+#### Additional Documentation
+
+https://www.dicebear.com/specification/definition-schema/
 
 ### `options.json`
 
@@ -25,7 +29,8 @@ Validates the options object passed by users when generating an avatar. Supporte
 | Property          | Type                           | Description                                                   |
 | ----------------- | ------------------------------ | ------------------------------------------------------------- |
 | `seed`            | `string`                       | PRNG seed for reproducible avatars                            |
-| `size`            | `integer`                      | Output size in pixels                                         |
+| `size`            | `integer`                      | Output size in pixels (1 to 4096)                             |
+| `title`           | `string`                       | Accessible title rendered as `<title>` and `aria-label`       |
 | `flip`            | `string \| array`              | Mirror direction: `none`, `horizontal`, `vertical`, or `both` |
 | `scale`           | `number \| [min, max]`         | Scaling factor (0 to 10, 1 = original size)                   |
 | `rotate`          | `number \| [min, max]`         | Rotation in degrees (−360 to 360)                             |
@@ -72,8 +77,8 @@ https://cdn.hopjs.net/npm/@dicebear/schema@0.15.0/dist/options.min.json
 **JavaScript**
 
 ```js
-import definitionSchema from "@dicebear/schema/definition.json" assert { type: "json" };
-import optionsSchema from "@dicebear/schema/options.json" assert { type: "json" };
+import definitionSchema from "@dicebear/schema/definition.json" with { type: "json" };
+import optionsSchema from "@dicebear/schema/options.json" with { type: "json" };
 ```
 
 **PHP**
