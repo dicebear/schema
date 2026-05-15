@@ -156,11 +156,12 @@
       "additionalProperties": false
     },
     "componentReference": {
-      "description": "A reference to a named component defined in the top-level `components` section. At render time, the PRNG selects one of the component's variants.",
+      "description": "A reference to a named component defined in the top-level `components` section. At render time, the PRNG selects one of the component's variants. Optional `attributes` are applied to the generated `<use>` tag — most commonly a `transform` placing the instance, but any allowlisted attribute is accepted.",
       "type": "object",
       "properties": {
         "type": { "const": "component" },
-        "name": { "$ref": "#/definitions/componentName" }
+        "name": { "$ref": "#/definitions/componentName" },
+        "attributes": { "$ref": "#/definitions/attributes" }
       },
       "required": ["type", "name"],
       "additionalProperties": false

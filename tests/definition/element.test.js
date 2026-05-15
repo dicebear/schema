@@ -222,9 +222,31 @@ describe("definition.json $defs/element", () => {
       );
     });
 
-    it("rejects component type with attributes", () => {
+    it("accepts component type with attributes", () => {
       assert.equal(
         validate({ type: "component", name: "eyes", attributes: {} }),
+        true,
+      );
+    });
+
+    it("accepts component type with a transform attribute", () => {
+      assert.equal(
+        validate({
+          type: "component",
+          name: "eyes",
+          attributes: { transform: "matrix(.85 0 0 .85 290.75 245.75)" },
+        }),
+        true,
+      );
+    });
+
+    it("rejects component type with a dangerous transform attribute", () => {
+      assert.equal(
+        validate({
+          type: "component",
+          name: "eyes",
+          attributes: { transform: "url(https://evil.example/x)" },
+        }),
         false,
       );
     });
