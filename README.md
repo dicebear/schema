@@ -94,8 +94,8 @@ options    = json.loads(files("dicebear_schema").joinpath("options.json").read_t
 The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:
 
 ```
-https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.1.0-rc.1/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.1.0-rc.1/dist/options.min.json
 ```
 
 ## Contributing
