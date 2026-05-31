@@ -100,7 +100,7 @@ https://cdn.hopjs.net/npm/@dicebear/schema@1.1.0-rc.2/dist/options.min.json
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for local development, testing,
+See [CONTRIBUTING.md](https://github.com/dicebear/schema/blob/main/CONTRIBUTING.md) for local development, testing,
 and the release process.
 
 ## Sponsors
