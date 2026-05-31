@@ -23,7 +23,7 @@ files, so schema changes tend to land in several repos at once.
 
 ## Requirements
 
-- [Node.js](https://nodejs.org/) 20 or newer (matches the test workflow)
+- [Node.js](https://nodejs.org/) 20 or newer
 
 ## Local setup
 
@@ -55,8 +55,15 @@ tests/
 └── helpers/           # Ajv helpers shared by the suites
 scripts/
 ├── build.sh           # Builds the minified dist files
-└── sync-readme.sh     # Keeps the README CDN links in sync on npm version
+├── sync-readme.sh     # Keeps the README CDN links in sync with the version
+└── version.sh         # Bumps package.json + pyproject.toml and tags a release
 ```
+
+The schemas also ship to PyPI as the data-only `dicebear-schema` package
+(`pyproject.toml`), the Python counterpart of the npm and Composer
+distributions. It carries no Python code: the same `src/*.json` files are
+exposed under the `dicebear_schema` import name and read by the consumer with
+the standard library.
 
 ## Making a change
 
@@ -93,18 +100,30 @@ scripts/
 ## Releasing (maintainers only)
 
 Publishing is fully automated via the
-[publish workflow](.github/workflows/publish.yml). To cut a release:
+[publish workflow](.github/workflows/publish.yml). To cut a release, bump the
+version across both manifests and tag it:
 
 ```sh
-npm version patch   # or minor / major
-git push origin main --follow-tags
+scripts/version.sh <version>   # e.g. 1.1.0 or 1.1.0-rc.1
+git push && git push --tags
 ```
 
-`npm version` updates `package.json`, syncs the README via
-`scripts/sync-readme.sh`, commits, and creates the Git tag. The workflow
-installs dependencies, runs the tests, and publishes to npm with
-provenance. Packagist picks up the same tag automatically once the repo
-is linked there.
+`scripts/version.sh` updates `version` in `package.json` **and**
+`pyproject.toml`, syncs the README CDN links (`scripts/sync-readme.sh`) and
+`package-lock.json`, then creates the commit and the `v<version>` tag. Both
+manifests carry the same version, so always release via this script (not
+`npm version`, which would bump only `package.json`).
+
+On the tag, the workflow:
+
+1. Runs the schema tests and builds the minified dist files.
+2. Publishes to npm with provenance (`@dicebear/schema`).
+3. Builds the data-only wheel from `src/` and publishes to PyPI via Trusted
+   Publishing (`dicebear-schema`).
+
+Packagist picks up the same Git tag automatically (`dicebear/schema`). For
+prereleases, note that PyPI normalizes to PEP 440, so npm publishes
+`1.1.0-rc.1` while PyPI publishes `1.1.0rc1`.
 
 ## Licensing
 

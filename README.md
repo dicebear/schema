@@ -49,18 +49,44 @@ Validates the options object passed by users when generating an avatar. Supporte
 
 When an option accepts an array, the PRNG either picks from the list (for discrete values) or picks a value within the range (for numeric min/max pairs).
 
-## Installation
+## Usage
 
-**npm**
+**JavaScript**
 
-```sh
+```bash
 npm install @dicebear/schema
 ```
 
-**Composer**
+```js
+import definitionSchema from "@dicebear/schema/definition.json" with { type: "json" };
+import optionsSchema from "@dicebear/schema/options.json" with { type: "json" };
+```
 
-```sh
+**PHP**
+
+```bash
 composer require dicebear/schema
+```
+
+```php
+$basePath = \Composer\InstalledVersions::getInstallPath('dicebear/schema');
+
+$definition = json_decode(file_get_contents($basePath . '/src/definition.json'), true);
+$options    = json_decode(file_get_contents($basePath . '/src/options.json'), true);
+```
+
+**Python**
+
+```bash
+pip install dicebear-schema
+```
+
+```python
+import json
+from importlib.resources import files
+
+definition = json.loads(files("dicebear_schema").joinpath("definition.json").read_text("utf-8"))
+options    = json.loads(files("dicebear_schema").joinpath("options.json").read_text("utf-8"))
 ```
 
 **CDN**
@@ -70,24 +96,6 @@ The schemas are available directly via CDN — no installation required. We reco
 ```
 https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/definition.min.json
 https://cdn.hopjs.net/npm/@dicebear/schema@1.0.0/dist/options.min.json
-```
-
-## Usage
-
-**JavaScript**
-
-```js
-import definitionSchema from "@dicebear/schema/definition.json" with { type: "json" };
-import optionsSchema from "@dicebear/schema/options.json" with { type: "json" };
-```
-
-**PHP**
-
-```php
-$basePath = \Composer\InstalledVersions::getInstallPath('dicebear/schema');
-
-$definition = json_decode(file_get_contents($basePath . '/src/definition.json'), true);
-$options    = json_decode(file_get_contents($basePath . '/src/options.json'), true);
 ```
 
 ## Contributing

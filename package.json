@@ -37,8 +37,7 @@
     "build": "bash scripts/build.sh",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --test tests/**/*.test.js",
-    "version": "bash scripts/sync-readme.sh && git add README.md"
+    "test": "node --test tests/**/*.test.js"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

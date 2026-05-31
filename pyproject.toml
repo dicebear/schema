@@ -1,0 +1,55 @@
+[build-system]
+# hatchling >= 1.27 is required for the PEP 639 `license = "MIT"` SPDX string.
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dicebear-schema"
+version = "1.0.0"
+description = "JSON Schema definitions for DiceBear avatar styles and options"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Florian Körner", email = "contact@florian-koerner.com" }]
+keywords = ["dicebear", "avatar", "schema", "json-schema"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Software Development :: Libraries",
+]
+
+# Data-only distribution: no runtime dependencies and no Python code. The two
+# draft-07 schemas ship as JSON resources under the `dicebear_schema` import
+# name and are read by the consumer via the standard library, mirroring how
+# `@dicebear/schema` (npm) and `dicebear/schema` (Composer) ship pure data:
+#
+#     import json
+#     from importlib.resources import files
+#
+#     definition = json.loads(
+#         files("dicebear_schema").joinpath("definition.json").read_text("utf-8")
+#     )
+
+[project.urls]
+Homepage = "https://www.dicebear.com"
+Repository = "https://github.com/dicebear/schema"
+Issues = "https://github.com/dicebear/schema/issues"
+
+# Ship the committed `src/*.json` schemas as the `dicebear_schema` namespace
+# package (a directory of JSON resources, no `__init__.py`). `bypass-selection`
+# tells hatchling there are no Python packages to discover — by design. Using
+# `src/` (not the generated, gitignored `dist/`, which carries an injected `$id`)
+# keeps the package in sync with the PHP usage and needs no build step before
+# packaging.
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+force-include = { "src" = "dicebear_schema" }
+
+[tool.hatch.build.targets.sdist]
+include = ["src/*.json", "README.md", "LICENSE", "pyproject.toml"]
