@@ -512,12 +512,14 @@
         "width": {
           "description": "The natural width of the component canvas in pixels.",
           "type": "number",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 1000000
         },
         "height": {
           "description": "The natural height of the component canvas in pixels.",
           "type": "number",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 1000000
         },
         "probability": { "$ref": "#/definitions/componentProbability" },
         "rotate": { "$ref": "#/definitions/componentRotate" },
@@ -656,12 +658,14 @@
         "width": {
           "description": "The natural width of the avatar canvas in pixels.",
           "type": "number",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 1000000
         },
         "height": {
           "description": "The natural height of the avatar canvas in pixels.",
           "type": "number",
-          "minimum": 1
+          "minimum": 1,
+          "maximum": 1000000
         }
       },
       "required": ["elements", "width", "height"],
