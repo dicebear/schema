@@ -12,6 +12,8 @@ schema itself, independently of the DiceBear library release line.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-06-03
+
 ### Fixed
 
 - Canvas and component dimensions (`canvas.width`/`height` and the component
@@ -53,7 +55,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v1.1.0-rc.2...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/dicebear/schema/compare/v1.1.0-rc.2...v1.1.0
 [1.1.0-rc.2]: https://github.com/dicebear/schema/compare/v1.1.0-rc.1...v1.1.0-rc.2
 [1.1.0-rc.1]: https://github.com/dicebear/schema/compare/v1.0.0...v1.1.0-rc.1
 [1.0.0]: https://github.com/dicebear/schema/releases/tag/v1.0.0
