@@ -89,6 +89,21 @@ definition = json.loads(files("dicebear_schema").joinpath("definition.json").rea
 options    = json.loads(files("dicebear_schema").joinpath("options.json").read_text("utf-8"))
 ```
 
+**Rust**
+
+```bash
+cargo add dicebear-schema
+```
+
+The schemas are embedded at compile time and exposed as raw JSON (`&'static str`). Parse them with `serde_json` and validate with the [`jsonschema`](https://crates.io/crates/jsonschema) crate:
+
+```rust
+use dicebear_schema::{DEFINITION, OPTIONS};
+
+let definition: serde_json::Value = serde_json::from_str(DEFINITION)?;
+let options: serde_json::Value = serde_json::from_str(OPTIONS)?;
+```
+
 **CDN**
 
 The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:

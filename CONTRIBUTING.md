@@ -101,16 +101,16 @@ the standard library.
 
 Publishing is fully automated via the
 [publish workflow](.github/workflows/publish.yml). To cut a release, bump the
-version across both manifests and tag it:
+version across all three manifests and tag it:
 
 ```sh
 scripts/version.sh <version>   # e.g. 1.1.0 or 1.1.0-rc.1
 git push && git push --tags
 ```
 
-`scripts/version.sh` updates `version` in `package.json` **and**
-`pyproject.toml`, syncs the README CDN links (`scripts/sync-readme.sh`) and
-`package-lock.json`, then creates the commit and the `v<version>` tag. Both
+`scripts/version.sh` updates `version` in `package.json`, `pyproject.toml` **and**
+`Cargo.toml`, syncs the README CDN links (`scripts/sync-readme.sh`) and
+`package-lock.json`, then creates the commit and the `v<version>` tag. All three
 manifests carry the same version, so always release via this script (not
 `npm version`, which would bump only `package.json`).
 
@@ -120,6 +120,9 @@ On the tag, the workflow:
 2. Publishes to npm with provenance (`@dicebear/schema`).
 3. Builds the data-only wheel from `src/` and publishes to PyPI via Trusted
    Publishing (`dicebear-schema`).
+4. Publishes the Rust crate to crates.io via Trusted Publishing
+   (`dicebear-schema`). The crate's first release must be published manually
+   with an API token; see the comment in the publish workflow.
 
 Packagist picks up the same Git tag automatically (`dicebear/schema`). For
 prereleases, note that PyPI normalizes to PEP 440, so npm publishes

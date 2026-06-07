@@ -1,0 +1,20 @@
+[package]
+name = "dicebear-schema"
+version = "1.1.0"
+edition = "2021"
+description = "JSON Schema definitions for DiceBear avatar styles and options"
+license = "MIT"
+repository = "https://github.com/dicebear/schema"
+homepage = "https://www.dicebear.com"
+keywords = ["dicebear", "avatar", "schema", "json-schema"]
+authors = ["Florian Körner <contact@florian-koerner.com>"]
+readme = "README.md"
+
+# Pure-data crate: ship the source schemas (committed `src/`, not the gitignored,
+# npm-only `dist/`) plus the thin re-export shim. `cargo publish` bundles only
+# files under the package root, so the JSON must live here — which it does.
+include = ["/src/*.json", "/rust/lib.rs", "/LICENSE", "/README.md"]
+
+[lib]
+# Keep Rust out of the data `src/` dir; the shim lives in its own `rust/`.
+path = "rust/lib.rs"
