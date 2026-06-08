@@ -123,9 +123,17 @@ On the tag, the workflow:
 4. Publishes the Rust crate to crates.io via Trusted Publishing
    (`dicebear-schema`).
 
-Packagist picks up the same Git tag automatically (`dicebear/schema`). For
-prereleases, note that PyPI normalizes to PEP 440, so npm publishes
-`1.1.0-rc.1` while PyPI publishes `1.1.0rc1`.
+Packagist (`dicebear/schema`) and the Go module proxy
+(`github.com/dicebear/schema`) both pick up the same Git tag automatically — no
+publish step. The Go version lives entirely in the tag, so `scripts/version.sh`
+does not touch `go.mod`. For prereleases, note that PyPI normalizes to PEP 440, so
+npm publishes `1.1.0-rc.1` while PyPI publishes `1.1.0rc1`.
+
+> **Major version bumps and Go.** Go encodes the major version in the import path.
+> While this repo is on `v0`/`v1` the module path stays `github.com/dicebear/schema`
+> (no suffix). When it moves to `v2`, the `go.mod` module path must gain a `/v2`
+> suffix by hand (and the README import examples updated) — `scripts/version.sh`
+> only rewrites the semver in the npm/PyPI/crates manifests, not the Go module path.
 
 ## Licensing
 

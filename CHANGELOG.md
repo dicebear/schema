@@ -7,10 +7,18 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 This repository holds the JSON Schema that defines the DiceBear avatar style
-definition format (distributed via npm, Composer, and PyPI). Versions track the
-schema itself, independently of the DiceBear library release line.
+definition format (distributed via npm, Composer, PyPI, crates.io, and Go
+modules). Versions track the schema itself, independently of the DiceBear library
+release line.
 
 ## [Unreleased]
+
+### Added
+
+- **Go:** The schemas are now available as a Go module
+  (`github.com/dicebear/schema`). `definition.json` and `options.json` are
+  embedded and exposed as `string` variables (`Definition`, `Options`) and via
+  `Get(name)`.
 
 ## [1.1.0] - 2026-06-03
 

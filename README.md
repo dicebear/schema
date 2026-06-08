@@ -104,6 +104,28 @@ let definition: serde_json::Value = serde_json::from_str(DEFINITION)?;
 let options: serde_json::Value = serde_json::from_str(OPTIONS)?;
 ```
 
+**Go**
+
+```bash
+go get github.com/dicebear/schema
+```
+
+The schemas are embedded at compile time and exposed as raw JSON (`string`). Parse them with `encoding/json` and validate with a library such as [`jsonschema`](https://github.com/santhosh-tekuri/jsonschema):
+
+```go
+import (
+	"encoding/json"
+
+	"github.com/dicebear/schema"
+)
+
+var definition map[string]any
+_ = json.Unmarshal([]byte(schema.Definition), &definition)
+
+var options map[string]any
+_ = json.Unmarshal([]byte(schema.Options), &options)
+```
+
 **CDN**
 
 The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:

@@ -26,3 +26,21 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+  go:
+    runs-on: ubuntu-latest
+    # schema.go is static (only two schemas, no codegen), so there is no drift
+    # check — just confirm the module builds and the embeds resolve.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+
+      - name: Vet and build
+        run: |
+          go vet ./...
+          go build ./...
