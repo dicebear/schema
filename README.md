@@ -139,8 +139,8 @@ all := schema.All()
 The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:
 
 ```
-https://cdn.hopjs.net/npm/@dicebear/schema@1.1.0/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@1.1.0/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.2.0/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.2.0/dist/options.min.json
 ```
 
 ## Contributing
