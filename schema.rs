@@ -38,3 +38,21 @@ pub const DEFINITION: &str = include_str!("src/definition.json");
 
 /// `options.json` — JSON Schema for DiceBear avatar options.
 pub const OPTIONS: &str = include_str!("src/options.json");
+
+/// Returns the raw JSON for the named schema (`"definition"` or `"options"`), or
+/// `None` if the name is unknown.
+///
+/// Companion to `all`: `all()` lists the names, `get(name)` fetches one. Mirrors
+/// the `dicebear-styles` crate's API.
+pub fn get(name: &str) -> Option<&'static str> {
+    match name {
+        "definition" => Some(DEFINITION),
+        "options" => Some(OPTIONS),
+        _ => None,
+    }
+}
+
+/// Names of every embedded schema (`"definition"`, `"options"`).
+pub fn all() -> Vec<&'static str> {
+    vec!["definition", "options"]
+}

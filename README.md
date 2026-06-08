@@ -102,6 +102,10 @@ use dicebear_schema::{DEFINITION, OPTIONS};
 
 let definition: serde_json::Value = serde_json::from_str(DEFINITION)?;
 let options: serde_json::Value = serde_json::from_str(OPTIONS)?;
+
+// Or look one up by name (None if unknown); all() lists the names:
+let schema = dicebear_schema::get("definition");
+let all = dicebear_schema::all();
 ```
 
 **Go**
@@ -124,6 +128,10 @@ _ = json.Unmarshal([]byte(schema.Definition), &definition)
 
 var options map[string]any
 _ = json.Unmarshal([]byte(schema.Options), &options)
+
+// Or look one up by name (ok is false if unknown); All() lists the names:
+raw, ok := schema.Get("definition")
+all := schema.All()
 ```
 
 **CDN**

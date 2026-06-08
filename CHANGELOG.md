@@ -18,7 +18,10 @@ release line.
 - **Go:** The schemas are now available as a Go module
   (`github.com/dicebear/schema`). `definition.json` and `options.json` are
   embedded and exposed as `string` variables (`Definition`, `Options`) and via
-  `Get(name)`.
+  `Get(name)`/`All()`.
+- **Rust:** Added `get(name)` and `all()` helpers, so the Rust and Go shims share
+  one API (`DEFINITION`/`OPTIONS` constant or variable + `get(name)` + `all()`),
+  matching the `dicebear-styles`/`@dicebear/styles` shims.
 
 ## [1.1.0] - 2026-06-03
 

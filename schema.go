@@ -48,6 +48,8 @@ var Options string
 
 // Get returns the raw JSON for the named schema ("definition" or "options"), or
 // ("", false) if the name is unknown.
+//
+// Companion to All: All lists the names, Get fetches one.
 func Get(name string) (string, bool) {
 	switch name {
 	case "definition":
@@ -56,4 +58,9 @@ func Get(name string) (string, bool) {
 		return Options, true
 	}
 	return "", false
+}
+
+// All returns the names of every embedded schema ("definition", "options").
+func All() []string {
+	return []string{"definition", "options"}
 }
