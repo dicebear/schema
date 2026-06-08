@@ -25,6 +25,13 @@ release line.
 
 ## [1.1.0] - 2026-06-03
 
+### Added
+
+- **Rust distribution:** A `dicebear-schema` crate is now published to crates.io,
+  alongside the existing npm, Composer, and PyPI distributions. It embeds the same
+  JSON Schemas via `include_str!` and exposes them as `&'static str` constants
+  (`DEFINITION`, `OPTIONS`).
+
 ### Fixed
 
 - Canvas and component dimensions (`canvas.width`/`height` and the component
