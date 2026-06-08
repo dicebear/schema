@@ -34,7 +34,7 @@
 //! files are used directly, matching the Python and PHP packages.
 
 /// `definition.json` — JSON Schema for DiceBear style definition files.
-pub const DEFINITION: &str = include_str!("../src/definition.json");
+pub const DEFINITION: &str = include_str!("src/definition.json");
 
 /// `options.json` — JSON Schema for DiceBear avatar options.
-pub const OPTIONS: &str = include_str!("../src/options.json");
+pub const OPTIONS: &str = include_str!("src/options.json");
