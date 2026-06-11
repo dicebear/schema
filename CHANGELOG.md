@@ -40,7 +40,7 @@ release line.
   base `width`/`height`) now have an upper bound of `1000000` in addition to the
   existing `minimum: 1`. Without it, extreme values could diverge across the
   language ports' number-to-string formatting. The bound never rejects a real
-  avatar — official styles use ~100 — and matches the precedent already set on
+  avatar (official styles use ~100) and matches the precedent already set on
   the `weight` field.
 
 ## [1.1.0-rc.2] - 2026-05-31

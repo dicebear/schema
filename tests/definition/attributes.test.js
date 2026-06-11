@@ -384,10 +384,7 @@ describe("definition.json $defs/attributes", () => {
         "@font-face",
         "@font-face { font-family: evil; src: url('https://evil.com/font.woff') }",
       ],
-      [
-        "@document",
-        "@document url-prefix('https://evil.com') { fill: red }",
-      ],
+      ["@document", "@document url-prefix('https://evil.com') { fill: red }"],
       ["@charset", '@charset "UTF-8"'],
     ]) {
       it(`rejects style with ${label}`, () => {

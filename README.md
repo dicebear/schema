@@ -8,17 +8,17 @@ This package exports two JSON Schemas (Draft 07):
 
 ### `definition.json`
 
-Validates avatar style definitions — the files that describe how a DiceBear avatar style is structured. A definition includes:
+Validates avatar style definitions: the files that describe how a DiceBear avatar style is structured. A definition includes:
 
-- **`canvas`** _(required)_ — The SVG canvas dimensions and root element tree
-- **`components`** — Named, reusable SVG components with variants. At render time, a PRNG selects one variant per component. Components can also be declared as aliases of another component via `extends`, producing an independently-randomized instance.
-- **`colors`** — Named color palettes. Colors can define constraints such as `notEqualTo` (must differ from another color) or `contrastTo` (picks the highest-contrast value).
-- **`attributes`** — Global SVG attributes applied to the root `<svg>` element
-- **`meta`** — License, creator, and source metadata
+- **`canvas`** _(required)_: The SVG canvas dimensions and root element tree
+- **`components`**: Named, reusable SVG components with variants. At render time, a PRNG selects one variant per component. Components can also be declared as aliases of another component via `extends`, producing an independently-randomized instance.
+- **`colors`**: Named color palettes. Colors can define constraints such as `notEqualTo` (must differ from another color) or `contrastTo` (picks the highest-contrast value).
+- **`attributes`**: Global SVG attributes applied to the root `<svg>` element
+- **`meta`**: License, creator, and source metadata
 
 Only a safe subset of SVG elements and attributes is permitted. Event handlers, external URL references, and CSS injection patterns are explicitly blocked.
 
-#### Additional Documentation
+#### Additional documentation
 
 https://www.dicebear.com/specification/definition-schema/
 
@@ -136,7 +136,7 @@ all := schema.All()
 
 **CDN**
 
-The schemas are available directly via CDN — no installation required. We recommend using a specific version to ensure stability:
+The schemas are available directly via CDN, so no installation is required. We recommend using a specific version to ensure stability:
 
 ```
 https://cdn.hopjs.net/npm/@dicebear/schema@1.2.0/dist/definition.min.json

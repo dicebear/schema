@@ -97,7 +97,11 @@ describe("definition.json components", () => {
     it("rejects additional property on translate", () => {
       assertInvalid(
         makeComponent({
-          translate: { x: { min: 0, max: 0 }, y: { min: 0, max: 0 }, z: { min: 0, max: 0 } },
+          translate: {
+            x: { min: 0, max: 0 },
+            y: { min: 0, max: 0 },
+            z: { min: 0, max: 0 },
+          },
         }),
       );
     });
@@ -105,7 +109,10 @@ describe("definition.json components", () => {
     it("rejects additional property on translate range object", () => {
       assertInvalid(
         makeComponent({
-          translate: { x: { min: 0, max: 10, extra: 1 }, y: { min: 0, max: 0 } },
+          translate: {
+            x: { min: 0, max: 10, extra: 1 },
+            y: { min: 0, max: 0 },
+          },
         }),
       );
     });
@@ -189,7 +196,9 @@ describe("definition.json components", () => {
 
     it("accepts fixed value via min === max", () => {
       assertValid(
-        makeComponent({ translate: { x: { min: 5, max: 5 }, y: { min: 0, max: 0 } } }),
+        makeComponent({
+          translate: { x: { min: 5, max: 5 }, y: { min: 0, max: 0 } },
+        }),
       );
     });
 
@@ -200,7 +209,10 @@ describe("definition.json components", () => {
     it("accepts x range with step", () => {
       assertValid(
         makeComponent({
-          translate: { x: { min: 0, max: 100, step: 5 }, y: { min: 0, max: 0 } },
+          translate: {
+            x: { min: 0, max: 100, step: 5 },
+            y: { min: 0, max: 0 },
+          },
         }),
       );
     });
@@ -208,7 +220,10 @@ describe("definition.json components", () => {
     it("accepts y range with step", () => {
       assertValid(
         makeComponent({
-          translate: { x: { min: 0, max: 0 }, y: { min: 0, max: 100, step: 5 } },
+          translate: {
+            x: { min: 0, max: 0 },
+            y: { min: 0, max: 100, step: 5 },
+          },
         }),
       );
     });
@@ -228,7 +243,10 @@ describe("definition.json components", () => {
     it("accepts fractional step", () => {
       assertValid(
         makeComponent({
-          translate: { x: { min: 0, max: 100, step: 2.5 }, y: { min: 0, max: 0 } },
+          translate: {
+            x: { min: 0, max: 100, step: 2.5 },
+            y: { min: 0, max: 0 },
+          },
         }),
       );
     });
@@ -236,7 +254,10 @@ describe("definition.json components", () => {
     it("rejects step <= 0", () => {
       assertInvalid(
         makeComponent({
-          translate: { x: { min: 0, max: 100, step: 0 }, y: { min: 0, max: 0 } },
+          translate: {
+            x: { min: 0, max: 100, step: 0 },
+            y: { min: 0, max: 0 },
+          },
         }),
       );
     });
@@ -399,7 +420,9 @@ describe("definition.json components", () => {
       });
 
       it("rejects alias with translate override", () => {
-        assertInvalid(makeAliasPair({ translate: { x: { min: -5, max: 5 }, y: 0 } }));
+        assertInvalid(
+          makeAliasPair({ translate: { x: { min: -5, max: 5 }, y: 0 } }),
+        );
       });
 
       it("rejects alias with width", () => {
