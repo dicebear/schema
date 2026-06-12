@@ -13,21 +13,20 @@ library release line.
 
 ## [Unreleased]
 
-### Added
-
-- **Dart:** The schemas are now available as a `dicebear_schema` package on
-  pub.dev. Dart has no compile-time file embedding, so `scripts/build.sh`
-  generates `lib/dicebear_schema.dart` with `definition.json` and
-  `options.json` embedded as string constants (`definition`, `options`), plus
-  `get(name)` and `all`; the Dart, Rust and Go shims share one API. The
-  generated `lib/` is git-ignored (like the npm `dist/`) and built fresh by
-  the test and publish workflows; `tool/check_parity.dart` proves in CI that
-  the embedded constants are byte-identical to their `src/*.json` sources.
-
 ## [1.2.0] - 2026-06-08
 
 ### Added
 
+- **Dart:** The schemas are now available as a `dicebear_schema` package on
+  pub.dev. The Dart shim landed after the `v1.2.0` tag, so the pub.dev release
+  of this version came from a later commit. Dart has no compile-time file
+  embedding, so `scripts/build.sh` generates
+  `lib/dicebear_schema.dart` with `definition.json` and `options.json` embedded
+  as string constants (`definition`, `options`), plus `get(name)` and `all`;
+  the Dart, Rust and Go shims share one API. The generated `lib/` is
+  git-ignored (like the npm `dist/`) and built fresh by the test and publish
+  workflows; `tool/check_parity.dart` proves in CI that the embedded constants
+  are byte-identical to their `src/*.json` sources.
 - **Go:** The schemas are now available as a Go module
   (`github.com/dicebear/schema`). `definition.json` and `options.json` are
   embedded and exposed as `string` variables (`Definition`, `Options`) and via
