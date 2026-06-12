@@ -1,0 +1,19 @@
+# Pure-data package: no dependencies and no logic. The schemas are embedded as
+# Dart string constants in lib/dicebear_schema.dart (generated from src/*.json
+# by scripts/build.sh). This mirrors how @dicebear/schema (npm), dicebear/schema
+# (Composer), dicebear-schema (PyPI, crates.io) and the Go module ship the same
+# data. scripts/version.sh keeps the version in lockstep with the other
+# manifests.
+name: dicebear_schema
+version: 1.2.0
+description: >-
+  JSON Schema definitions for DiceBear avatar styles and options, embedded as
+  Dart string constants.
+homepage: https://www.dicebear.com
+repository: https://github.com/dicebear/schema
+issue_tracker: https://github.com/dicebear/schema/issues
+topics:
+  - avatar
+  - dicebear
+environment:
+  sdk: ^3.0.0

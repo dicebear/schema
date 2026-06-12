@@ -35,12 +35,12 @@ npm install
 
 ## Scripts
 
-| Script                 | What it does                                         |
-| ---------------------- | ---------------------------------------------------- |
-| `npm run build`        | Runs `scripts/build.sh` to produce `dist/*.min.json` |
-| `npm test`             | Runs the Node built-in test runner against `tests/`  |
-| `npm run format`       | Runs Prettier on the whole repo                      |
-| `npm run format:check` | Checks formatting without writing                    |
+| Script                 | What it does                                                                        |
+| ---------------------- | ----------------------------------------------------------------------------------- |
+| `npm run build`        | Runs `scripts/build.sh` to produce `dist/*.min.json` and `lib/dicebear_schema.dart` |
+| `npm test`             | Runs the Node built-in test runner against `tests/`                                 |
+| `npm run format`       | Runs Prettier on the whole repo                                                     |
+| `npm run format:check` | Checks formatting without writing                                                   |
 
 ## Project layout
 
@@ -48,15 +48,19 @@ npm install
 src/
 ├── definition.json    # Schema for avatar style definitions
 └── options.json       # Schema for the user-supplied options object
+lib/
+└── dicebear_schema.dart  # Generated Dart shim embedding src/*.json (git-ignored)
 tests/
 ├── definition/        # Fixtures that must validate against definition.json
 ├── options/           # Fixtures that must validate against options.json
 ├── standalone/        # Self-contained schema/fixture pairs
 └── helpers/           # Ajv helpers shared by the suites
+tool/
+└── check_parity.dart  # CI guard: embedded Dart constants == src/*.json bytes
 scripts/
-├── build.sh           # Builds the minified dist files
+├── build.sh           # Builds the minified dist files and the Dart shim
 ├── sync-readme.sh     # Keeps the README CDN links in sync with the version
-└── version.sh         # Bumps package.json + pyproject.toml and tags a release
+└── version.sh         # Bumps all four manifests and tags a release
 ```
 
 The schemas also ship to PyPI as the data-only `dicebear-schema` package
@@ -73,8 +77,10 @@ the standard library.
    - `invalid/*.json` fixtures must fail validation.
 3. Run `npm test`. The suite uses [Ajv](https://ajv.js.org/) with
    `ajv-formats`; failures point at the offending fixture and keyword.
-4. Run `npm run build` and commit the regenerated `dist/*.min.json` files
-   along with the source changes.
+4. Run `npm run build` to refresh the generated files. Both outputs are
+   git-ignored: only the npm publish ships `dist/*.min.json`, and only the
+   pub.dev publish ships `lib/dicebear_schema.dart`; each publish builds its
+   output fresh from `src/`.
 5. Run `npm run format` before you open the pull request.
 
 ### Tips when editing the schemas
@@ -101,18 +107,19 @@ the standard library.
 
 Publishing is fully automated via the
 [publish workflow](.github/workflows/publish.yml). To cut a release, bump the
-version across all three manifests and tag it:
+version across all four manifests and tag it:
 
 ```sh
 scripts/version.sh <version>   # e.g. 1.1.0 or 1.1.0-rc.1
 git push && git push --tags
 ```
 
-`scripts/version.sh` updates `version` in `package.json`, `pyproject.toml` **and**
-`Cargo.toml`, syncs the README CDN links (`scripts/sync-readme.sh`) and
-`package-lock.json`, then creates the commit and the `v<version>` tag. All three
-manifests carry the same version, so always release via this script (not
-`npm version`, which would bump only `package.json`).
+`scripts/version.sh` updates `version` in `package.json`, `pyproject.toml`,
+`Cargo.toml` **and** `pubspec.yaml`, syncs the README CDN links
+(`scripts/sync-readme.sh`) and `package-lock.json`, then creates the commit and
+the `v<version>` tag. All four manifests carry the same version, so always
+release via this script (not `npm version`, which would bump only
+`package.json`).
 
 On the tag, the workflow:
 
@@ -122,6 +129,10 @@ On the tag, the workflow:
    Publishing (`dicebear-schema`).
 4. Publishes the Rust crate to crates.io via Trusted Publishing
    (`dicebear-schema`).
+5. Publishes the Dart package to pub.dev via the GitHub Actions integration
+   (`dicebear_schema`). This requires automated publishing to be enabled in the
+   pub.dev admin settings for the package (repository `dicebear/schema`, tag
+   pattern `v{{version}}`).
 
 Packagist (`dicebear/schema`) and the Go module proxy
 (`github.com/dicebear/schema`) both pick up the same Git tag automatically, with
@@ -133,7 +144,8 @@ npm publishes `1.1.0-rc.1` while PyPI publishes `1.1.0rc1`.
 > While this repo is on `v0`/`v1` the module path stays `github.com/dicebear/schema`
 > (no suffix). When it moves to `v2`, the `go.mod` module path must gain a `/v2`
 > suffix by hand (and the README import examples updated). `scripts/version.sh`
-> only rewrites the semver in the npm/PyPI/crates manifests, not the Go module path.
+> only rewrites the semver in the npm/PyPI/crates/pub manifests, not the Go
+> module path.
 
 ## Licensing
 

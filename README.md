@@ -134,6 +134,27 @@ raw, ok := schema.Get("definition")
 all := schema.All()
 ```
 
+**Dart**
+
+```bash
+dart pub add dicebear_schema
+```
+
+The schemas are embedded as Dart string constants. Parse them with `dart:convert` and validate with a package such as [`json_schema`](https://pub.dev/packages/json_schema):
+
+```dart
+import 'dart:convert';
+
+import 'package:dicebear_schema/dicebear_schema.dart' as schema;
+
+final definitionSchema = jsonDecode(schema.definition);
+final optionsSchema = jsonDecode(schema.options);
+
+// Or look one up by name (null if unknown); `all` lists the names:
+final raw = schema.get('definition');
+final names = schema.all;
+```
+
 **CDN**
 
 The schemas are available directly via CDN, so no installation is required. We recommend using a specific version to ensure stability:

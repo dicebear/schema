@@ -7,11 +7,22 @@ and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 This repository holds the JSON Schema that defines the DiceBear avatar style
-definition format (distributed via npm, Composer, PyPI, crates.io, and Go
-modules). Versions track the schema itself, independently of the DiceBear library
-release line.
+definition format (distributed via npm, Composer, PyPI, crates.io, Go modules,
+and pub.dev). Versions track the schema itself, independently of the DiceBear
+library release line.
 
 ## [Unreleased]
+
+### Added
+
+- **Dart:** The schemas are now available as a `dicebear_schema` package on
+  pub.dev. Dart has no compile-time file embedding, so `scripts/build.sh`
+  generates `lib/dicebear_schema.dart` with `definition.json` and
+  `options.json` embedded as string constants (`definition`, `options`), plus
+  `get(name)` and `all`; the Dart, Rust and Go shims share one API. The
+  generated `lib/` is git-ignored (like the npm `dist/`) and built fresh by
+  the test and publish workflows; `tool/check_parity.dart` proves in CI that
+  the embedded constants are byte-identical to their `src/*.json` sources.
 
 ## [1.2.0] - 2026-06-08
 
