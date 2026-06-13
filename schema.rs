@@ -25,13 +25,14 @@
 //! DiceBear JSON Schema definitions, embedded at compile time.
 //!
 //! This is a pure-data crate. It mirrors the npm (`@dicebear/schema`), Composer
-//! (`dicebear/schema`) and PyPI (`dicebear-schema`) packages: the same source
-//! schemas under `src/`, with no logic. Consumers parse and validate (e.g. with
-//! the `jsonschema` crate); this crate only ships the bytes.
+//! (`dicebear/schema`), PyPI (`dicebear-schema`), Go and pub.dev
+//! (`dicebear_schema`) packages: the same source schemas under `src/`, with no
+//! logic. Consumers parse and validate (e.g. with the `jsonschema` crate); this
+//! crate only ships the bytes.
 //!
 //! Unlike npm — which serves the minified `dist/` over the browser — Rust embeds
 //! the JSON into the binary and parses it at runtime, so the unminified `src/`
-//! files are used directly, matching the Python and PHP packages.
+//! files are used directly, matching the Python, PHP, Go and Dart packages.
 
 /// `definition.json` — JSON Schema for DiceBear style definition files.
 pub const DEFINITION: &str = include_str!("src/definition.json");
