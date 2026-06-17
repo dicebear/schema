@@ -54,6 +54,11 @@
       "pattern": "^[a-z][a-zA-Z0-9]*$",
       "maxLength": 64
     },
+    "tagFilter": {
+      "type": "string",
+      "pattern": "^!?[a-z][a-zA-Z0-9]*(:[a-z][a-zA-Z0-9]*)?$",
+      "maxLength": 130
+    },
     "rotateOption": {
       "anyOf": [
         { "$ref": "#/definitions/rotate" },
@@ -174,6 +179,22 @@
           },
           "minItems": 0,
           "maxItems": 2
+        }
+      ]
+    },
+    "tags": {
+      "description": "Uses tags to filter which variants of the avatar's components the PRNG may select. Each token is `category` or `category:value` (e.g. `hairLength:long`), optionally prefixed with `!` to exclude. An include affects only its own category: it drops variants that carry a different value in that category and keeps variants that carry no tag there. An exclude removes variants carrying the named tag. A `*Variant` option for the same component adds its named variants to that pool, so tags and `*Variant` combine rather than one overriding the other. Can be a single string or an array of strings.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/tagFilter"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/tagFilter"
+          },
+          "minItems": 0,
+          "maxItems": 128
         }
       ]
     }

@@ -177,6 +177,52 @@ describe("options.json named properties", () => {
     it("accepts boundary: borderRadius: 50", () => {
       assert.equal(validate({ borderRadius: 50 }), true);
     });
+
+    it("accepts tags as a single string", () => {
+      assert.equal(validate({ tags: "hairLength:long" }), true);
+    });
+
+    it("accepts tags as an array of include/exclude tokens", () => {
+      assert.equal(
+        validate({ tags: ["hairLength:long", "!facialHair:beard"] }),
+        true,
+      );
+    });
+
+    it("accepts a bare-category exclude token", () => {
+      assert.equal(validate({ tags: ["!facialHair"] }), true);
+    });
+
+    it("accepts an empty tags array", () => {
+      assert.equal(validate({ tags: [] }), true);
+    });
+
+    it("accepts tags alongside a variant option", () => {
+      assert.equal(
+        validate({ tags: ["hairLength:long"], topVariant: ["shortFlat"] }),
+        true,
+      );
+    });
+
+    it("accepts the tags maxItems boundary (128)", () => {
+      assert.equal(
+        validate({
+          tags: Array.from({ length: 128 }, (_, i) => `axis:value${i}`),
+        }),
+        true,
+      );
+    });
+
+    it("accepts a filter token at the maxLength boundary (130)", () => {
+      assert.equal(validate({ tags: ["!" + "a".repeat(129)] }), true);
+    });
+
+    it("accepts duplicate filter tokens (no uniqueItems, unlike variant tags)", () => {
+      assert.equal(
+        validate({ tags: ["hairLength:long", "hairLength:long"] }),
+        true,
+      );
+    });
   });
 
   describe("invalid properties", () => {
@@ -317,6 +363,51 @@ describe("options.json named properties", () => {
 
     it("rejects borderRadius array with 3+ items", () => {
       assert.equal(validate({ borderRadius: [0, 25, 50] }), false);
+    });
+
+    it("rejects a malformed tag token (uppercase)", () => {
+      assert.equal(validate({ tags: ["Hair:Long"] }), false);
+    });
+
+    it("rejects a three-segment tag token", () => {
+      assert.equal(validate({ tags: ["hair:long:weird"] }), false);
+    });
+
+    it("rejects a negated token with an invalid (uppercase) body", () => {
+      assert.equal(validate({ tags: ["!Hair"] }), false);
+    });
+
+    it("rejects a double negation", () => {
+      assert.equal(validate({ tags: ["!!hair"] }), false);
+    });
+
+    it("rejects an empty-string token", () => {
+      assert.equal(validate({ tags: [""] }), false);
+    });
+
+    it("rejects a non-string tag item", () => {
+      assert.equal(validate({ tags: [123] }), false);
+    });
+
+    it("rejects tags array with more than 128 items", () => {
+      assert.equal(
+        validate({
+          tags: Array.from({ length: 129 }, (_, i) => `axis:value${i}`),
+        }),
+        false,
+      );
+    });
+
+    it("rejects a tag token exceeding maxLength (130)", () => {
+      assert.equal(validate({ tags: ["a".repeat(131)] }), false);
+    });
+
+    it("rejects an array mixing a valid and an invalid token", () => {
+      assert.equal(validate({ tags: ["hairLength:long", "!!bad"] }), false);
+    });
+
+    it("rejects a malformed single-string token", () => {
+      assert.equal(validate({ tags: "Bad:X" }), false);
     });
   });
 });

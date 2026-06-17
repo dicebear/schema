@@ -397,6 +397,105 @@ describe("definition.json components", () => {
         );
       });
     });
+
+    describe("tags", () => {
+      const withTags = (tags) =>
+        makeComponent({ variants: { round: { elements: [], tags } } });
+
+      it("accepts a single category:value tag", () => {
+        assertValid(withTags(["hairLength:long"]));
+      });
+
+      it("accepts a bare-category tag", () => {
+        assertValid(withTags(["freckles"]));
+      });
+
+      it("accepts multiple tags across categories", () => {
+        assertValid(withTags(["hairLength:long", "facialHair:beard"]));
+      });
+
+      it("accepts an empty tags array", () => {
+        assertValid(withTags([]));
+      });
+
+      it("accepts a variant carrying both weight and tags", () => {
+        assertValid(
+          makeComponent({
+            variants: {
+              round: { elements: [], weight: 5, tags: ["hairLength:short"] },
+            },
+          }),
+        );
+      });
+
+      it("accepts the maxItems boundary (32 tags)", () => {
+        assertValid(
+          withTags(Array.from({ length: 32 }, (_, i) => `axis:value${i}`)),
+        );
+      });
+
+      it("accepts a tag at the maxLength boundary (129 chars)", () => {
+        assertValid(withTags(["a".repeat(129)]));
+      });
+
+      it("rejects a category starting with uppercase", () => {
+        assertInvalid(withTags(["Hair:long"]));
+      });
+
+      it("rejects a value starting with uppercase", () => {
+        assertInvalid(withTags(["hair:Long"]));
+      });
+
+      it("rejects a category starting with a digit", () => {
+        assertInvalid(withTags(["1hair:long"]));
+      });
+
+      it("rejects a three-segment tag", () => {
+        assertInvalid(withTags(["hair:long:weird"]));
+      });
+
+      it("rejects a trailing colon", () => {
+        assertInvalid(withTags(["hair:"]));
+      });
+
+      it("rejects a leading colon", () => {
+        assertInvalid(withTags([":long"]));
+      });
+
+      it("rejects a negation prefix (data tags are not filter tokens)", () => {
+        assertInvalid(withTags(["!hair:long"]));
+      });
+
+      it("rejects duplicate tags (uniqueItems)", () => {
+        assertInvalid(withTags(["hairLength:long", "hairLength:long"]));
+      });
+
+      it("rejects more than 32 tags (maxItems)", () => {
+        assertInvalid(
+          withTags(Array.from({ length: 33 }, (_, i) => `axis:value${i}`)),
+        );
+      });
+
+      it("rejects a tag exceeding maxLength (129)", () => {
+        assertInvalid(withTags(["a".repeat(130)]));
+      });
+
+      it("rejects an array mixing a valid and an invalid tag", () => {
+        assertInvalid(withTags(["hairLength:long", "Bad:X"]));
+      });
+
+      it("rejects a non-string tag", () => {
+        assertInvalid(withTags([123]));
+      });
+
+      it("rejects tags as a non-array", () => {
+        assertInvalid(
+          makeComponent({
+            variants: { round: { elements: [], tags: "hairLength:long" } },
+          }),
+        );
+      });
+    });
   });
 
   describe("aliases (extends)", () => {

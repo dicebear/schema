@@ -543,6 +543,18 @@
                 "type": "number",
                 "minimum": 0,
                 "maximum": 1000000
+              },
+              "tags": {
+                "description": "Optional tags for this variant (e.g. `hairLength:long`, `facialHair:beard`). The `tags` render option uses them to filter the variant pool.",
+                "type": "array",
+                "items": {
+                  "description": "A tag of the form `category` or `category:value`, where the category is an axis (e.g. `hairLength`, `mouthExpression`) and the value is its setting on that axis (e.g. `hairLength:long`). Each segment is camelCase.",
+                  "type": "string",
+                  "pattern": "^[a-z][a-zA-Z0-9]*(:[a-z][a-zA-Z0-9]*)?$",
+                  "maxLength": 129
+                },
+                "uniqueItems": true,
+                "maxItems": 32
               }
             },
             "required": ["elements"],
