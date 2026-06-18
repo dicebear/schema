@@ -15,6 +15,18 @@ library release line.
 
 ## [1.3.0-rc.1] - 2026-06-18
 
+### Added
+
+- **Variant tags:** Component variants may now carry an optional `tags` array,
+  such as `hairLength:long` or `facialHair:beard`. Each tag is a `category` or
+  `category:value` token in camelCase.
+- **`tags` render option:** The options schema now defines a `tags` option that
+  filters which variants the PRNG may select. A token is `category` or
+  `category:value`, optionally prefixed with `!` to exclude. An include narrows
+  its own category, an exclude removes the matching variants, and a `*Variant`
+  option for the same component adds its named variants to that pool. Accepts a
+  single string or an array.
+
 ## [1.2.0] - 2026-06-08
 
 ### Added
