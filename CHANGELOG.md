@@ -13,6 +13,8 @@ library release line.
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-06-19
+
 ## [1.3.0-rc.1] - 2026-06-18
 
 ### Added
@@ -99,7 +101,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v1.3.0-rc.1...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/dicebear/schema/compare/v1.3.0-rc.1...v1.3.0
 [1.3.0-rc.1]: https://github.com/dicebear/schema/compare/v1.2.0...v1.3.0-rc.1
 [1.2.0]: https://github.com/dicebear/schema/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/dicebear/schema/compare/v1.1.0-rc.2...v1.1.0

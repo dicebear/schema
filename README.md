@@ -160,8 +160,8 @@ final names = schema.all;
 The schemas are available directly via CDN, so no installation is required. We recommend using a specific version to ensure stability:
 
 ```
-https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0-rc.1/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0-rc.1/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@1.3.0/dist/options.min.json
 ```
 
 ## Contributing
