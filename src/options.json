@@ -183,7 +183,7 @@
       ]
     },
     "tags": {
-      "description": "Uses tags to filter which variants of the avatar's components the PRNG may select. Each token is `category` or `category:value` (e.g. `hairLength:long`), optionally prefixed with `!` to exclude. An include affects only its own category: it drops variants that carry a different value in that category and keeps variants that carry no tag there. An exclude removes variants carrying the named tag. Unknown tags are ignored. A `*Variant` option for the same component takes precedence: when set, it determines that component's variants and the tag filter does not apply to it. Can be a single string or an array of strings.",
+      "description": "Uses tags to filter which variants of the avatar's components the PRNG may select. Each token is `category` or `category:value` (e.g. `hairLength:long`), optionally prefixed with `!` to exclude. An include affects only its own category: it drops variants that carry a different value in that category and keeps variants that carry no tag there. A bare `category` include requires the category: it drops variants that carry no tag there, but only in components where the category is in use (e.g. `animation` turns on a style's opt-in animation). An exclude removes variants carrying the named tag. Unknown tags are ignored. A `*Variant` option for the same component takes precedence: when set, it determines that component's variants and the tag filter does not apply to it. Can be a single string or an array of strings.",
       "anyOf": [
         {
           "$ref": "#/definitions/tagFilter"

@@ -13,6 +13,13 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **`tags` render option:** The option description now documents that a bare
+  `category` include requires the category — it drops variants that carry no
+  tag there, but only in components where the category is in use. A bare
+  include used to be a no-op. The schema shape itself is unchanged.
+
 ## [1.3.0] - 2026-06-19
 
 ## [1.3.0-rc.1] - 2026-06-18
