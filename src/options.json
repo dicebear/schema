@@ -284,6 +284,11 @@
       "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
+    "^[a-z][a-zA-Z0-9]*ColorOrder$": {
+      "description": "Specifies whether the PRNG may rearrange the colors specified in the `*Color` option. With `random`, the default, the colors are shuffled before use, so which colors appear and in which order depends on the seed. With `fixed`, the colors are used in exactly the specified order: gradient fills apply them as color stops from first to last, and solid fills always use the first color. With `fixed` and no `*ColorFillStops` value, the number of gradient stops defaults to the number of specified colors instead of 2. Without a `*Color` option, `fixed` only makes the result seed-independent: the style's default palette is used in a deterministic sorted order.",
+      "type": "string",
+      "enum": ["random", "fixed"]
+    },
     "^rotate$": {
       "description": "This is the rotation angle for the entire avatar. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation in both directions. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/rotateOption" }]

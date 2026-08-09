@@ -238,6 +238,28 @@ describe("options.json patternProperties", () => {
     });
   });
 
+  describe("colorOrder", () => {
+    it("accepts colorOrder: random", () => {
+      assert.equal(validate({ skinColorOrder: "random" }), true);
+    });
+
+    it("accepts colorOrder: fixed", () => {
+      assert.equal(validate({ skinColorOrder: "fixed" }), true);
+    });
+
+    it("rejects invalid colorOrder string", () => {
+      assert.equal(validate({ skinColorOrder: "sorted" }), false);
+    });
+
+    it("rejects colorOrder as array", () => {
+      assert.equal(validate({ skinColorOrder: ["fixed"] }), false);
+    });
+
+    it("rejects colorOrder as boolean", () => {
+      assert.equal(validate({ skinColorOrder: true }), false);
+    });
+  });
+
   describe("colorAngle", () => {
     it("accepts single colorAngle value", () => {
       assert.equal(validate({ skinColorAngle: 45 }), true);

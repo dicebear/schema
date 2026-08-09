@@ -13,6 +13,18 @@ library release line.
 
 ## [Unreleased]
 
+### Added
+
+- **`*ColorOrder` render option:** New per-color option with the values
+  `random` and `fixed`. `random` matches the previous behavior: the PRNG
+  shuffles the colors before use. `fixed` keeps the colors of the `*Color`
+  option in exactly the specified order; gradient fills apply them as color
+  stops from first to last, and solid fills always use the first color. With
+  `fixed` and no `*ColorFillStops` value, the number of gradient stops
+  defaults to the number of specified colors instead of 2. Without a `*Color`
+  option, `fixed` only makes the result seed-independent: the style's default
+  palette is used in a deterministic sorted order.
+
 ### Changed
 
 - **`tags` render option:** The option description now documents that a bare
