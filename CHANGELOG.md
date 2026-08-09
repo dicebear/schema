@@ -13,6 +13,14 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **`*ColorOrder` render option:** The description no longer claims that
+  `fixed` without a `*Color` option makes the result seed-independent. It only
+  skips the shuffle; constraints from the style definition, such as a contrast
+  sort against another color group, still resolve with the seed. The schema
+  shape itself is unchanged.
+
 ## [1.4.0] - 2026-08-09
 
 ### Added
