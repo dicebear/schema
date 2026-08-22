@@ -13,3 +13,10 @@ Cargo.lock
 .dart_tool
 pubspec.lock
 /lib
+
+# .NET build output of DiceBear.Schema.csproj (the package is data-only, so
+# there is nothing generated here that needs committing) and the directory the
+# publish workflow packs the .nupkg into.
+bin
+obj
+dist-nuget

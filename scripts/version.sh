@@ -4,9 +4,10 @@ set -euo pipefail
 # Bumps the release version across every manifest in this repo, syncs the README
 # CDN URLs and the lockfile, then commits and tags — mirroring scripts/version.sh
 # in the dicebear/styles repo. The version lives in the manifests (package.json,
-# pyproject.toml, Cargo.toml and pubspec.yaml) and is the single source of
-# truth for the npm, PyPI, crates.io and pub.dev publishes; this script keeps
-# them in lockstep (npm's own `npm version` would only touch package.json).
+# pyproject.toml, Cargo.toml, pubspec.yaml and DiceBear.Schema.csproj) and is
+# the single source of truth for the npm, PyPI, crates.io, pub.dev and NuGet
+# publishes; this script keeps them in lockstep (npm's own `npm version` would
+# only touch package.json).
 #
 #   scripts/version.sh 1.1.0
 
@@ -54,6 +55,9 @@ bump "pyproject.toml" '^version = "[^"]*"$' "version = \"$version\""
 bump "Cargo.toml" '^version = "[^"]*"$' "version = \"$version\""
 # pub.dev: pubspec's top-level `version:` is the only line matching at column 0.
 bump "pubspec.yaml" '^version: .*$' "version: $version"
+# NuGet: MSBuild's `<Version>` property. The csproj carries exactly one. The
+# closing tag's slash is escaped because bump's sed uses / as its delimiter.
+bump "DiceBear.Schema.csproj" '<Version>[^<]*<\/Version>' "<Version>$version<\/Version>"
 
 # Repository the changelog's compare links point at.
 CHANGELOG_REPO_URL="https://github.com/dicebear/schema"

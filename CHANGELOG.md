@@ -13,6 +13,14 @@ library release line.
 
 ## [Unreleased]
 
+### Added
+
+- **C#:** The schemas are now available as a `DiceBear.Schema` package on
+  NuGet, targeting `netstandard2.0`. MSBuild embeds `definition.json` and
+  `options.json` into the assembly as resources. The shim in `schema.cs`
+  exposes them as the `string` properties `Definition` and `Options`, plus
+  `Get(name)` and `All()`, the same API the other shims carry.
+
 ### Changed
 
 - **`*ColorOrder` render option:** The description no longer claims that

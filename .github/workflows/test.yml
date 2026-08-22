@@ -71,3 +71,32 @@ jobs:
 
       - name: Verify byte parity with src/
         run: dart run tool/check_parity.dart
+
+  csharp:
+    runs-on: ubuntu-latest
+    # MSBuild embeds src/*.json into the assembly verbatim, so unlike the Dart
+    # shim there is nothing generated and no escaping to guard. What can still
+    # break is the wiring: a renamed file, or a LogicalName that no longer
+    # matches what schema.cs looks up. The tool builds the package, reads both
+    # schemas back out and compares them to src/.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Build
+        run: dotnet build DiceBear.Schema.csproj --configuration Release
+
+      - name: Verify byte parity with src/
+        run: dotnet run --project tool/CheckParity
+
+      - name: Pack
+        # dotnet build leaves the packaging inputs unresolved, so a Pack item
+        # pointing at a missing file (LICENSE, README.md) stays invisible until
+        # the release packs, by which point npm is already published. Packing
+        # here turns that into a red pull request instead.
+        run: dotnet pack DiceBear.Schema.csproj --configuration Release --output dist-nuget

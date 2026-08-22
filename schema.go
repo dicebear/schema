@@ -24,14 +24,13 @@
 
 // Package schema embeds the DiceBear JSON Schema definitions.
 //
-// It is a pure-data package, mirroring the npm (@dicebear/schema), Composer
-// (dicebear/schema), PyPI (dicebear-schema), crates.io (dicebear-schema) and
-// pub.dev (dicebear_schema) packages: the same source schemas under src/, with
-// no logic. Consumers parse and validate (e.g. with
+// It is a pure-data package, mirroring the schema packages published to the
+// other registries: the same source schemas under src/, with no logic.
+// Consumers parse and validate (e.g. with
 // github.com/santhosh-tekuri/jsonschema); this package only ships the bytes.
 //
-// Unlike the npm build, which serves the minified dist/, Go embeds and parses the
-// unminified src/ JSON, matching the Python, PHP, Rust and Dart packages.
+// Unlike the npm build, which serves the minified dist/, Go embeds and parses
+// the unminified src/ JSON.
 package schema
 
 import _ "embed"

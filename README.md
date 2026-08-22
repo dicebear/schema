@@ -155,6 +155,25 @@ final raw = schema.get('definition');
 final names = schema.all;
 ```
 
+**C#**
+
+```bash
+dotnet add package DiceBear.Schema
+```
+
+The schemas are embedded in the assembly and exposed as raw JSON (`string`). Parse them with `System.Text.Json` and validate with a library such as [`JsonSchema.Net`](https://www.nuget.org/packages/JsonSchema.Net):
+
+```csharp
+using System.Text.Json.Nodes;
+
+var definitionSchema = JsonNode.Parse(DiceBear.Schema.Definition);
+var optionsSchema = JsonNode.Parse(DiceBear.Schema.Options);
+
+// Or look one up by name (null if unknown). All() lists the names:
+var raw = DiceBear.Schema.Get("definition");
+var names = DiceBear.Schema.All();
+```
+
 **CDN**
 
 The schemas are available directly via CDN, so no installation is required. We recommend using a specific version to ensure stability:

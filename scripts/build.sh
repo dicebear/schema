@@ -64,10 +64,10 @@ dart_escape() { LC_ALL=C sed -e 's/\\/\\\\/g' -e "s/'/\\\\'/g" -e 's/\$/\\$/g'; 
 
 /// DiceBear JSON Schema definitions, embedded as Dart string constants.
 ///
-/// This is a pure-data package. It mirrors the npm (`@dicebear/schema`),
-/// Composer, PyPI, crates.io and Go packages: the same source schemas, with no
-/// logic. Consumers parse and validate (e.g. with `package:json_schema`); this
-/// package only ships the bytes.
+/// This is a pure-data package. It mirrors the schema packages published to the
+/// other registries: the same source schemas, with no logic. Consumers parse
+/// and validate (e.g. with `package:json_schema`); this package only ships the
+/// bytes.
 library;
 
 EOF

@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Pure-data package: ship the source schemas (the committed src/, not the
+    gitignored, npm-only dist/) embedded in the assembly, plus the thin shim in
+    schema.cs. The shim lives at the repository root next to schema.rs and
+    schema.go, so the default **/*.cs glob is switched off and the one file is
+    listed explicitly.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>DiceBear.Schema</AssemblyName>
+    <RootNamespace>DiceBear</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>DiceBear.Schema</PackageId>
+    <Version>1.4.0</Version>
+    <Authors>Florian Körner</Authors>
+    <Description>JSON Schema definitions for DiceBear avatar styles and options</Description>
+    <PackageTags>dicebear;avatar;schema;json-schema</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://www.dicebear.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dicebear/schema</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="schema.cs" />
+    <!--
+      LogicalName pins the resource key, so it no longer depends on how MSBuild
+      derives one from the file path. Schema.Read looks the schemas up by these
+      exact names.
+    -->
+    <EmbeddedResource Include="src/definition.json" LogicalName="DiceBear.Schema.definition.json" />
+    <EmbeddedResource Include="src/options.json" LogicalName="DiceBear.Schema.options.json" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <!--
+      PackageLicenseExpression records the SPDX id, which is what nuget.org
+      renders and filters on, but it puts no text in the package. The LICENSE
+      file is packed alongside it, so the notice travels with the artifact the
+      way it does in the npm, PyPI, crates.io and pub.dev packages. The header
+      in the source file does not: comments do not survive into the assembly.
+    -->
+    <None Include="LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
