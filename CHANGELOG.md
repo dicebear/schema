@@ -13,6 +13,18 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **Injection filter:** The separator between a blocked token and what follows
+  is now written out as `[ \t\n\f\r]` instead of `\s`. Regex engines disagree
+  on what `\s` covers, so the same definition was valid in one language and
+  invalid in another. The new class holds the characters a URL or CSS parser
+  actually discards, which loosens the filter in one place and tightens it in
+  another. Loosened: a non-breaking space between `javascript` and its colon is
+  valid now, and such a string is inert because a URL scheme cannot hold one.
+  Tightened: `url(` followed by a non-breaking space and a fragment is rejected
+  now, because the space reads as the start of the URL instead of a separator.
+
 ## [1.5.0] - 2026-08-22
 
 ## [1.5.0-rc.2] - 2026-08-22

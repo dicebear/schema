@@ -117,6 +117,114 @@ describe("definition.json $defs/attributes", () => {
       assert.equal(validate({ fill: "JavaScript:alert(1)" }), false);
     });
 
+    // The separator is the five characters a URL or CSS parser actually
+    // discards, written out rather than \s. A regex shorthand would drag in
+    // code points no parser skips, and every engine reads it differently.
+    // Every pattern in the filter carries its own copy of the class, so each
+    // one is exercised here. A typo in one copy is otherwise invisible.
+    const SKIPPED = [
+      ["space", 0x20],
+      ["tab", 0x09],
+      ["line feed", 0x0a],
+      ["form feed", 0x0c],
+      ["carriage return", 0x0d],
+    ];
+
+    for (const [name, cp] of SKIPPED) {
+      const sep = String.fromCharCode(cp);
+
+      it(`rejects a javascript URI behind a ${name}`, () => {
+        assert.equal(validate({ fill: `javascript${sep}:alert(1)` }), false);
+      });
+
+      it(`rejects a vbscript URI behind a ${name}`, () => {
+        assert.equal(validate({ fill: `vbscript${sep}:MsgBox(1)` }), false);
+      });
+
+      it(`rejects behavior: behind a ${name}`, () => {
+        assert.equal(validate({ fill: `behavior${sep}:url(xss.htc)` }), false);
+      });
+
+      it(`rejects expression() behind a ${name}`, () => {
+        assert.equal(validate({ fill: `expression${sep}(alert(1))` }), false);
+      });
+
+      it(`rejects an external url() behind a ${name}`, () => {
+        assert.equal(
+          validate({ fill: `url${sep}(${sep}https://evil.example)` }),
+          false,
+        );
+      });
+
+      // Separately from the pair above, because a separator before the
+      // parenthesis stops the pattern from reaching it at all. Only the
+      // separator inside the parenthesis reaches the trailing negated class,
+      // which is where a local reference is told apart from an external one.
+      it(`rejects an external url() behind an inner ${name}`, () => {
+        assert.equal(
+          validate({ fill: `url(${sep}https://evil.example)` }),
+          false,
+        );
+      });
+
+      it(`accepts a local url(#id) behind a ${name}`, () => {
+        assert.equal(validate({ fill: `url${sep}(${sep}#ref)` }), true);
+      });
+
+      it(`accepts a local url(#id) behind an inner ${name}`, () => {
+        assert.equal(validate({ fill: `url(${sep}#ref)` }), true);
+      });
+    }
+
+    // Code points a parser does not skip. A URL scheme is [a-zA-Z0-9+.-], and
+    // CSS counts none of these as whitespace, so `javascript<sep>:` never
+    // becomes a URI and the filter has nothing to defend against.
+    const NOT_SKIPPED = [
+      ["no-break space", 0xa0],
+      ["vertical tab", 0x0b],
+      ["ogham space mark", 0x1680],
+      ["en quad", 0x2000],
+      ["line separator", 0x2028],
+      ["narrow no-break space", 0x202f],
+      ["ideographic space", 0x3000],
+      ["zero width no-break space", 0xfeff],
+    ];
+
+    for (const [name, cp] of NOT_SKIPPED) {
+      const sep = String.fromCharCode(cp);
+
+      it(`accepts a javascript token behind a ${name}`, () => {
+        assert.equal(validate({ fill: `javascript${sep}:alert(1)` }), true);
+      });
+
+      it(`accepts a url token behind a ${name}`, () => {
+        assert.equal(validate({ fill: `url${sep}(${sep}#ref)` }), true);
+      });
+
+      // The trailing negated class holds the same five characters, so a code
+      // point outside it reads as the start of the URL body. That makes an
+      // inner one an external reference rather than a local one, which is a
+      // reject. It also means these were accepted before the class was
+      // written out and are rejected now.
+      it(`rejects a local url(#id) behind an inner ${name}`, () => {
+        assert.equal(validate({ fill: `url(${sep}#ref)` }), false);
+      });
+    }
+
+    // These two were never covered by the shorthand either, so they pin the
+    // filter's floor rather than the change. U+0085 is whitespace to Unicode
+    // but not to ECMA-262, and U+200B is not whitespace to either.
+    for (const [name, cp] of [
+      ["next line", 0x85],
+      ["zero width space", 0x200b],
+    ]) {
+      const sep = String.fromCharCode(cp);
+
+      it(`accepts a javascript token behind a ${name}, before and after`, () => {
+        assert.equal(validate({ fill: `javascript${sep}:alert(1)` }), true);
+      });
+    }
+
     it("rejects stroke with vbscript: URI", () => {
       assert.equal(validate({ stroke: "vbscript:MsgBox(1)" }), false);
     });

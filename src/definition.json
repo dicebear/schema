@@ -58,20 +58,23 @@
       "maxLength": 2048
     },
     "filteredString": {
-      "description": "Base definition for the filtered-string family (`attributeString`, `cssString`). Blocks a shared set of known-dangerous patterns: external `url(...)` references (local `url(#id)` is allowed), `expression()`, `behavior:`, `-moz-binding`, `javascript:` / `vbscript:` URI schemes, and backslash escape sequences. This is not a general CSS sanitizer — it is a defense-in-depth injection filter, so substring matches of blocked tokens will reject otherwise-harmless strings (e.g. a plain text containing the literal word `javascript:`). The `maxLength` here acts as an absolute ceiling for all derivatives; callers narrow it further.",
+      "description": "Base definition for the filtered-string family (`attributeString`, `cssString`). Blocks a shared set of known-dangerous patterns: external `url(...)` references (local `url(#id)` is allowed), `expression()`, `behavior:`, `-moz-binding`, `javascript:` / `vbscript:` URI schemes, and backslash escape sequences. This is not a general CSS sanitizer — it is a defense-in-depth injection filter, so substring matches of blocked tokens will reject otherwise-harmless strings (e.g. a plain text containing the literal word `javascript:`). The `maxLength` here acts as an absolute ceiling for all derivatives; callers narrow it further. The separator between a blocked token and what follows is written out as a literal character class rather than `\\s`. Two reasons. Every regex engine reads `\\s` differently, so the shorthand made the same definition valid in one language and invalid in another. And `\\s` covers code points no parser skips, such as U+00A0, which widened the filter without adding protection. The class holds the five characters a URL or CSS parser actually discards between a token and what follows. The same five appear negated in the `url` pattern, where they mark that the URL body has not started, which is how a local `url(#id)` is told apart from an external reference. Do not fold either back into `\\s`.",
       "type": "string",
       "maxLength": 16384,
       "not": {
         "type": "string",
         "anyOf": [
-          { "type": "string", "pattern": "[uU][rR][lL]\\s*\\(\\s*[^#)\\s]" },
           {
             "type": "string",
-            "pattern": "[eE][xX][pP][rR][eE][sS][sS][iI][oO][nN]\\s*\\("
+            "pattern": "[uU][rR][lL][ \\t\\n\\f\\r]*\\([ \\t\\n\\f\\r]*[^#) \\t\\n\\f\\r]"
           },
           {
             "type": "string",
-            "pattern": "[bB][eE][hH][aA][vV][iI][oO][rR]\\s*:"
+            "pattern": "[eE][xX][pP][rR][eE][sS][sS][iI][oO][nN][ \\t\\n\\f\\r]*\\("
+          },
+          {
+            "type": "string",
+            "pattern": "[bB][eE][hH][aA][vV][iI][oO][rR][ \\t\\n\\f\\r]*:"
           },
           {
             "type": "string",
@@ -79,11 +82,11 @@
           },
           {
             "type": "string",
-            "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT]\\s*:"
+            "pattern": "[jJ][aA][vV][aA][sS][cC][rR][iI][pP][tT][ \\t\\n\\f\\r]*:"
           },
           {
             "type": "string",
-            "pattern": "[vV][bB][sS][cC][rR][iI][pP][tT]\\s*:"
+            "pattern": "[vV][bB][sS][cC][rR][iI][pP][tT][ \\t\\n\\f\\r]*:"
           },
           { "type": "string", "pattern": "\\\\" }
         ]
