@@ -13,6 +13,8 @@ library release line.
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-08-22
+
 ### Changed
 
 - **Injection filter:** The separator between a blocked token and what follows
@@ -156,7 +158,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/dicebear/schema/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/dicebear/schema/compare/v1.5.0-rc.2...v1.5.0
 [1.5.0-rc.2]: https://github.com/dicebear/schema/compare/v1.5.0-rc.1...v1.5.0-rc.2
 [1.5.0-rc.1]: https://github.com/dicebear/schema/compare/v1.4.0...v1.5.0-rc.1
