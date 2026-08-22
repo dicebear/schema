@@ -156,7 +156,10 @@ jobs:
         uses: NuGet/login@v1
         id: login
         with:
-          user: dicebear
+          # The NuGet.org account that created the trusted publishing policy,
+          # not the organization that owns the package. Passing the owner fails
+          # the token exchange with a 401.
+          user: FlorianKoerner
 
       - name: Publish
         run: dotnet nuget push "dist-nuget/*.nupkg" --source https://api.nuget.org/v3/index.json --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
