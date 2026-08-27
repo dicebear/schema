@@ -14,8 +14,8 @@ files, so schema changes tend to land in several repos at once.
 - Anything that changes the shape of `definition.json` or `options.json`
   (new fields, renames, stricter constraints, removed keywords): open an
   issue first. Schema changes affect the core library, the API, the
-  definitions repo, the Figma exporter, and every third-party integration,
-  so the coordination matters more than the diff.
+  definitions repo, the DiceBear Studio plugin, and every third-party
+  integration, so the coordination matters more than the diff.
 - Security issues go to <contact@dicebear.com> privately, not into a
   public issue.
 - Everyone participating is expected to follow the
