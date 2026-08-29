@@ -20,7 +20,7 @@ Only a safe subset of SVG elements and attributes is permitted. Event handlers, 
 
 #### Additional documentation
 
-https://www.dicebear.com/specification/definition-schema/
+https://www.dicebear.com/create-styles/definition-schema/
 
 ### `options.json`
 
