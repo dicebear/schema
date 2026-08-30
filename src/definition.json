@@ -751,7 +751,7 @@
               "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "opacity": {
-              "description": "Opacity from 0 to 1, multiplied with the element's own `opacity` attribute.",
+              "description": "Opacity from 0 to 1. It replaces the element's own `opacity` attribute while the animation plays, so a layer hidden with `opacity=\"0\"` can be brought in by its animation.",
               "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             }
           },
