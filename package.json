@@ -1,6 +1,6 @@
 {
   "name": "@dicebear/schema",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "JSON Schema definitions for DiceBear avatar styles and options",
   "keywords": [
     "dicebear",
