@@ -59,6 +59,13 @@
       "pattern": "^!?[a-z][a-zA-Z0-9]*(:[a-z][a-zA-Z0-9]*)?$",
       "maxLength": 130
     },
+    "animationSpeed": { "type": "number", "minimum": 0.1, "maximum": 10 },
+    "animationName": {
+      "description": "The name of an animation defined by the style, matching the `name` of one or more animation timelines in its definition.",
+      "type": "string",
+      "pattern": "^[a-z][a-zA-Z0-9]*$",
+      "maxLength": 64
+    },
     "rotateOption": {
       "anyOf": [
         { "$ref": "#/definitions/rotate" },
@@ -183,7 +190,7 @@
       ]
     },
     "tags": {
-      "description": "Uses tags to filter which variants of the avatar's components the PRNG may select. Each token is `category` or `category:value` (e.g. `hairLength:long`), optionally prefixed with `!` to exclude. An include affects only its own category: it drops variants that carry a different value in that category and keeps variants that carry no tag there. A bare `category` include requires the category: it drops variants that carry no tag there, but only in components where the category is in use (e.g. `animation` turns on a style's opt-in animation). An exclude removes variants carrying the named tag. Unknown tags are ignored. A `*Variant` option for the same component takes precedence: when set, it determines that component's variants and the tag filter does not apply to it. Can be a single string or an array of strings.",
+      "description": "Uses tags to filter which variants of the avatar's components the PRNG may select. Each token is `category` or `category:value` (e.g. `hairLength:long`), optionally prefixed with `!` to exclude. An include affects only its own category: it drops variants that carry a different value in that category and keeps variants that carry no tag there. A bare `category` include requires the category: it drops variants that carry no tag there, but only in components where the category is in use (e.g. `facialHair` keeps only the variants that show facial hair). An exclude removes variants carrying the named tag. Unknown tags are ignored. A `*Variant` option for the same component takes precedence: when set, it determines that component's variants and the tag filter does not apply to it. Can be a single string or an array of strings.",
       "anyOf": [
         {
           "$ref": "#/definitions/tagFilter"
@@ -195,6 +202,31 @@
           },
           "minItems": 0,
           "maxItems": 128
+        }
+      ]
+    },
+    "animation": {
+      "description": "Enables the style's declarative animations. `true` plays all of them, a name or list of names plays only the timelines carrying those names, and timelines without a name stay static in that case. An empty list plays nothing, same as false. Defaults to false, so the SVG output and every raster conversion stay static and deterministic. Styles without declarative animations ignore this option, and unknown names match nothing.",
+      "anyOf": [
+        { "type": "boolean" },
+        { "$ref": "#/definitions/animationName" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/animationName" },
+          "minItems": 0,
+          "maxItems": 32
+        }
+      ]
+    },
+    "animationSpeed": {
+      "description": "A playback speed multiplier for declarative animations. A value of 2 plays animations twice as fast, 0.5 at half speed. Durations and delays are divided by this value. Only meaningful when `animation` is enabled. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
+      "anyOf": [
+        { "$ref": "#/definitions/animationSpeed" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/animationSpeed" },
+          "minItems": 0,
+          "maxItems": 2
         }
       ]
     }

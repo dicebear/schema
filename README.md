@@ -40,6 +40,8 @@ Validates the options object passed by users when generating an avatar. Supporte
 | `idRandomization` | `boolean`                      | SVG ID randomization to avoid conflicts                       |
 | `fontFamily`      | `string \| array`              | Font family for text rendering                                |
 | `fontWeight`      | `integer \| array`             | Font weight (1 to 1000)                                       |
+| `animation`       | `boolean \| string \| array`   | Plays the style's declarative animations, all or by name      |
+| `animationSpeed`  | `number \| [min, max]`         | Playback speed multiplier (0.1 to 10, 1 = as authored)        |
 | `*Probability`    | `number`                       | Component display probability (0 to 100)                      |
 | `*Variant`        | `string \| string[] \| object` | Component variant filter and weights                          |
 | `*Color`          | `string \| array`              | Hex colors                                                    |

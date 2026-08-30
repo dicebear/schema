@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "camelCaseName": {
-      "description": "A camelCase identifier used for named things defined in the definition (colors, components, variants). Must start with a lowercase letter and may contain letters and digits.",
+      "description": "A camelCase identifier used for named things defined in the definition (colors, components, variants, animations). Must start with a lowercase letter and may contain letters and digits.",
       "type": "string",
       "pattern": "^[a-z][a-zA-Z0-9]*$",
       "maxLength": 64
@@ -164,7 +164,10 @@
       "properties": {
         "type": { "const": "component" },
         "name": { "$ref": "#/definitions/componentName" },
-        "attributes": { "$ref": "#/definitions/attributes" }
+        "attributes": { "$ref": "#/definitions/attributes" },
+        "animations": {
+          "$ref": "#/definitions/animations"
+        }
       },
       "required": ["type", "name"],
       "additionalProperties": false
@@ -259,6 +262,9 @@
           ]
         },
         "attributes": { "$ref": "#/definitions/attributes" },
+        "animations": {
+          "$ref": "#/definitions/animations"
+        },
         "children": {
           "type": "array",
           "items": { "$ref": "#/definitions/element" },
@@ -580,6 +586,190 @@
       },
       "required": ["extends"],
       "additionalProperties": false
+    },
+    "easingValue": {
+      "description": "An easing for the transition between two keyframes. Either a named CSS easing keyword (`hold` renders as `step-end`) or a cubic bezier given by its two control points. `x1` and `x2` must stay within 0..1, while `y1` and `y2` may leave that range for overshoot curves.",
+      "anyOf": [
+        {
+          "enum": ["linear", "ease", "easeIn", "easeOut", "easeInOut", "hold"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "x1": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "y1": {
+              "type": "number",
+              "minimum": -4,
+              "maximum": 4
+            },
+            "x2": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "y2": {
+              "type": "number",
+              "minimum": -4,
+              "maximum": 4
+            }
+          },
+          "required": ["x1", "y1", "x2", "y2"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "animationKeyframe": {
+      "description": "A single keyframe. `at` positions it on the timeline as a percentage of the animation's duration. `easing` shapes the segment from this keyframe to the next one and falls back to the animation's default easing when omitted. Keyframes must be listed in strictly ascending `at` order, so no two of them share a position. The schema cannot express that constraint, renderers reject violations at load time. An instant jump is written with the `hold` easing instead of a duplicate position.",
+      "type": "object",
+      "properties": {
+        "at": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "value": {
+          "type": "number",
+          "minimum": -36000,
+          "maximum": 36000
+        },
+        "easing": {
+          "$ref": "#/definitions/easingValue"
+        }
+      },
+      "required": ["at", "value"],
+      "additionalProperties": false
+    },
+    "animationTrack": {
+      "description": "The keyframes animating one property of the element.",
+      "type": "object",
+      "properties": {
+        "keyframes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/animationKeyframe"
+          },
+          "minItems": 1,
+          "maxItems": 64
+        }
+      },
+      "required": ["keyframes"],
+      "additionalProperties": false
+    },
+    "animation": {
+      "description": "One animation timeline for an element, made of per-property keyframe tracks. Renderers translate it to CSS when the `animation` render option is enabled; without the option the output stays static. Defaults applied by renderers, not by this schema: `delay` 0, `iterations` `infinite`, `direction` `normal`, `fill` `none`, `easing` `linear`, `origin` center. When a track's first keyframe sits after 0% or its last before 100%, renderers pad the endpoints with copies of the nearest keyframe, so the resting value holds outside the keyframed span.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "An optional name that groups this timeline under a user-selectable animation. The `animation` render option accepts these names to play a subset of a style's animations. Several timelines may share one name and are then switched together. A timeline without a name only plays when the option enables all animations.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/camelCaseName"
+            }
+          ]
+        },
+        "duration": {
+          "description": "The duration of one iteration in seconds.",
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 3600
+        },
+        "delay": {
+          "description": "Start delay in seconds. Negative values shift the phase, the animation starts mid-cycle.",
+          "type": "number",
+          "minimum": -3600,
+          "maximum": 3600
+        },
+        "iterations": {
+          "description": "How often the animation runs. Defaults to `infinite`.",
+          "anyOf": [
+            {
+              "const": "infinite"
+            },
+            {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 10000
+            }
+          ]
+        },
+        "direction": {
+          "description": "The playback direction per iteration, matching the CSS `animation-direction` keywords.",
+          "enum": ["normal", "reverse", "alternate", "alternateReverse"]
+        },
+        "fill": {
+          "description": "Whether the last keyframe's value persists after a finite run, matching CSS `animation-fill-mode`.",
+          "enum": ["none", "forwards"]
+        },
+        "easing": {
+          "description": "The default easing for segments whose keyframes define none.",
+          "allOf": [{ "$ref": "#/definitions/easingValue" }]
+        },
+        "origin": {
+          "description": "The transform origin for `rotate` and `scale` tracks, as a percentage of the element's bounding box (`fill-box`). Defaults to the center (`x` 50, `y` 50).",
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            },
+            "y": {
+              "type": "number",
+              "minimum": -1000,
+              "maximum": 1000
+            }
+          },
+          "required": ["x", "y"],
+          "additionalProperties": false
+        },
+        "tracks": {
+          "description": "The animated properties. Tracks compose in a fixed order: translation applies outside rotation, rotation outside scale, opacity innermost.",
+          "type": "object",
+          "properties": {
+            "translateX": {
+              "description": "Horizontal offset in user units, relative to the element's resting position. Positive values move right.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            },
+            "translateY": {
+              "description": "Vertical offset in user units, relative to the element's resting position. Positive values move down.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            },
+            "rotate": {
+              "description": "Rotation in degrees around `origin`, added to the element's resting transform. Positive values rotate clockwise. Values are not normalized, `360` describes one full turn.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            },
+            "scaleX": {
+              "description": "Horizontal scale factor around `origin`. `1` is the resting size.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            },
+            "scaleY": {
+              "description": "Vertical scale factor around `origin`. `1` is the resting size.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            },
+            "opacity": {
+              "description": "Opacity from 0 to 1, multiplied with the element's own `opacity` attribute.",
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      },
+      "required": ["duration", "tracks"],
+      "additionalProperties": false
+    },
+    "animations": {
+      "description": "Animation timelines attached to an element. Each entry is an independent timeline with its own duration, delay, and tracks.",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/animation"
+      },
+      "minItems": 1,
+      "maxItems": 8
     }
   },
   "type": "object",

@@ -13,6 +13,26 @@ library release line.
 
 ## [Unreleased]
 
+### Added
+
+- **Declarative animations:** Generic elements and component references accept
+  an `animations` array. Each entry is one timeline with a `duration` in
+  seconds, optional `delay` (negative values shift the phase), `iterations`,
+  `direction`, `fill`, a default `easing`, a transform `origin`, an optional
+  camelCase `name`, and per property keyframe `tracks` for `translateX`,
+  `translateY`, `rotate`, `scaleX`, `scaleY`, and `opacity`. Keyframes place
+  their `at` position as a percentage of the duration, and easings are either
+  a named CSS keyword or a cubic bezier. Renderers translate the data to CSS
+  when the new `animation` render option is enabled. The previous approach,
+  raw CSS in a `<style>` element, stays valid.
+- **`animation` render option:** Enables a style's declarative animations.
+  `true` plays all of them, while a timeline name or a list of names plays
+  only the timelines carrying those names. Defaults to false, so SVG output
+  and raster conversions stay static and deterministic.
+- **`animationSpeed` render option:** A playback speed multiplier between 0.1
+  and 10, as a single value or a `[min, max]` range the PRNG picks from.
+  Durations and delays are divided by the resolved value.
+
 ## [1.5.1] - 2026-08-22
 
 ### Changed
