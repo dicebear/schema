@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "camelCaseName": {
-      "description": "A camelCase identifier used for named things defined in the definition (colors, components, variants). Must start with a lowercase letter and may contain letters and digits.",
+      "description": "A camelCase identifier used for named things defined in the definition (colors, components, variants, animations). Must start with a lowercase letter and may contain letters and digits.",
       "type": "string",
       "pattern": "^[a-z][a-zA-Z0-9]*$",
       "maxLength": 64
@@ -623,7 +623,7 @@
       ]
     },
     "animationKeyframe": {
-      "description": "A single keyframe. `at` positions it on the timeline as a percentage of the animation's duration. `easing` shapes the segment from this keyframe to the next one and falls back to the animation's default easing when omitted. Keyframes must be listed in ascending `at` order; the schema cannot express this constraint, renderers reject violations at load time.",
+      "description": "A single keyframe. `at` positions it on the timeline as a percentage of the animation's duration. `easing` shapes the segment from this keyframe to the next one and falls back to the animation's default easing when omitted. Keyframes must be listed in strictly ascending `at` order, so no two of them share a position. The schema cannot express that constraint, renderers reject violations at load time. An instant jump is written with the `hold` easing instead of a duplicate position.",
       "type": "object",
       "properties": {
         "at": {
@@ -664,7 +664,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "An optional name that groups this timeline under a user-selectable animation. The `animation` render option accepts these names to play a subset of a style's animations. Several timelines may share one name and are then switched together; a timeline without a name only plays when the option enables all animations.",
+          "description": "An optional name that groups this timeline under a user-selectable animation. The `animation` render option accepts these names to play a subset of a style's animations. Several timelines may share one name and are then switched together. A timeline without a name only plays when the option enables all animations.",
           "allOf": [
             {
               "$ref": "#/definitions/camelCaseName"
@@ -706,7 +706,7 @@
         },
         "easing": {
           "description": "The default easing for segments whose keyframes define none.",
-          "$ref": "#/definitions/easingValue"
+          "allOf": [{ "$ref": "#/definitions/easingValue" }]
         },
         "origin": {
           "description": "The transform origin for `rotate` and `scale` tracks, as a percentage of the element's bounding box (`fill-box`). Defaults to the center (`x` 50, `y` 50).",
@@ -732,27 +732,27 @@
           "properties": {
             "translateX": {
               "description": "Horizontal offset in user units, relative to the element's resting position. Positive values move right.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "translateY": {
               "description": "Vertical offset in user units, relative to the element's resting position. Positive values move down.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "rotate": {
               "description": "Rotation in degrees around `origin`, added to the element's resting transform. Positive values rotate clockwise. Values are not normalized, `360` describes one full turn.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "scaleX": {
               "description": "Horizontal scale factor around `origin`. `1` is the resting size.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "scaleY": {
               "description": "Vertical scale factor around `origin`. `1` is the resting size.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             },
             "opacity": {
               "description": "Opacity from 0 to 1, multiplied with the element's own `opacity` attribute.",
-              "$ref": "#/definitions/animationTrack"
+              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
             }
           },
           "minProperties": 1,
