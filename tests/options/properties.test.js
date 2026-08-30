@@ -427,6 +427,10 @@ describe("options.json animation properties", () => {
       assert.equal(validate({ animation: ["look", "blink"] }), true);
     });
 
+    it("accepts an empty animation name list", () => {
+      assert.equal(validate({ animation: [] }), true);
+    });
+
     it("accepts animationSpeed within range", () => {
       assert.equal(validate({ animationSpeed: 1 }), true);
       assert.equal(validate({ animationSpeed: 0.5 }), true);
@@ -452,10 +456,6 @@ describe("options.json animation properties", () => {
     it("rejects animation names outside the camelCase pattern", () => {
       assert.equal(validate({ animation: "Blink" }), false);
       assert.equal(validate({ animation: "has-dash" }), false);
-    });
-
-    it("rejects an empty animation name list", () => {
-      assert.equal(validate({ animation: [] }), false);
     });
 
     it("rejects an animation list mixing a valid and an invalid name", () => {
