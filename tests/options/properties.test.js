@@ -411,3 +411,72 @@ describe("options.json named properties", () => {
     });
   });
 });
+
+describe("options.json animation properties", () => {
+  describe("valid values", () => {
+    it("accepts animation as boolean", () => {
+      assert.equal(validate({ animation: true }), true);
+      assert.equal(validate({ animation: false }), true);
+    });
+
+    it("accepts animation as a single name", () => {
+      assert.equal(validate({ animation: "blink" }), true);
+    });
+
+    it("accepts animation as a list of names", () => {
+      assert.equal(validate({ animation: ["look", "blink"] }), true);
+    });
+
+    it("accepts animationSpeed within range", () => {
+      assert.equal(validate({ animationSpeed: 1 }), true);
+      assert.equal(validate({ animationSpeed: 0.5 }), true);
+    });
+
+    it("accepts boundary: animationSpeed 0.1 and 10", () => {
+      assert.equal(validate({ animationSpeed: 0.1 }), true);
+      assert.equal(validate({ animationSpeed: 10 }), true);
+    });
+
+    it("accepts animationSpeed as a range array", () => {
+      assert.equal(validate({ animationSpeed: [0.5, 2] }), true);
+      assert.equal(validate({ animationSpeed: [2] }), true);
+      assert.equal(validate({ animationSpeed: [] }), true);
+    });
+  });
+
+  describe("invalid values", () => {
+    it("rejects animation as number", () => {
+      assert.equal(validate({ animation: 1 }), false);
+    });
+
+    it("rejects animation names outside the camelCase pattern", () => {
+      assert.equal(validate({ animation: "Blink" }), false);
+      assert.equal(validate({ animation: "has-dash" }), false);
+    });
+
+    it("rejects an empty animation name list", () => {
+      assert.equal(validate({ animation: [] }), false);
+    });
+
+    it("rejects an animation list mixing a valid and an invalid name", () => {
+      assert.equal(validate({ animation: ["blink", "Bad"] }), false);
+    });
+
+    it("rejects animationSpeed of 0", () => {
+      assert.equal(validate({ animationSpeed: 0 }), false);
+    });
+
+    it("rejects animationSpeed above 10", () => {
+      assert.equal(validate({ animationSpeed: 10.5 }), false);
+    });
+
+    it("rejects animationSpeed as string", () => {
+      assert.equal(validate({ animationSpeed: "fast" }), false);
+    });
+
+    it("rejects animationSpeed arrays with out-of-range or excess items", () => {
+      assert.equal(validate({ animationSpeed: [0, 2] }), false);
+      assert.equal(validate({ animationSpeed: [0.5, 2, 4] }), false);
+    });
+  });
+});
