@@ -112,6 +112,17 @@ describe("definition.json $defs/animation", () => {
       );
     });
 
+    it("accepts boundary block values", () => {
+      assert.equal(validateAnimation(block({ duration: 3600 })), true);
+      assert.equal(validateAnimation(block({ delay: -3600 })), true);
+      assert.equal(validateAnimation(block({ delay: 3600 })), true);
+      assert.equal(validateAnimation(block({ iterations: 10000 })), true);
+      assert.equal(
+        validateAnimation(block({ origin: { x: -1000, y: 1000 } })),
+        true,
+      );
+    });
+
     it("accepts boundary keyframe values", () => {
       assert.equal(
         validateAnimation(
@@ -226,6 +237,13 @@ describe("definition.json $defs/animation", () => {
       );
     });
 
+    it("rejects a bezier with y1 outside -4..4", () => {
+      assert.equal(
+        validateAnimation(block({ easing: { x1: 0, y1: 5, x2: 1, y2: 1 } })),
+        false,
+      );
+    });
+
     it("rejects a bezier missing a control point", () => {
       assert.equal(
         validateAnimation(block({ easing: { x1: 0, y1: 0, x2: 1 } })),
@@ -235,6 +253,17 @@ describe("definition.json $defs/animation", () => {
 
     it("rejects iterations of 0", () => {
       assert.equal(validateAnimation(block({ iterations: 0 })), false);
+    });
+
+    it("rejects values above the block maximums", () => {
+      assert.equal(validateAnimation(block({ duration: 3601 })), false);
+      assert.equal(validateAnimation(block({ delay: 3601 })), false);
+      assert.equal(validateAnimation(block({ delay: -3601 })), false);
+      assert.equal(validateAnimation(block({ iterations: 10001 })), false);
+      assert.equal(
+        validateAnimation(block({ origin: { x: 1001, y: 0 } })),
+        false,
+      );
     });
 
     it("rejects an unknown direction", () => {
