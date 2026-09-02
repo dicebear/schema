@@ -26,28 +26,29 @@ https://www.dicebear.com/create-styles/definition-schema/
 
 Validates the options object passed by users when generating an avatar. Supported properties include:
 
-| Property          | Type                           | Description                                                   |
-| ----------------- | ------------------------------ | ------------------------------------------------------------- |
-| `seed`            | `string`                       | PRNG seed for reproducible avatars                            |
-| `size`            | `integer`                      | Output size in pixels (1 to 4096)                             |
-| `title`           | `string`                       | Accessible title rendered as `<title>` and `aria-label`       |
-| `flip`            | `string \| array`              | Mirror direction: `none`, `horizontal`, `vertical`, or `both` |
-| `scale`           | `number \| [min, max]`         | Scaling factor (0 to 10, 1 = original size)                   |
-| `rotate`          | `number \| [min, max]`         | Rotation in degrees (−360 to 360)                             |
-| `translateX`      | `number \| [min, max]`         | Horizontal offset (−1000 to 1000)                             |
-| `translateY`      | `number \| [min, max]`         | Vertical offset (−1000 to 1000)                               |
-| `borderRadius`    | `number \| [min, max]`         | Corner radius (0 = sharp, 50 = circle)                        |
-| `idRandomization` | `boolean`                      | SVG ID randomization to avoid conflicts                       |
-| `fontFamily`      | `string \| array`              | Font family for text rendering                                |
-| `fontWeight`      | `integer \| array`             | Font weight (1 to 1000)                                       |
-| `animation`       | `boolean \| string \| array`   | Plays the style's declarative animations, all or by name      |
-| `animationSpeed`  | `number \| [min, max]`         | Playback speed multiplier (0.1 to 10, 1 = as authored)        |
-| `*Probability`    | `number`                       | Component display probability (0 to 100)                      |
-| `*Variant`        | `string \| string[] \| object` | Component variant filter and weights                          |
-| `*Color`          | `string \| array`              | Hex colors                                                    |
-| `*ColorFill`      | `string \| array`              | Color fill: `solid`, `linear`, or `radial`                    |
-| `*ColorFillStops` | `integer \| [min, max]`        | Gradient color stops (min 2)                                  |
-| `*ColorAngle`     | `number \| [min, max]`         | Gradient angle (−360 to 360)                                  |
+| Property          | Type                           | Description                                                         |
+| ----------------- | ------------------------------ | ------------------------------------------------------------------- |
+| `seed`            | `string`                       | PRNG seed for reproducible avatars                                  |
+| `size`            | `integer`                      | Output size in pixels (1 to 4096)                                   |
+| `title`           | `string`                       | Accessible title rendered as `<title>` and `aria-label`             |
+| `flip`            | `string \| array`              | Mirror direction: `none`, `horizontal`, `vertical`, or `both`       |
+| `scale`           | `number \| [min, max]`         | Scaling factor (0 to 10, 1 = original size)                         |
+| `rotate`          | `number \| [min, max]`         | Rotation in degrees (−360 to 360)                                   |
+| `translateX`      | `number \| [min, max]`         | Horizontal offset (−1000 to 1000)                                   |
+| `translateY`      | `number \| [min, max]`         | Vertical offset (−1000 to 1000)                                     |
+| `borderRadius`    | `number \| [min, max]`         | Corner radius (0 = sharp, 50 = circle)                              |
+| `idRandomization` | `boolean`                      | SVG ID randomization to avoid conflicts                             |
+| `fontFamily`      | `string \| array`              | Font family for text rendering                                      |
+| `fontWeight`      | `integer \| array`             | Font weight (1 to 1000)                                             |
+| `animation`       | `boolean \| string \| array`   | Plays the style's declarative animations, all or by name            |
+| `animationSpeed`  | `number \| [min, max]`         | Playback speed multiplier (0.1 to 10, 1 = as authored)              |
+| `*AnimationSpeed` | `number \| [min, max]`         | Playback speed of one animation by name, wins over `animationSpeed` |
+| `*Probability`    | `number`                       | Component display probability (0 to 100)                            |
+| `*Variant`        | `string \| string[] \| object` | Component variant filter and weights                                |
+| `*Color`          | `string \| array`              | Hex colors                                                          |
+| `*ColorFill`      | `string \| array`              | Color fill: `solid`, `linear`, or `radial`                          |
+| `*ColorFillStops` | `integer \| [min, max]`        | Gradient color stops (min 2)                                        |
+| `*ColorAngle`     | `number \| [min, max]`         | Gradient angle (−360 to 360)                                        |
 
 When an option accepts an array, the PRNG either picks from the list (for discrete values) or picks a value within the range (for numeric min/max pairs).
 

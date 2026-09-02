@@ -13,6 +13,12 @@ library release line.
 
 ## [Unreleased]
 
+### Added
+
+- `*AnimationSpeed` options, such as `blinkAnimationSpeed`, set the playback
+  speed of one animation by name, as a factor or a `[min, max]` range. They win
+  over `animationSpeed` for that animation.
+
 ## [1.6.1] - 2026-08-30
 
 ## [1.6.0] - 2026-08-30
