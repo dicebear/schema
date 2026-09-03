@@ -305,7 +305,7 @@
       "allOf": [{ "$ref": "#/definitions/rotateOption" }]
     },
     "^[a-z][a-zA-Z0-9]*ColorOrder$": {
-      "description": "Specifies whether the PRNG may rearrange the colors specified in the `*Color` option. With `random`, the default, the colors are shuffled before use, so which colors appear and in which order depends on the seed. With `fixed`, the colors are used in exactly the specified order: gradient fills apply them as color stops from first to last, and solid fills always use the first color. With `fixed` and no `*ColorFillStops` value, the number of gradient stops defaults to the number of specified colors instead of 2. Without a `*Color` option, `fixed` only skips the shuffle: the style's default palette is deduplicated and used in sorted order. Constraints in the style definition, such as a contrast sort against another color group, still apply and can vary with the seed.",
+      "description": "Specifies whether the PRNG may rearrange the colors specified in the `*Color` option. With `random`, the default, the colors are shuffled before use, so which colors appear and in which order depends on the seed. With `fixed`, the colors are used in exactly their given order, from the `*Color` option or, without it, from the style's palette: gradient fills apply them as color stops from first to last, and solid fills always use the first color. With `fixed` and no `*ColorFillStops` value, the number of gradient stops defaults to the number of colors instead of 2. A contrast sort declared in the style definition is skipped, a `notEqualTo` constraint still applies and can vary with the seed.",
       "type": "string",
       "enum": ["random", "fixed"]
     },

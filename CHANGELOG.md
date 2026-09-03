@@ -15,6 +15,9 @@ library release line.
 
 ### Changed
 
+- **`options.json`:** The `*ColorOrder` description follows the DiceBear 11
+  behaviour: with `fixed`, the style's palette keeps its definition order like
+  user colors do, and the contrast sort is skipped.
 - **`options.json`:** `animation` is a boolean. The name and list forms are
   gone, an animation is switched by name through its own `*Animation` option
   instead. This is a breaking change for anyone who passed names to

@@ -896,7 +896,7 @@
         "type": "object",
         "properties": {
           "values": {
-            "description": "The list of hex color values the PRNG can choose from.",
+            "description": "The list of hex color values the PRNG can choose from. The order carries meaning for a user who sets the `*ColorOrder` render option to `fixed` without colors of their own: the palette is then used in exactly this order.",
             "type": "array",
             "items": { "$ref": "#/definitions/hexColor" },
             "minItems": 1,
