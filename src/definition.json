@@ -9,19 +9,39 @@
     },
     "colorName": {
       "description": "A reference to a color palette defined in the top-level `colors` section.",
-      "allOf": [{ "$ref": "#/definitions/camelCaseName" }]
+      "allOf": [
+        {
+          "$ref": "#/definitions/camelCaseName"
+        }
+      ]
     },
     "componentName": {
       "description": "A reference to a component defined in the top-level `components` section.",
-      "allOf": [{ "$ref": "#/definitions/camelCaseName" }]
+      "allOf": [
+        {
+          "$ref": "#/definitions/camelCaseName"
+        }
+      ]
     },
     "translateValue": {
       "description": "A translation value expressed as a percentage of the component's width (for `x`) or height (for `y`). Defines a range the PRNG picks from. Set `min === max` for a fixed value. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
-        "min": { "type": "number", "minimum": -1000, "maximum": 1000 },
-        "max": { "type": "number", "minimum": -1000, "maximum": 1000 },
-        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 2000 }
+        "min": {
+          "type": "number",
+          "minimum": -1000,
+          "maximum": 1000
+        },
+        "max": {
+          "type": "number",
+          "minimum": -1000,
+          "maximum": 1000
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 2000
+        }
       },
       "required": ["min", "max"],
       "additionalProperties": false
@@ -35,12 +55,16 @@
     "colorValue": {
       "description": "A color value for `fill`, `stroke`, `stop-color`, and other color attributes. Either a plain string (any CSS color format — named color, hex, `rgb()`, `oklch()`, `color-mix()`, local paint server reference `url(#id)`, etc.) or an object referencing a named color palette defined in the top-level `colors` section. CSS color syntax is not validated; invalid colors are the browser's problem.",
       "anyOf": [
-        { "$ref": "#/definitions/attributeString" },
+        {
+          "$ref": "#/definitions/attributeString"
+        },
         {
           "description": "A reference to a named color palette. At render time, the PRNG selects a color value from the referenced palette.",
           "type": "object",
           "properties": {
-            "type": { "const": "color" },
+            "type": {
+              "const": "color"
+            },
             "name": {
               "description": "The name of the color palette to reference.",
               "$ref": "#/definitions/colorName"
@@ -88,31 +112,49 @@
             "type": "string",
             "pattern": "[vV][bB][sS][cC][rR][iI][pP][tT][ \\t\\n\\f\\r]*:"
           },
-          { "type": "string", "pattern": "\\\\" }
+          {
+            "type": "string",
+            "pattern": "\\\\"
+          }
         ]
       }
     },
     "attributeString": {
       "description": "The default value type for generic SVG attribute values — transform lists, numeric values, keywords, and so on. No syntactic validation; only the common `filteredString` injection filter applies.",
       "type": "string",
-      "allOf": [{ "$ref": "#/definitions/filteredString" }],
+      "allOf": [
+        {
+          "$ref": "#/definitions/filteredString"
+        }
+      ],
       "maxLength": 1024
     },
     "pathDataString": {
       "description": "Used for the `d` attribute of `<path>`. Same filter as `attributeString`, but with a much larger length budget to accommodate complex path geometry.",
       "type": "string",
-      "allOf": [{ "$ref": "#/definitions/filteredString" }],
+      "allOf": [
+        {
+          "$ref": "#/definitions/filteredString"
+        }
+      ],
       "maxLength": 16384
     },
     "cssString": {
       "description": "Used for inline `style` attribute content and `<style>` element bodies. Known-dangerous `@`-rules — `@import`, `@font-face`, `@document`, `@charset` — are rejected in addition to the common `filteredString` injection filter. Other `@`-rules (`@media`, `@keyframes`, `@supports`, `@layer`, etc.) are permitted, but the `filteredString` injection filter still applies to their contents — so external `url(...)` references inside e.g. an `@media` rule are still blocked. This is not a general CSS sanitizer.",
       "type": "string",
-      "allOf": [{ "$ref": "#/definitions/filteredString" }],
+      "allOf": [
+        {
+          "$ref": "#/definitions/filteredString"
+        }
+      ],
       "maxLength": 4096,
       "not": {
         "type": "string",
         "anyOf": [
-          { "type": "string", "pattern": "@[iI][mM][pP][oO][rR][tT]" },
+          {
+            "type": "string",
+            "pattern": "@[iI][mM][pP][oO][rR][tT]"
+          },
           {
             "type": "string",
             "pattern": "@[fF][oO][nN][tT]-[fF][aA][cC][eE]"
@@ -121,33 +163,71 @@
             "type": "string",
             "pattern": "@[dD][oO][cC][uU][mM][eE][nN][tT]"
           },
-          { "type": "string", "pattern": "@[cC][hH][aA][rR][sS][eE][tT]" }
+          {
+            "type": "string",
+            "pattern": "@[cC][hH][aA][rR][sS][eE][tT]"
+          }
         ]
       }
     },
     "element": {
       "description": "An SVG node. One of four mutually exclusive forms, discriminated by `type` (and `name` for the `<style>` special case): a text element, a component reference, a `<style>` element, or any other SVG element.",
       "anyOf": [
-        { "$ref": "#/definitions/textElement" },
-        { "$ref": "#/definitions/componentReference" },
-        { "$ref": "#/definitions/styleElement" },
-        { "$ref": "#/definitions/genericElement" }
+        {
+          "$ref": "#/definitions/textElement"
+        },
+        {
+          "$ref": "#/definitions/componentReference"
+        },
+        {
+          "$ref": "#/definitions/styleElement"
+        },
+        {
+          "$ref": "#/definitions/genericElement"
+        }
+      ]
+    },
+    "staticElement": {
+      "description": "An element below `defs` or `clipPath`: the same node as `element`, but without `animations` at any depth. The renderer plays an animation by wrapping the element in a group, and that wrapper never reaches a `<use>` instance of a def and is no valid clipPath content, so such an animation could not play. Animate the `<use>` instead.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/element"
+        },
+        {
+          "properties": {
+            "animations": false,
+            "children": {
+              "items": {
+                "$ref": "#/definitions/staticElement"
+              }
+            }
+          }
+        }
       ]
     },
     "textElement": {
       "description": "A raw text node. Its `value` becomes the text content rendered into the parent element.",
       "type": "object",
       "properties": {
-        "type": { "const": "text" },
+        "type": {
+          "const": "text"
+        },
         "value": {
           "description": "Either a plain string, or a `variable` reference resolved at render time to the seed's initials.",
           "anyOf": [
-            { "type": "string", "maxLength": 4096 },
+            {
+              "type": "string",
+              "maxLength": 4096
+            },
             {
               "type": "object",
               "properties": {
-                "type": { "const": "variable" },
-                "name": { "enum": ["initial", "initials"] }
+                "type": {
+                  "const": "variable"
+                },
+                "name": {
+                  "enum": ["initial", "initials"]
+                }
               },
               "required": ["type", "name"],
               "additionalProperties": false
@@ -162,9 +242,15 @@
       "description": "A reference to a named component defined in the top-level `components` section. At render time, the PRNG selects one of the component's variants. Optional `attributes` are applied to the generated `<use>` tag — most commonly a `transform` placing the instance, but any allowlisted attribute is accepted.",
       "type": "object",
       "properties": {
-        "type": { "const": "component" },
-        "name": { "$ref": "#/definitions/componentName" },
-        "attributes": { "$ref": "#/definitions/attributes" },
+        "type": {
+          "const": "component"
+        },
+        "name": {
+          "$ref": "#/definitions/componentName"
+        },
+        "attributes": {
+          "$ref": "#/definitions/attributes"
+        },
         "animations": {
           "$ref": "#/definitions/animations"
         }
@@ -176,16 +262,26 @@
       "description": "An SVG `<style>` element. Its CSS content must be provided as `text` children; each child's value is validated as a CSS string with a stricter content policy than generic SVG attribute values.",
       "type": "object",
       "properties": {
-        "type": { "const": "element" },
-        "name": { "const": "style" },
-        "attributes": { "$ref": "#/definitions/attributes" },
+        "type": {
+          "const": "element"
+        },
+        "name": {
+          "const": "style"
+        },
+        "attributes": {
+          "$ref": "#/definitions/attributes"
+        },
         "children": {
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "type": { "const": "text" },
-              "value": { "$ref": "#/definitions/cssString" }
+              "type": {
+                "const": "text"
+              },
+              "value": {
+                "$ref": "#/definitions/cssString"
+              }
             },
             "required": ["type", "value"],
             "additionalProperties": false
@@ -197,10 +293,12 @@
       "additionalProperties": false
     },
     "genericElement": {
-      "description": "Any SVG element other than `<style>`, which has its own stricter content policy.",
+      "description": "Any SVG element other than `<style>`, which has its own stricter content policy. Two elements own a content model the renderer's animation wrappers cannot enter: below `defs` and `clipPath` no element may carry `animations`, and elements that cannot be wrapped in a group, such as `stop`, `tspan`, `textPath`, `mpath` and the filter primitives, carry none themselves.",
       "type": "object",
       "properties": {
-        "type": { "const": "element" },
+        "type": {
+          "const": "element"
+        },
         "name": {
           "description": "The SVG tag name. Only a safe subset of SVG elements is permitted; dangerous elements such as `script`, `foreignObject`, or `a` are excluded.",
           "enum": [
@@ -261,101 +359,265 @@
             "view"
           ]
         },
-        "attributes": { "$ref": "#/definitions/attributes" },
+        "attributes": {
+          "$ref": "#/definitions/attributes"
+        },
         "animations": {
           "$ref": "#/definitions/animations"
         },
         "children": {
           "type": "array",
-          "items": { "$ref": "#/definitions/element" },
+          "items": {
+            "$ref": "#/definitions/element"
+          },
           "maxItems": 1024
         }
       },
       "required": ["type", "name"],
-      "additionalProperties": false
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "name": {
+                "enum": ["clipPath", "defs"]
+              }
+            },
+            "required": ["name"]
+          },
+          "then": {
+            "properties": {
+              "children": {
+                "items": {
+                  "$ref": "#/definitions/staticElement"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "name": {
+                "enum": [
+                  "feBlend",
+                  "feColorMatrix",
+                  "feComponentTransfer",
+                  "feComposite",
+                  "feConvolveMatrix",
+                  "feDiffuseLighting",
+                  "feDisplacementMap",
+                  "feDistantLight",
+                  "feDropShadow",
+                  "feFlood",
+                  "feFuncA",
+                  "feFuncB",
+                  "feFuncG",
+                  "feFuncR",
+                  "feGaussianBlur",
+                  "feImage",
+                  "feMerge",
+                  "feMergeNode",
+                  "feMorphology",
+                  "feOffset",
+                  "fePointLight",
+                  "feSpecularLighting",
+                  "feSpotLight",
+                  "feTile",
+                  "feTurbulence",
+                  "mpath",
+                  "stop",
+                  "textPath",
+                  "tspan"
+                ]
+              }
+            },
+            "required": ["name"]
+          },
+          "then": {
+            "properties": {
+              "animations": false
+            }
+          }
+        }
+      ]
     },
     "attributes": {
       "description": "A map of allowed SVG presentation attributes. Only a safe subset is permitted; event handlers (e.g. `onclick`) and namespace attributes (e.g. `xlink:href`) are not allowed.",
       "type": "object",
       "properties": {
-        "alignment-baseline": { "$ref": "#/definitions/attributeString" },
-        "amplitude": { "$ref": "#/definitions/attributeString" },
-        "azimuth": { "$ref": "#/definitions/attributeString" },
-        "baseFrequency": { "$ref": "#/definitions/attributeString" },
-        "baseline-shift": { "$ref": "#/definitions/attributeString" },
-        "bias": { "$ref": "#/definitions/attributeString" },
-        "class": { "$ref": "#/definitions/attributeString" },
-        "clipPathUnits": { "$ref": "#/definitions/attributeString" },
-        "clip-path": { "$ref": "#/definitions/attributeString" },
-        "clip-rule": { "$ref": "#/definitions/attributeString" },
+        "alignment-baseline": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "amplitude": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "azimuth": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "baseFrequency": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "baseline-shift": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "bias": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "class": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "clipPathUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "clip-path": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "clip-rule": {
+          "$ref": "#/definitions/attributeString"
+        },
         "color": {
           "$ref": "#/definitions/colorValue"
         },
-        "color-interpolation": { "$ref": "#/definitions/attributeString" },
+        "color-interpolation": {
+          "$ref": "#/definitions/attributeString"
+        },
         "color-interpolation-filters": {
           "$ref": "#/definitions/attributeString"
         },
-        "crossorigin": { "$ref": "#/definitions/attributeString" },
-        "cx": { "$ref": "#/definitions/attributeString" },
-        "cy": { "$ref": "#/definitions/attributeString" },
-        "d": { "$ref": "#/definitions/pathDataString" },
-        "decoding": { "$ref": "#/definitions/attributeString" },
-        "diffuseConstant": { "$ref": "#/definitions/attributeString" },
-        "direction": { "$ref": "#/definitions/attributeString" },
-        "display": { "$ref": "#/definitions/attributeString" },
-        "divisor": { "$ref": "#/definitions/attributeString" },
-        "dominant-baseline": { "$ref": "#/definitions/attributeString" },
-        "dx": { "$ref": "#/definitions/attributeString" },
-        "dy": { "$ref": "#/definitions/attributeString" },
-        "edgeMode": { "$ref": "#/definitions/attributeString" },
-        "elevation": { "$ref": "#/definitions/attributeString" },
-        "exponent": { "$ref": "#/definitions/attributeString" },
-        "fill": { "$ref": "#/definitions/colorValue" },
-        "fill-opacity": { "$ref": "#/definitions/attributeString" },
-        "fill-rule": { "$ref": "#/definitions/attributeString" },
-        "filter": { "$ref": "#/definitions/attributeString" },
-        "filterUnits": { "$ref": "#/definitions/attributeString" },
+        "crossorigin": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "cx": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "cy": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "d": {
+          "$ref": "#/definitions/pathDataString"
+        },
+        "decoding": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "diffuseConstant": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "direction": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "display": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "divisor": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "dominant-baseline": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "dx": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "dy": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "edgeMode": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "elevation": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "exponent": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "fill": {
+          "$ref": "#/definitions/colorValue"
+        },
+        "fill-opacity": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "fill-rule": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "filter": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "filterUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
         "flood-color": {
           "$ref": "#/definitions/colorValue"
         },
-        "flood-opacity": { "$ref": "#/definitions/attributeString" },
+        "flood-opacity": {
+          "$ref": "#/definitions/attributeString"
+        },
         "font-family": {
           "anyOf": [
-            { "$ref": "#/definitions/attributeString" },
+            {
+              "$ref": "#/definitions/attributeString"
+            },
             {
               "type": "object",
               "properties": {
-                "type": { "const": "variable" },
-                "name": { "const": "fontFamily" }
+                "type": {
+                  "const": "variable"
+                },
+                "name": {
+                  "const": "fontFamily"
+                }
               },
               "required": ["type", "name"],
               "additionalProperties": false
             }
           ]
         },
-        "font-size": { "$ref": "#/definitions/attributeString" },
-        "font-size-adjust": { "$ref": "#/definitions/attributeString" },
-        "font-style": { "$ref": "#/definitions/attributeString" },
-        "font-variant": { "$ref": "#/definitions/attributeString" },
+        "font-size": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "font-size-adjust": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "font-style": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "font-variant": {
+          "$ref": "#/definitions/attributeString"
+        },
         "font-weight": {
           "anyOf": [
-            { "$ref": "#/definitions/attributeString" },
+            {
+              "$ref": "#/definitions/attributeString"
+            },
             {
               "type": "object",
               "properties": {
-                "type": { "const": "variable" },
-                "name": { "const": "fontWeight" }
+                "type": {
+                  "const": "variable"
+                },
+                "name": {
+                  "const": "fontWeight"
+                }
               },
               "required": ["type", "name"],
               "additionalProperties": false
             }
           ]
         },
-        "fx": { "$ref": "#/definitions/attributeString" },
-        "fy": { "$ref": "#/definitions/attributeString" },
-        "gradientTransform": { "$ref": "#/definitions/attributeString" },
-        "gradientUnits": { "$ref": "#/definitions/attributeString" },
-        "height": { "$ref": "#/definitions/attributeString" },
+        "fx": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "fy": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "gradientTransform": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "gradientUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "height": {
+          "$ref": "#/definitions/attributeString"
+        },
         "href": {
           "anyOf": [
             {
@@ -370,110 +632,306 @@
             }
           ]
         },
-        "id": { "$ref": "#/definitions/attributeString" },
-        "image-rendering": { "$ref": "#/definitions/attributeString" },
-        "in": { "$ref": "#/definitions/attributeString" },
-        "in2": { "$ref": "#/definitions/attributeString" },
-        "intercept": { "$ref": "#/definitions/attributeString" },
-        "k1": { "$ref": "#/definitions/attributeString" },
-        "k2": { "$ref": "#/definitions/attributeString" },
-        "k3": { "$ref": "#/definitions/attributeString" },
-        "k4": { "$ref": "#/definitions/attributeString" },
-        "kernelMatrix": { "$ref": "#/definitions/attributeString" },
-        "kernelUnitLength": { "$ref": "#/definitions/attributeString" },
-        "lang": { "$ref": "#/definitions/attributeString" },
-        "lengthAdjust": { "$ref": "#/definitions/attributeString" },
-        "letter-spacing": { "$ref": "#/definitions/attributeString" },
+        "id": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "image-rendering": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "in": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "in2": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "intercept": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "k1": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "k2": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "k3": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "k4": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "kernelMatrix": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "kernelUnitLength": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "lang": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "lengthAdjust": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "letter-spacing": {
+          "$ref": "#/definitions/attributeString"
+        },
         "lighting-color": {
           "$ref": "#/definitions/colorValue"
         },
-        "marker-end": { "$ref": "#/definitions/attributeString" },
-        "marker-mid": { "$ref": "#/definitions/attributeString" },
-        "marker-start": { "$ref": "#/definitions/attributeString" },
-        "markerHeight": { "$ref": "#/definitions/attributeString" },
-        "markerUnits": { "$ref": "#/definitions/attributeString" },
-        "markerWidth": { "$ref": "#/definitions/attributeString" },
-        "mask": { "$ref": "#/definitions/attributeString" },
-        "maskContentUnits": { "$ref": "#/definitions/attributeString" },
-        "maskUnits": { "$ref": "#/definitions/attributeString" },
-        "media": { "$ref": "#/definitions/attributeString" },
-        "method": { "$ref": "#/definitions/attributeString" },
-        "mode": { "$ref": "#/definitions/attributeString" },
-        "numOctaves": { "$ref": "#/definitions/attributeString" },
-        "offset": { "$ref": "#/definitions/attributeString" },
-        "opacity": { "$ref": "#/definitions/attributeString" },
-        "operator": { "$ref": "#/definitions/attributeString" },
-        "order": { "$ref": "#/definitions/attributeString" },
-        "orient": { "$ref": "#/definitions/attributeString" },
-        "overflow": { "$ref": "#/definitions/attributeString" },
-        "paint-order": { "$ref": "#/definitions/attributeString" },
-        "path": { "$ref": "#/definitions/attributeString" },
-        "pathLength": { "$ref": "#/definitions/attributeString" },
-        "patternContentUnits": { "$ref": "#/definitions/attributeString" },
-        "patternTransform": { "$ref": "#/definitions/attributeString" },
-        "patternUnits": { "$ref": "#/definitions/attributeString" },
-        "points": { "$ref": "#/definitions/attributeString" },
-        "preserveAlpha": { "$ref": "#/definitions/attributeString" },
-        "preserveAspectRatio": { "$ref": "#/definitions/attributeString" },
-        "primitiveUnits": { "$ref": "#/definitions/attributeString" },
-        "r": { "$ref": "#/definitions/attributeString" },
-        "radius": { "$ref": "#/definitions/attributeString" },
-        "refX": { "$ref": "#/definitions/attributeString" },
-        "refY": { "$ref": "#/definitions/attributeString" },
-        "result": { "$ref": "#/definitions/attributeString" },
-        "rx": { "$ref": "#/definitions/attributeString" },
-        "ry": { "$ref": "#/definitions/attributeString" },
-        "scale": { "$ref": "#/definitions/attributeString" },
-        "seed": { "$ref": "#/definitions/attributeString" },
-        "shape-rendering": { "$ref": "#/definitions/attributeString" },
-        "slope": { "$ref": "#/definitions/attributeString" },
-        "specularConstant": { "$ref": "#/definitions/attributeString" },
-        "specularExponent": { "$ref": "#/definitions/attributeString" },
-        "spreadMethod": { "$ref": "#/definitions/attributeString" },
-        "startOffset": { "$ref": "#/definitions/attributeString" },
-        "stdDeviation": { "$ref": "#/definitions/attributeString" },
-        "stitchTiles": { "$ref": "#/definitions/attributeString" },
+        "marker-end": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "marker-mid": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "marker-start": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "markerHeight": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "markerUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "markerWidth": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "mask": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "maskContentUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "maskUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "media": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "method": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "mode": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "numOctaves": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "offset": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "opacity": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "operator": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "order": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "orient": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "overflow": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "paint-order": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "path": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "pathLength": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "patternContentUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "patternTransform": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "patternUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "points": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "preserveAlpha": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "preserveAspectRatio": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "primitiveUnits": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "r": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "radius": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "refX": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "refY": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "result": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "rx": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "ry": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "scale": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "seed": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "shape-rendering": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "slope": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "specularConstant": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "specularExponent": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "spreadMethod": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "startOffset": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stdDeviation": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stitchTiles": {
+          "$ref": "#/definitions/attributeString"
+        },
         "stop-color": {
           "$ref": "#/definitions/colorValue"
         },
-        "stop-opacity": { "$ref": "#/definitions/attributeString" },
-        "stroke": { "$ref": "#/definitions/colorValue" },
-        "stroke-dasharray": { "$ref": "#/definitions/attributeString" },
-        "stroke-dashoffset": { "$ref": "#/definitions/attributeString" },
-        "stroke-linecap": { "$ref": "#/definitions/attributeString" },
-        "stroke-linejoin": { "$ref": "#/definitions/attributeString" },
-        "stroke-miterlimit": { "$ref": "#/definitions/attributeString" },
-        "stroke-opacity": { "$ref": "#/definitions/attributeString" },
-        "stroke-width": { "$ref": "#/definitions/attributeString" },
-        "style": { "$ref": "#/definitions/cssString" },
-        "surfaceScale": { "$ref": "#/definitions/attributeString" },
-        "systemLanguage": { "$ref": "#/definitions/attributeString" },
-        "tabindex": { "$ref": "#/definitions/attributeString" },
-        "tableValues": { "$ref": "#/definitions/attributeString" },
-        "targetX": { "$ref": "#/definitions/attributeString" },
-        "targetY": { "$ref": "#/definitions/attributeString" },
-        "text-anchor": { "$ref": "#/definitions/attributeString" },
-        "text-decoration": { "$ref": "#/definitions/attributeString" },
-        "text-rendering": { "$ref": "#/definitions/attributeString" },
-        "textLength": { "$ref": "#/definitions/attributeString" },
-        "transform": { "$ref": "#/definitions/attributeString" },
-        "transform-origin": { "$ref": "#/definitions/attributeString" },
-        "type": { "$ref": "#/definitions/attributeString" },
-        "values": { "$ref": "#/definitions/attributeString" },
-        "viewBox": { "$ref": "#/definitions/attributeString" },
-        "visibility": { "$ref": "#/definitions/attributeString" },
-        "width": { "$ref": "#/definitions/attributeString" },
-        "word-spacing": { "$ref": "#/definitions/attributeString" },
-        "writing-mode": { "$ref": "#/definitions/attributeString" },
-        "x": { "$ref": "#/definitions/attributeString" },
-        "x1": { "$ref": "#/definitions/attributeString" },
-        "x2": { "$ref": "#/definitions/attributeString" },
-        "xChannelSelector": { "$ref": "#/definitions/attributeString" },
-        "y": { "$ref": "#/definitions/attributeString" },
-        "y1": { "$ref": "#/definitions/attributeString" },
-        "y2": { "$ref": "#/definitions/attributeString" },
-        "yChannelSelector": { "$ref": "#/definitions/attributeString" },
-        "z": { "$ref": "#/definitions/attributeString" }
+        "stop-opacity": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke": {
+          "$ref": "#/definitions/colorValue"
+        },
+        "stroke-dasharray": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-dashoffset": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-linecap": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-linejoin": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-miterlimit": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-opacity": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "stroke-width": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "style": {
+          "$ref": "#/definitions/cssString"
+        },
+        "surfaceScale": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "systemLanguage": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "tabindex": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "tableValues": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "targetX": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "targetY": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "text-anchor": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "text-decoration": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "text-rendering": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "textLength": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "transform": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "transform-origin": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "type": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "values": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "viewBox": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "visibility": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "width": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "word-spacing": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "writing-mode": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "x": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "x1": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "x2": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "xChannelSelector": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "y": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "y1": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "y2": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "yChannelSelector": {
+          "$ref": "#/definitions/attributeString"
+        },
+        "z": {
+          "$ref": "#/definitions/attributeString"
+        }
       },
       "additionalProperties": false
     },
@@ -487,9 +945,21 @@
       "description": "A rotation in degrees. Defines a range the PRNG picks from. Set `min === max` for a fixed angle. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
-        "min": { "type": "number", "minimum": -360, "maximum": 360 },
-        "max": { "type": "number", "minimum": -360, "maximum": 360 },
-        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 720 }
+        "min": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360
+        },
+        "max": {
+          "type": "number",
+          "minimum": -360,
+          "maximum": 360
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 720
+        }
       },
       "required": ["min", "max"],
       "additionalProperties": false
@@ -498,9 +968,21 @@
       "description": "A scale factor around the component's own center (`1` corresponds to the original size). Defines a range the PRNG picks from. Set `min === max` for a fixed scale. A positive `step` quantizes the range to multiples of `step` starting at `min`; omit for a continuous range. When `(max - min)` is not a multiple of `step`, `max` itself is unreachable — the last bucket is clamped to `≤ max`.",
       "type": "object",
       "properties": {
-        "min": { "type": "number", "minimum": 0, "maximum": 10 },
-        "max": { "type": "number", "minimum": 0, "maximum": 10 },
-        "step": { "type": "number", "exclusiveMinimum": 0, "maximum": 10 }
+        "min": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "step": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 10
+        }
       },
       "required": ["min", "max"],
       "additionalProperties": false
@@ -509,8 +991,12 @@
       "description": "A positional translation applied to the component after placement. Values are interpreted as a percentage of the component's size.",
       "type": "object",
       "properties": {
-        "x": { "$ref": "#/definitions/translateValue" },
-        "y": { "$ref": "#/definitions/translateValue" }
+        "x": {
+          "$ref": "#/definitions/translateValue"
+        },
+        "y": {
+          "$ref": "#/definitions/translateValue"
+        }
       },
       "additionalProperties": false
     },
@@ -530,21 +1016,33 @@
           "minimum": 1,
           "maximum": 1000000
         },
-        "probability": { "$ref": "#/definitions/componentProbability" },
-        "rotate": { "$ref": "#/definitions/componentRotate" },
-        "scale": { "$ref": "#/definitions/componentScale" },
-        "translate": { "$ref": "#/definitions/componentTranslate" },
+        "probability": {
+          "$ref": "#/definitions/componentProbability"
+        },
+        "rotate": {
+          "$ref": "#/definitions/componentRotate"
+        },
+        "scale": {
+          "$ref": "#/definitions/componentScale"
+        },
+        "translate": {
+          "$ref": "#/definitions/componentTranslate"
+        },
         "variants": {
           "description": "The available visual variants of this component. The PRNG selects one variant per render. Keys must be `camelCaseName` identifiers.",
           "type": "object",
-          "propertyNames": { "$ref": "#/definitions/camelCaseName" },
+          "propertyNames": {
+            "$ref": "#/definitions/camelCaseName"
+          },
           "additionalProperties": {
             "type": "object",
             "properties": {
               "elements": {
                 "description": "The SVG elements that make up this variant.",
                 "type": "array",
-                "items": { "$ref": "#/definitions/element" },
+                "items": {
+                  "$ref": "#/definitions/element"
+                },
                 "maxItems": 1024
               },
               "weight": {
@@ -706,7 +1204,11 @@
         },
         "easing": {
           "description": "The default easing for segments whose keyframes define none.",
-          "allOf": [{ "$ref": "#/definitions/easingValue" }]
+          "allOf": [
+            {
+              "$ref": "#/definitions/easingValue"
+            }
+          ]
         },
         "origin": {
           "description": "The transform origin for `rotate` and `scale` tracks, as a percentage of the element's bounding box (`fill-box`). Defaults to the center (`x` 50, `y` 50).",
@@ -732,27 +1234,51 @@
           "properties": {
             "translateX": {
               "description": "Horizontal offset in user units, relative to the element's resting position. Positive values move right.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             },
             "translateY": {
               "description": "Vertical offset in user units, relative to the element's resting position. Positive values move down.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             },
             "rotate": {
               "description": "Rotation in degrees around `origin`, added to the element's resting transform. Positive values rotate clockwise. Values are not normalized, `360` describes one full turn.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             },
             "scaleX": {
               "description": "Horizontal scale factor around `origin`. `1` is the resting size.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             },
             "scaleY": {
               "description": "Vertical scale factor around `origin`. `1` is the resting size.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             },
             "opacity": {
               "description": "Opacity from 0 to 1. It replaces the element's own `opacity` attribute while the animation plays, so a layer hidden with `opacity=\"0\"` can be brought in by its animation.",
-              "allOf": [{ "$ref": "#/definitions/animationTrack" }]
+              "allOf": [
+                {
+                  "$ref": "#/definitions/animationTrack"
+                }
+              ]
             }
           },
           "minProperties": 1,
@@ -857,7 +1383,9 @@
         "elements": {
           "description": "The list of SVG elements that make up the avatar.",
           "type": "array",
-          "items": { "$ref": "#/definitions/element" },
+          "items": {
+            "$ref": "#/definitions/element"
+          },
           "maxItems": 1024
         },
         "width": {
@@ -879,11 +1407,17 @@
     "components": {
       "description": "Named, reusable SVG components. Each component defines a set of variants that the PRNG can select from at render time, or aliases another component to render an additional, independently-randomized instance of it. Keys must be `camelCaseName` identifiers.",
       "type": "object",
-      "propertyNames": { "$ref": "#/definitions/camelCaseName" },
+      "propertyNames": {
+        "$ref": "#/definitions/camelCaseName"
+      },
       "additionalProperties": {
         "anyOf": [
-          { "$ref": "#/definitions/componentBase" },
-          { "$ref": "#/definitions/componentAlias" }
+          {
+            "$ref": "#/definitions/componentBase"
+          },
+          {
+            "$ref": "#/definitions/componentAlias"
+          }
         ]
       },
       "maxProperties": 512
@@ -891,21 +1425,27 @@
     "colors": {
       "description": "Named color palettes used by the avatar. The PRNG selects colors from these groups at render time. Color groups can define constraints such as contrast or exclusion rules. Keys must be `camelCaseName` identifiers.",
       "type": "object",
-      "propertyNames": { "$ref": "#/definitions/camelCaseName" },
+      "propertyNames": {
+        "$ref": "#/definitions/camelCaseName"
+      },
       "additionalProperties": {
         "type": "object",
         "properties": {
           "values": {
             "description": "The list of hex color values the PRNG can choose from. The order carries meaning for a user who sets the `*ColorOrder` render option to `fixed` without colors of their own: the palette is then used in exactly this order.",
             "type": "array",
-            "items": { "$ref": "#/definitions/hexColor" },
+            "items": {
+              "$ref": "#/definitions/hexColor"
+            },
             "minItems": 1,
             "maxItems": 128
           },
           "notEqualTo": {
             "description": "A list of other color names. The selected color value must differ from the color values selected in those colors. The schema does not prevent cycles (e.g. `a` notEqualTo `b` and `b` notEqualTo `a`); renderers resolve palettes in definition order and must reject unsatisfiable configurations at load time.",
             "type": "array",
-            "items": { "$ref": "#/definitions/colorName" },
+            "items": {
+              "$ref": "#/definitions/colorName"
+            },
             "maxItems": 64
           },
           "contrastTo": {

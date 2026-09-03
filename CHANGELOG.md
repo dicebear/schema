@@ -15,6 +15,13 @@ library release line.
 
 ### Changed
 
+- **`definition.json`:** `animations` are rejected below `defs` and `clipPath`,
+  and on elements a group cannot wrap: `stop`, `tspan`, `textPath`, `mpath`
+  and the filter primitives. The renderer plays an animation by wrapping the
+  element in a group, which never reaches a `<use>` instance of a def, is no
+  valid clipPath content, and breaks a gradient or a filter chain. Such an
+  animation could not play, so a definition carrying one is invalid now.
+
 - **Release script:** `scripts/version.sh` refuses to tag while the Go module
   path and the version disagree, so a major bump cannot ship a tag the Go
   module proxy rejects.

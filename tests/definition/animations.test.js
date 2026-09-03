@@ -360,3 +360,116 @@ describe("definition.json animations on elements", () => {
     );
   });
 });
+
+describe("definition.json animations below defs and clipPath", () => {
+  const animations = [block()];
+  const animated = { type: "element", name: "circle", animations };
+  const still = { type: "element", name: "circle" };
+
+  it("accepts still children below defs and clipPath", () => {
+    assert.equal(
+      validateElement({ type: "element", name: "defs", children: [still] }),
+      true,
+    );
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "clipPath",
+        children: [still],
+      }),
+      true,
+    );
+  });
+
+  it("accepts animations below a mask", () => {
+    assert.equal(
+      validateElement({ type: "element", name: "mask", children: [animated] }),
+      true,
+    );
+  });
+
+  it("accepts animations on the defs element itself", () => {
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "g",
+        animations,
+        children: [{ type: "element", name: "defs", children: [still] }],
+      }),
+      true,
+    );
+  });
+
+  it("rejects animations on a child of defs", () => {
+    assert.equal(
+      validateElement({ type: "element", name: "defs", children: [animated] }),
+      false,
+    );
+  });
+
+  it("rejects animations on a child of clipPath", () => {
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "clipPath",
+        children: [animated],
+      }),
+      false,
+    );
+  });
+
+  it("rejects animations further down below defs", () => {
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "defs",
+        children: [{ type: "element", name: "g", children: [animated] }],
+      }),
+      false,
+    );
+  });
+
+  it("rejects an animated component reference below defs", () => {
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "defs",
+        children: [{ type: "component", name: "eyes", animations }],
+      }),
+      false,
+    );
+  });
+});
+
+describe("definition.json animations on elements a group cannot wrap", () => {
+  const animations = [block()];
+
+  for (const name of ["stop", "tspan", "textPath", "mpath", "feGaussianBlur"]) {
+    it(`rejects animations on ${name}`, () => {
+      assert.equal(
+        validateElement({ type: "element", name, animations }),
+        false,
+      );
+    });
+  }
+
+  it("accepts the same elements without animations", () => {
+    assert.equal(validateElement({ type: "element", name: "stop" }), true);
+    assert.equal(
+      validateElement({ type: "element", name: "feGaussianBlur" }),
+      true,
+    );
+  });
+
+  it("accepts animations on the parent of such elements", () => {
+    assert.equal(
+      validateElement({
+        type: "element",
+        name: "text",
+        animations,
+        children: [{ type: "element", name: "tspan" }],
+      }),
+      true,
+    );
+  });
+});
