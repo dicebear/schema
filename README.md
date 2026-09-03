@@ -187,8 +187,8 @@ var names = DiceBear.Schema.All();
 The schemas are available directly via CDN, so no installation is required. We recommend using a specific version to ensure stability:
 
 ```
-https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/definition.min.json
-https://cdn.hopjs.net/npm/@dicebear/schema@2.0.1/dist/options.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/definition.min.json
+https://cdn.hopjs.net/npm/@dicebear/schema@2.0.2/dist/options.min.json
 ```
 
 ## Contributing
