@@ -60,6 +60,18 @@
       "maxLength": 130
     },
     "animationSpeed": { "type": "number", "minimum": 0.1, "maximum": 10 },
+    "animationDelay": { "type": "number", "minimum": -3600, "maximum": 3600 },
+    "animationDelayOption": {
+      "anyOf": [
+        { "$ref": "#/definitions/animationDelay" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/animationDelay" },
+          "minItems": 0,
+          "maxItems": 2
+        }
+      ]
+    },
     "animationSpeedOption": {
       "anyOf": [
         { "$ref": "#/definitions/animationSpeed" },
@@ -217,6 +229,10 @@
     "animationSpeed": {
       "description": "A playback speed multiplier for declarative animations. A value of 2 plays animations twice as fast, 0.5 at half speed. Durations and delays are divided by this value. Only meaningful when `animation` is enabled. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. A `*AnimationSpeed` option takes precedence for the animation of that name.",
       "allOf": [{ "$ref": "#/definitions/animationSpeedOption" }]
+    },
+    "animationDelay": {
+      "description": "A start offset in seconds for declarative animations, added to each timeline's own delay after the speed applies. As a `[min, max]` range the PRNG picks a value per seed, which keeps a wall of avatars from moving in step. Negative values start the animations mid-cycle. Only meaningful when animations play. A `*AnimationDelay` option takes precedence for the animation of that name.",
+      "allOf": [{ "$ref": "#/definitions/animationDelayOption" }]
     }
   },
   "patternProperties": {
@@ -311,6 +327,10 @@
     "^[a-z][a-zA-Z0-9]*AnimationSpeed$": {
       "description": "A playback speed multiplier for the animation with this name, for example `blinkAnimationSpeed` for the `blink` timelines. Takes the same values as `animationSpeed` and wins over it for that animation. Other animations keep the global factor, and a name the style does not carry has no effect.",
       "allOf": [{ "$ref": "#/definitions/animationSpeedOption" }]
+    },
+    "^[a-z][a-zA-Z0-9]*AnimationDelay$": {
+      "description": "A start offset in seconds for the animation with this name, for example `blinkAnimationDelay` for the `blink` timelines. Takes the same values as `animationDelay` and wins over it for that animation.",
+      "allOf": [{ "$ref": "#/definitions/animationDelayOption" }]
     },
     "^[a-z][a-zA-Z0-9]*ColorOrder$": {
       "description": "Specifies whether the PRNG may rearrange the colors specified in the `*Color` option. With `random`, the default, the colors are shuffled before use, so which colors appear and in which order depends on the seed. With `fixed`, the colors are used in exactly the specified order: gradient fills apply them as color stops from first to last, and solid fills always use the first color. With `fixed` and no `*ColorFillStops` value, the number of gradient stops defaults to the number of specified colors instead of 2. Without a `*Color` option, `fixed` only skips the shuffle: the style's default palette is deduplicated and used in sorted order. Constraints in the style definition, such as a contrast sort against another color group, still apply and can vary with the seed.",

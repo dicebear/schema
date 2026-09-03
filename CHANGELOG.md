@@ -27,6 +27,10 @@ library release line.
 - **`options.json`:** `*AnimationSpeed` options, such as `blinkAnimationSpeed`,
   set the playback speed of one animation by name, as a factor or a
   `[min, max]` range. They win over `animationSpeed` for that animation.
+- **`options.json`:** `animationDelay` and `*AnimationDelay` add a start
+  offset in seconds, as a value or a `[min, max]` range the PRNG picks from,
+  so avatars rendered next to each other do not move in step. The named form
+  wins over the global one for that animation.
 
 ## [1.6.1] - 2026-08-30
 
