@@ -664,7 +664,7 @@
       "type": "object",
       "properties": {
         "name": {
-          "description": "An optional name that groups this timeline under a user-selectable animation. The `animation` render option accepts these names to play a subset of a style's animations. Several timelines may share one name and are then switched together. A timeline without a name only plays when the option enables all animations.",
+          "description": "An optional name that groups this timeline under a user-selectable animation. The `*Animation` options, such as `blinkAnimation` for the name `blink`, switch it on or off and the `*AnimationSpeed` and `*AnimationDelay` options tune it, each winning over the global `animation`, `animationSpeed`, and `animationDelay` options. Several timelines may share one name and are then switched together. A timeline without a name follows the global options only.",
           "allOf": [
             {
               "$ref": "#/definitions/camelCaseName"
