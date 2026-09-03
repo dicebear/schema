@@ -13,6 +13,8 @@ library release line.
 
 ## [Unreleased]
 
+## [2.0.1] - 2026-09-03
+
 ### Changed
 
 - **Go:** The module path is `github.com/dicebear/schema/v2`, as Go requires
@@ -217,7 +219,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v2.0.1...HEAD
+[2.0.1]: https://github.com/dicebear/schema/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/dicebear/schema/compare/v1.6.1...v2.0.0
 [1.6.1]: https://github.com/dicebear/schema/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/dicebear/schema/compare/v1.5.1...v1.6.0

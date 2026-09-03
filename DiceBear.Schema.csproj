@@ -21,7 +21,7 @@
 
   <PropertyGroup>
     <PackageId>DiceBear.Schema</PackageId>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <Authors>Florian Körner</Authors>
     <Description>JSON Schema definitions for DiceBear avatar styles and options</Description>
     <PackageTags>dicebear;avatar;schema;json-schema</PackageTags>
