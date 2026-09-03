@@ -13,6 +13,13 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **Go:** The module path is `github.com/dicebear/schema/v2`, as Go requires
+  for a major version above 1. Import it with `go get
+github.com/dicebear/schema/v2`. The 2.0.0 tag is not fetchable as a Go module
+  because it still carried the old path.
+
 ## [2.0.0] - 2026-09-03
 
 ### Changed

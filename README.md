@@ -119,7 +119,7 @@ let all = dicebear_schema::all();
 **Go**
 
 ```bash
-go get github.com/dicebear/schema
+go get github.com/dicebear/schema/v2
 ```
 
 The schemas are embedded at compile time and exposed as raw JSON (`string`). Parse them with `encoding/json` and validate with a library such as [`jsonschema`](https://github.com/santhosh-tekuri/jsonschema):
@@ -128,7 +128,7 @@ The schemas are embedded at compile time and exposed as raw JSON (`string`). Par
 import (
 	"encoding/json"
 
-	"github.com/dicebear/schema"
+	"github.com/dicebear/schema/v2"
 )
 
 var definition map[string]any
