@@ -13,6 +13,12 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **Release script:** `scripts/version.sh` refuses to tag while the Go module
+  path and the version disagree, so a major bump cannot ship a tag the Go
+  module proxy rejects.
+
 ## [2.0.1] - 2026-09-03
 
 ### Changed
