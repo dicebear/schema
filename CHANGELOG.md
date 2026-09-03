@@ -20,6 +20,10 @@ library release line.
   instead. This is a breaking change for anyone who passed names to
   `animation`.
 
+- **`options.json`:** `rotate`, `translateX`, and `translateY` sit under
+  `properties` instead of being exact-match patterns, and the file is ordered
+  by topic. Validation is unchanged.
+
 ### Added
 
 - **`options.json`:** `*Animation` options, such as `blinkAnimation`, switch
