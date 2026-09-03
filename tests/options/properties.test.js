@@ -419,16 +419,27 @@ describe("options.json animation properties", () => {
       assert.equal(validate({ animation: false }), true);
     });
 
-    it("accepts animation as a single name", () => {
-      assert.equal(validate({ animation: "blink" }), true);
+    it("accepts a switch per animation name", () => {
+      assert.equal(validate({ blinkAnimation: true }), true);
+      assert.equal(validate({ blinkAnimation: false }), true);
     });
 
-    it("accepts animation as a list of names", () => {
-      assert.equal(validate({ animation: ["look", "blink"] }), true);
+    it("accepts a speed per animation name", () => {
+      assert.equal(validate({ blinkAnimationSpeed: 2 }), true);
+      assert.equal(validate({ blinkAnimationSpeed: [0.5, 2] }), true);
     });
 
-    it("accepts an empty animation name list", () => {
-      assert.equal(validate({ animation: [] }), true);
+    it("accepts animationDelay within range, as a value or a range", () => {
+      assert.equal(validate({ animationDelay: 2 }), true);
+      assert.equal(validate({ animationDelay: -3600 }), true);
+      assert.equal(validate({ animationDelay: 3600 }), true);
+      assert.equal(validate({ animationDelay: [0, 3] }), true);
+      assert.equal(validate({ animationDelay: [] }), true);
+    });
+
+    it("accepts a delay per animation name", () => {
+      assert.equal(validate({ blinkAnimationDelay: -1 }), true);
+      assert.equal(validate({ blinkAnimationDelay: [-1, 1] }), true);
     });
 
     it("accepts animationSpeed within range", () => {
@@ -453,13 +464,34 @@ describe("options.json animation properties", () => {
       assert.equal(validate({ animation: 1 }), false);
     });
 
-    it("rejects animation names outside the camelCase pattern", () => {
-      assert.equal(validate({ animation: "Blink" }), false);
-      assert.equal(validate({ animation: "has-dash" }), false);
+    it("rejects animation as a name or a list of names", () => {
+      assert.equal(validate({ animation: "blink" }), false);
+      assert.equal(validate({ animation: ["look", "blink"] }), false);
+      assert.equal(validate({ animation: [] }), false);
     });
 
-    it("rejects an animation list mixing a valid and an invalid name", () => {
-      assert.equal(validate({ animation: ["blink", "Bad"] }), false);
+    it("rejects a named switch that is not a boolean", () => {
+      assert.equal(validate({ blinkAnimation: "yes" }), false);
+      assert.equal(validate({ blinkAnimation: 1 }), false);
+    });
+
+    it("rejects named animation options outside the camelCase pattern", () => {
+      assert.equal(validate({ BlinkAnimation: true }), false);
+      assert.equal(validate({ BlinkAnimationSpeed: 2 }), false);
+      assert.equal(validate({ BlinkAnimationDelay: 1 }), false);
+    });
+
+    it("rejects animationDelay outside its bounds or of the wrong shape", () => {
+      assert.equal(validate({ animationDelay: 3601 }), false);
+      assert.equal(validate({ animationDelay: -3601 }), false);
+      assert.equal(validate({ animationDelay: "later" }), false);
+      assert.equal(validate({ animationDelay: [0, 1, 2] }), false);
+      assert.equal(validate({ blinkAnimationDelay: [0, 1, 2] }), false);
+    });
+
+    it("rejects a named speed outside its bounds", () => {
+      assert.equal(validate({ blinkAnimationSpeed: 0 }), false);
+      assert.equal(validate({ blinkAnimationSpeed: [0.5, 2, 4] }), false);
     });
 
     it("rejects animationSpeed of 0", () => {
