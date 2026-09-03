@@ -13,11 +13,20 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **`options.json`:** `animation` is a boolean. The name and list forms are
+  gone, an animation is switched by name through its own `*Animation` option
+  instead. This is a breaking change for anyone who passed names to
+  `animation`.
+
 ### Added
 
-- `*AnimationSpeed` options, such as `blinkAnimationSpeed`, set the playback
-  speed of one animation by name, as a factor or a `[min, max]` range. They win
-  over `animationSpeed` for that animation.
+- **`options.json`:** `*Animation` options, such as `blinkAnimation`, switch
+  one animation on or off by name and win over `animation` for it.
+- **`options.json`:** `*AnimationSpeed` options, such as `blinkAnimationSpeed`,
+  set the playback speed of one animation by name, as a factor or a
+  `[min, max]` range. They win over `animationSpeed` for that animation.
 
 ## [1.6.1] - 2026-08-30
 

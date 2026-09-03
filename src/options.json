@@ -71,12 +71,6 @@
         }
       ]
     },
-    "animationName": {
-      "description": "The name of an animation defined by the style, matching the `name` of one or more animation timelines in its definition.",
-      "type": "string",
-      "pattern": "^[a-z][a-zA-Z0-9]*$",
-      "maxLength": 64
-    },
     "rotateOption": {
       "anyOf": [
         { "$ref": "#/definitions/rotate" },
@@ -217,17 +211,8 @@
       ]
     },
     "animation": {
-      "description": "Enables the style's declarative animations. `true` plays all of them, a name or list of names plays only the timelines carrying those names, and timelines without a name stay static in that case. An empty list plays nothing, same as false. Defaults to false, so the SVG output and every raster conversion stay static and deterministic. Styles without declarative animations ignore this option, and unknown names match nothing.",
-      "anyOf": [
-        { "type": "boolean" },
-        { "$ref": "#/definitions/animationName" },
-        {
-          "type": "array",
-          "items": { "$ref": "#/definitions/animationName" },
-          "minItems": 0,
-          "maxItems": 32
-        }
-      ]
+      "description": "Plays the style's declarative animations. Defaults to false, so the SVG output and every raster conversion stay static and deterministic. A `*Animation` option switches one animation by name and wins over this value. Styles without declarative animations ignore the option.",
+      "type": "boolean"
     },
     "animationSpeed": {
       "description": "A playback speed multiplier for declarative animations. A value of 2 plays animations twice as fast, 0.5 at half speed. Durations and delays are divided by this value. Only meaningful when `animation` is enabled. If specified as an array, the PRNG will select a value within the specified range, including the values themselves. A `*AnimationSpeed` option takes precedence for the animation of that name.",
@@ -318,6 +303,10 @@
     "^[a-z][a-zA-Z0-9]*ColorAngle$": {
       "description": "Specifies the angle for the color gradient. This value can be an integer or a float. A value of 0 results in no rotation, while values between -360 and 360 define the degree of rotation. If specified as an array, the PRNG will select a value within the specified range, including the values themselves.",
       "allOf": [{ "$ref": "#/definitions/rotateOption" }]
+    },
+    "^[a-z][a-zA-Z0-9]*Animation$": {
+      "description": "Switches the animation with this name on or off, for example `blinkAnimation` for the `blink` timelines. Wins over `animation` for that animation, so a single animation can play while the rest stay static, or stay static while the rest play. A name the style does not carry has no effect.",
+      "type": "boolean"
     },
     "^[a-z][a-zA-Z0-9]*AnimationSpeed$": {
       "description": "A playback speed multiplier for the animation with this name, for example `blinkAnimationSpeed` for the `blink` timelines. Takes the same values as `animationSpeed` and wins over it for that animation. Other animations keep the global factor, and a name the style does not carry has no effect.",
