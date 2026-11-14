@@ -233,6 +233,10 @@
     "animationDelay": {
       "description": "A start offset in seconds for declarative animations, added to each timeline's own delay after the speed applies. As a `[min, max]` range the PRNG picks a value per seed, which keeps a wall of avatars from moving in step. Negative values start the animations mid-cycle. Only meaningful when animations play. A `*AnimationDelay` option takes precedence for the animation of that name.",
       "allOf": [{ "$ref": "#/definitions/animationDelayOption" }]
+    },
+    "animationMotionQuery": {
+      "description": "Wraps the animation CSS in a `prefers-reduced-motion: no-preference` media query, so viewers who ask their system for reduced motion see the static avatar. Defaults to true. Set it to false for renderers that ignore media queries, such as SVG libraries in native apps; the app then decides from the system setting whether to pass `animation`. Only meaningful when animations play.",
+      "type": "boolean"
     }
   },
   "patternProperties": {

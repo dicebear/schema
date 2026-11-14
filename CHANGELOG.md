@@ -13,6 +13,15 @@ library release line.
 
 ## [Unreleased]
 
+### Added
+
+- **`options.json`:** The `animationMotionQuery` option. Renderers wrap the
+  animation CSS in a `prefers-reduced-motion: no-preference` media query by
+  default. Setting the option to `false` leaves the query out, for SVG
+  renderers that ignore media queries and would otherwise drop every
+  animation, such as the SVG libraries of native apps. The app then reads the
+  system setting itself and decides whether to pass `animation`.
+
 ## [2.0.2] - 2026-09-03
 
 ### Changed

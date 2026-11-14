@@ -457,9 +457,20 @@ describe("options.json animation properties", () => {
       assert.equal(validate({ animationSpeed: [2] }), true);
       assert.equal(validate({ animationSpeed: [] }), true);
     });
+
+    it("accepts animationMotionQuery as boolean", () => {
+      assert.equal(validate({ animationMotionQuery: true }), true);
+      assert.equal(validate({ animationMotionQuery: false }), true);
+    });
   });
 
   describe("invalid values", () => {
+    it("rejects animationMotionQuery that is not a boolean", () => {
+      assert.equal(validate({ animationMotionQuery: "false" }), false);
+      assert.equal(validate({ animationMotionQuery: 0 }), false);
+      assert.equal(validate({ animationMotionQuery: null }), false);
+    });
+
     it("rejects animation as number", () => {
       assert.equal(validate({ animation: 1 }), false);
     });
