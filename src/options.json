@@ -235,7 +235,7 @@
       "allOf": [{ "$ref": "#/definitions/animationDelayOption" }]
     },
     "animationMotionQuery": {
-      "description": "Wraps the animation CSS in a `prefers-reduced-motion: no-preference` media query, so viewers who ask their system for reduced motion see the static avatar. Defaults to true. Set it to false for renderers that ignore media queries, such as SVG libraries in native apps; the app then decides from the system setting whether to pass `animation`. Only meaningful when animations play.",
+      "description": "Wraps the animation CSS in a `prefers-reduced-motion: no-preference` media query, so viewers who ask their system for reduced motion see the static avatar. Defaults to true. Set it to false for renderers that ignore media queries, such as SVG libraries in native apps. The app then reads the system setting itself and decides whether to pass `animation`. Only meaningful when animations play.",
       "type": "boolean"
     }
   },
