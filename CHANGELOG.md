@@ -13,6 +13,17 @@ library release line.
 
 ## [Unreleased]
 
+### Changed
+
+- **`options.json`:** `animationMotionQuery` is now called
+  `animationRespectReducedMotion`. The new name says what the option is about,
+  the viewer's reduced motion setting, rather than how the renderer honors
+  it. Behavior and default stay the same. Options that still use the old name
+  fail validation, which makes this a major release.
+
+- **Go:** The module path is `github.com/dicebear/schema/v3`. Update the
+  import and run `go get github.com/dicebear/schema/v3`.
+
 ## [2.1.0] - 2026-11-14
 
 ### Added

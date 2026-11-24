@@ -146,13 +146,13 @@ On the tag, the workflow:
    the `Publish` workflow.
 
 Packagist (`dicebear/schema`) and the Go module proxy
-(`github.com/dicebear/schema/v2`) both pick up the same Git tag automatically, with
+(`github.com/dicebear/schema/v3`) both pick up the same Git tag automatically, with
 no publish step. The Go version lives entirely in the tag, so `scripts/version.sh`
 does not touch `go.mod`. For prereleases, note that PyPI normalizes to PEP 440, so
 npm publishes `1.1.0-rc.1` while PyPI publishes `1.1.0rc1`.
 
 > **Major version bumps and Go.** Go encodes the major version in the import path:
-> the `go.mod` module path is `github.com/dicebear/schema/v2`, and consumers
+> the `go.mod` module path is `github.com/dicebear/schema/v3`, and consumers
 > import that. On the next major, that suffix must be bumped by hand in `go.mod`
 > (and the README import examples). `scripts/version.sh` refuses to tag while the
 > module path and the version disagree, because the Go module proxy rejects such

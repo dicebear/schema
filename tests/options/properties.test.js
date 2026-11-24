@@ -458,17 +458,21 @@ describe("options.json animation properties", () => {
       assert.equal(validate({ animationSpeed: [] }), true);
     });
 
-    it("accepts animationMotionQuery as boolean", () => {
-      assert.equal(validate({ animationMotionQuery: true }), true);
-      assert.equal(validate({ animationMotionQuery: false }), true);
+    it("accepts animationRespectReducedMotion as boolean", () => {
+      assert.equal(validate({ animationRespectReducedMotion: true }), true);
+      assert.equal(validate({ animationRespectReducedMotion: false }), true);
     });
   });
 
   describe("invalid values", () => {
-    it("rejects animationMotionQuery that is not a boolean", () => {
-      assert.equal(validate({ animationMotionQuery: "false" }), false);
-      assert.equal(validate({ animationMotionQuery: 0 }), false);
-      assert.equal(validate({ animationMotionQuery: null }), false);
+    it("rejects animationRespectReducedMotion that is not a boolean", () => {
+      assert.equal(validate({ animationRespectReducedMotion: "false" }), false);
+      assert.equal(validate({ animationRespectReducedMotion: 0 }), false);
+      assert.equal(validate({ animationRespectReducedMotion: null }), false);
+    });
+
+    it("rejects the former name animationMotionQuery", () => {
+      assert.equal(validate({ animationMotionQuery: false }), false);
     });
 
     it("rejects animation as number", () => {
