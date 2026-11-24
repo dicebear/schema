@@ -13,6 +13,9 @@ library release line.
 
 ## [Unreleased]
 
+The first stable release of the 3.x line, for DiceBear 11. It is the same as
+3.0.0-rc.1.
+
 ## [3.0.0-rc.1] - 2026-11-24
 
 ### Changed
