@@ -13,6 +13,8 @@ library release line.
 
 ## [Unreleased]
 
+## [3.0.0-rc.1] - 2026-11-24
+
 ### Changed
 
 - **`options.json`:** `animationMotionQuery` is now called
@@ -256,7 +258,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v3.0.0-rc.1...HEAD
+[3.0.0-rc.1]: https://github.com/dicebear/schema/compare/v2.1.0...v3.0.0-rc.1
 [2.1.0]: https://github.com/dicebear/schema/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/dicebear/schema/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/dicebear/schema/compare/v2.0.0...v2.0.1
