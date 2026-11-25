@@ -13,6 +13,8 @@ library release line.
 
 ## [Unreleased]
 
+## [3.0.0] - 2026-11-25
+
 The first stable release of the 3.x line, for DiceBear 11. It is the same as
 3.0.0-rc.1.
 
@@ -261,7 +263,8 @@ First stable release of the DiceBear style definition schema.
 - Distribution via npm and Composer (Packagist), plus a CDN with automatic
   versioning.
 
-[Unreleased]: https://github.com/dicebear/schema/compare/v3.0.0-rc.1...HEAD
+[Unreleased]: https://github.com/dicebear/schema/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/dicebear/schema/compare/v3.0.0-rc.1...v3.0.0
 [3.0.0-rc.1]: https://github.com/dicebear/schema/compare/v2.1.0...v3.0.0-rc.1
 [2.1.0]: https://github.com/dicebear/schema/compare/v2.0.2...v2.1.0
 [2.0.2]: https://github.com/dicebear/schema/compare/v2.0.1...v2.0.2
